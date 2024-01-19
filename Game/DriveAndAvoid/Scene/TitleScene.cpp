@@ -90,7 +90,7 @@ void TitleScene::Draw() const
 	DrawGraph(120, 200, menu_image, TRUE);
 
 	// カーソル画像の描画
-	DrawRotaGraph(90, 220, + menu_cursor * 40, 0.7, DX_PI / 2.0, cursor_image, TRUE);
+	DrawRotaGraph(90, 220 + menu_cursor * 40, 0.7, DX_PI / 2.0, cursor_image, TRUE);
 }
 
 // 終了時処理
