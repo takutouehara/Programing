@@ -9,7 +9,7 @@ RankingInputScene::RankingInputScene():background_image(NULL),ranking(nullptr),s
 
 RankingInputScene::~RankingInputScene()
 {
-
+	
 }
 
 // ‰Šú‰»ˆ—

@@ -135,6 +135,13 @@ void SceneManager::ChangeScene(eSceneType scene_type)
 	}
 
 	// 前回シーンの終了時処理を行う
+	if (current_scene != nullptr)
+	{
+		current_scene->Finalize();
+		delete current_scene;
+	}
+
+	// 新しく生成したシーンの初期化を行う
 	new_scene->Initialize();
 
 	// 現在シーンの更新
