@@ -195,6 +195,9 @@ void GameMainScene::Finalize()
 	// スコアを保存
 	fprintf(fp, "%d,\n", score);
 
+	// 走行距離を保存
+	fprintf(fp, "%d,\n", mileage / 10);
+
 	// 避けた数と得点を保存
 	for (int i = 0; i < 3; i++)
 	{
