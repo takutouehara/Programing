@@ -2,6 +2,7 @@
 #include "../Object//RankingData.h"
 #include "DxLib.h"
 #include <math.h>
+#include"time.h"
 
 GameMainScene::GameMainScene():high_score(0),back_ground(NULL),barrier_image(NULL),mileage(0),player(nullptr),enemy(nullptr)
 {
@@ -19,6 +20,9 @@ GameMainScene::~GameMainScene()
 // 初期化処理
 void GameMainScene::Initialize()
 {
+
+	starttime = GetNowCount();
+
 	// 高得点を読み込む
 	ReadHighScore();
 
@@ -52,6 +56,10 @@ void GameMainScene::Initialize()
 	{
 		enemy[i] = nullptr;
 	}
+
+
+
+
 }
 
 // 更新処理
@@ -150,6 +158,8 @@ void GameMainScene::Draw() const
 	DrawFormatString(510, 240, GetColor(0, 0, 0), "スピード");
 	DrawFormatString(555, 260, GetColor(255, 255, 255), "%08.1f", player->GetSpeed());
 
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "残り:%d秒",  starttime / 1000);
+
 	// バリア枚数の描画
 	for (int i = 0; i < player->GetBarriarCount(); i++)
 	{
@@ -176,6 +186,7 @@ void GameMainScene::Finalize()
 {
 	// スコアを加算する
 	int score = (mileage / 10 * 10);
+	score += (starttime / 10 * 10);
 	for (int i = 0; i < 3; i++)
 	{
 		score += (i + 1) * 50 * enemy_count[i];
@@ -196,6 +207,7 @@ void GameMainScene::Finalize()
 	fprintf(fp, "%d,\n", score);
 
 	// 走行距離を保存
+	fprintf(fp, "%d,\n", mileage / 10);
 	fprintf(fp, "%d,\n", mileage / 10);
 
 	// 避けた数と得点を保存
