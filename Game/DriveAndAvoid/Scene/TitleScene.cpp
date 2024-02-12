@@ -2,7 +2,7 @@
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
 
-TitleScene::TitleScene():background_image(NULL),background_font(NULL), menu_image(NULL), cursor_image(NULL), menu_cursor(0)
+TitleScene::TitleScene():background_image(NULL),background_font(NULL), menu_image(NULL), cursor_image(NULL), menu_cursor(2)
 {
 
 }
@@ -18,7 +18,7 @@ void TitleScene::Initialize()
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Title_Back.png");
 	background_font = LoadGraph("Resource/images/Title_Font2.png");
-	menu_image = LoadGraph("Resource/images/MENU_F.png");
+	menu_image = LoadGraph("Resource/images/MENU_F2.png");
 	cursor_image = LoadGraph("Resource/images/cone.bmp");
 
 	// エラーチェック
@@ -32,7 +32,7 @@ void TitleScene::Initialize()
 	}
 	if (menu_image == -1)
 	{
-		throw("Resource/images/MENU_F.pngがありません\n");
+		throw("Resource/images/MENU_F2.pngがありません\n");
 	}
 	if (cursor_image == -1)
 	{
@@ -49,9 +49,9 @@ eSceneType TitleScene::Update()
 	{
 		menu_cursor+=2;
 		// 一番下に到達したら一番上にする
-		if (menu_cursor > 6)
+		if (menu_cursor > 8)
 		{
-			menu_cursor = 0;
+			menu_cursor = 2;
 		}
 	}
 	// カーソル上移動
@@ -74,7 +74,7 @@ eSceneType TitleScene::Update()
 			return eSceneType::E_MAIN;
 		case 1:
 			return eSceneType::E_RANKING_DISP;
-		case 2:
+		case 4:
 			return eSceneType::E_HELP;
 		default:
 			return eSceneType::E_END;
@@ -95,7 +95,7 @@ void TitleScene::Draw() const
 	DrawGraph(20, 20, background_font, FALSE);
 
 	// メニュー画面の描画
-	DrawGraph(120, 200, menu_image, TRUE);
+	DrawGraph(120, 220, menu_image, TRUE);
 
 	// カーソル画像の描画
 	DrawRotaGraph(90, 220 + menu_cursor * 40, 0.7, DX_PI / 2.0, cursor_image, TRUE);
