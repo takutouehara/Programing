@@ -36,7 +36,7 @@ void Enemy::Update(float speed)
 	if (isExplosion == false)
 	{
 		// ˆÊ’uî•ñ‚ÉˆÚ“®—Ê‚ğ‰ÁZ‚·‚é
-		location.x += speed;
+		location.x -= speed;
 	}
 	else
 	{

@@ -48,6 +48,8 @@ void GameMainScene::Initialize()
 	// オブジェクトの初期化
 	player->Initialize();
 
+	//コメント読み込み
+	SetComentText();
 }
 
 // 更新処理
@@ -62,7 +64,7 @@ eSceneType GameMainScene::Update()
 	// 敵生成処理
 	if (mileage / 20 % 100 == 0)
 	{
-		Enemy::ComentType type = Enemy::ComentType::NORMAL;
+		Enemy::ComentType type = Enemy::ComentType::LAUGTH;
 		enemy.emplace_back(std::make_shared<Enemy>(enemy_image,type,SetComent(type)));
 	}
 
@@ -251,49 +253,23 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 	return ((fabsf(diff_location.x) < box_ex.x) && (fabsf(diff_location.y) < box_ex.y));
 }
 
-//ファイル読み込み
-void GameMainScene::LoadComentText()
+//コメントテキスト設定
+void GameMainScene::SetComentText()
 {
-	//パスの指定
-	std::string normalComentPass = "Resource/comentText/normalComent.csv";
-	std::string laugthComentPass = "Resource/comentText/laugthComent.csv";
+	std::vector<std::string> normalComent{ "タヒネ","ここすき","うぽつ" };
+	std::vector<std::string> laughtComent{ "wwwww","草","爆笑"};
 
-	std::ifstream normalFile(normalComentPass);
-	std::ifstream laugthFile(laugthComentPass);
-
-	//ファイルを読み込めない場合は終了
-	if (!normalFile)
-	{
-		OutputDebugString("ComentFile not Found!\n");
-		std::exit(0);
-	}
-	if (!laugthFile)
-	{
-		OutputDebugString("ComentFile not Found!\n");
-		std::exit(0);
-	}
-
-	std::string line;
-
-	while (std::getline(laugthFile, line))
-	{
-		comentText->at(Enemy::ComentType::NORMAL).push_back(line);
-	}
-	normalFile.close();
-	line = "";
-	while (std::getline(normalFile, line))
-	{
-		comentText->at(Enemy::ComentType::LAUGTH).push_back(line);
-	}
-	laugthFile.close();
+	comentText[Enemy::ComentType::NORMAL] = normalComent;
+	comentText[Enemy::ComentType::LAUGTH] = laughtComent;
 
 }
 
+//コメント決定
 std::string GameMainScene::SetComent(Enemy::ComentType type)
 {
 	std::string coment;
 	
-	coment = comentText->at(type).at(0);
+	coment = comentText[type].at(0);
 
 	return coment;
 }
