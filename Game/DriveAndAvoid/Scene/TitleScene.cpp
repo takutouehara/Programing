@@ -18,8 +18,8 @@ void TitleScene::Initialize()
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Title_Back.png");
 	background_font = LoadGraph("Resource/images/Title_Font2.png");
-	menu_image = LoadGraph("Resource/images/MENU_F3.png");
-	cursor_image = LoadGraph("Resource/images/icon2.png");
+	menu_image = LoadGraph("Resource/images/Menu_Font.png");
+	cursor_image = LoadGraph("Resource/images/Menu_Icon.png");
 
 	// エラーチェック
 	if (background_image == -1)
@@ -32,11 +32,11 @@ void TitleScene::Initialize()
 	}
 	if (menu_image == -1)
 	{
-		throw("Resource/images/MENU_F3.pngがありません\n");
+		throw("Resource/images/Menu_Font.pngがありません\n");
 	}
 	if (cursor_image == -1)
 	{
-		throw("Resource/images/icon2.pngがありません\n");
+		throw("Resource/images/Menu_Icon.pngがありません\n");
 	}
 	
 }
@@ -95,7 +95,7 @@ void TitleScene::Draw() const
 	DrawGraph(20, 20, background_font, FALSE);
 
 	// メニュー画面の描画
-	DrawGraph(120, 226, menu_image, TRUE);
+	DrawGraph(120, 228, menu_image, TRUE);
 
 	// カーソル画像の描画
 	DrawRotaGraph(90, 220 + menu_cursor * 40, 0.7, DX_PI / 2.0, cursor_image, TRUE);
