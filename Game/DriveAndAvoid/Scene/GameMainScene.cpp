@@ -21,8 +21,7 @@ GameMainScene::~GameMainScene()
 void GameMainScene::Initialize()
 {
 
-	starttime = GetNowCount();
-
+	starttime = 0;
 	// 高得点を読み込む
 	ReadHighScore();
 
@@ -67,6 +66,8 @@ eSceneType GameMainScene::Update()
 {
 	// プレイヤーの更新
 	player->Update();
+	starttime = GetNowCount();
+
 
 	// 移動距離の更新
 	mileage += (int)player->GetSpeed() + 5;
