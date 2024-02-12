@@ -16,14 +16,14 @@ TitleScene::~TitleScene()
 void TitleScene::Initialize()
 {
 	// 画像の読み込み
-	background_image = LoadGraph("Resource/images/Title_Back.jpg");
+	background_image = LoadGraph("Resource/images/Title_Back2.png");
 	menu_image = LoadGraph("Resource/images/menu.bmp");
 	cursor_image = LoadGraph("Resource/images/cone.bmp");
 
 	// エラーチェック
 	if (background_image == -1)
 	{
-		throw("Resource/images/Title_Back.jpgがありません\n");
+		throw("Resource/images/Title_Back2.pngがありません\n");
 	}
 	if (menu_image == -1)
 	{
