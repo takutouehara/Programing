@@ -2,7 +2,7 @@
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
 
-RankingDispScene::RankingDispScene():background_image(NULL),ranking(nullptr)
+RankingDispScene::RankingDispScene():background_image(NULL), background_font(NULL),ranking(nullptr)
 {
 
 }
@@ -16,12 +16,18 @@ RankingDispScene::~RankingDispScene()
 void RankingDispScene::Initialize()
 {
 	// 画像の読み込み
-	background_image = LoadGraph("Resource/images/Ranking.bmp");
+	background_image = LoadGraph("Resource/images/Ranking_Back.png");
+	background_font=LoadGraph("Resource/images/Ranking_Font.png");
+
 
 	// エラーチェック
 	if (background_image == -1)
 	{
-		throw("Resource/images/Ranking.bmpがありません\n");
+		throw("Resource/images/Ranking_Back.pngがありません\n");
+	}
+	if (background_font == -1)
+	{
+		throw("Resource/images/Ranking_Font.pngがありません\n");
 	}
 
 	// ランキング情報を取得
@@ -45,7 +51,9 @@ void RankingDispScene::Draw() const
 {
 	// 背景画像の描画
 	DrawGraph(0, 0, background_image, FALSE);
+	DrawGraph(50, 50, background_font, TRUE);
 
+	
 	// 取得したランキングデータを描画する
 	for (int i = 0; i < 5; i++)
 	{
@@ -58,6 +66,7 @@ void RankingDispScene::Finalize()
 {
 	// 読み込んだ画像を削除
 	DeleteGraph(background_image);
+	DeleteGraph(background_font);
 
 	// 動的メモリの解放
 	ranking->Finalize();
