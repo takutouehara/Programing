@@ -66,6 +66,7 @@ eSceneType GameMainScene::Update()
 {
 	// プレイヤーの更新
 	player->Update();
+
 	starttime = GetNowCount();
 
 
