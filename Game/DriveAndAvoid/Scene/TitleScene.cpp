@@ -35,12 +35,13 @@ void TitleScene::Initialize()
 		throw("Resource/images/cone.bmpがありません\n");
 	}
 	
-	start_time = GetNowCount();
 }
 
 // 更新処理
 eSceneType TitleScene::Update()
 {
+	start_time = GetNowCount();
+
 	// カーソル下移動
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN))
 	{
