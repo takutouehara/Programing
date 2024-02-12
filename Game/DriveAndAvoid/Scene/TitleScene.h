@@ -11,6 +11,7 @@ private:
 	int menu_image;			// メニュー画像
 	int cursor_image;		// カーソル画像
 	int menu_cursor;		// メニューカーソル画像
+	int start_time;
 
 public:
 	TitleScene();

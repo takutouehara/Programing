@@ -176,7 +176,7 @@ void GameMainScene::Draw() const
 	// ‘Ì—ÍƒQ[ƒW‚Ì•`‰æ
 	fx = 510.0f;
 	fy = 430.0f;
-	DrawFormatStringF(fx, fy, GetColor(0, 0, 0), "PLAYER HP");
+	DrawFormatStringF(fx, fy, GetColor(0, 0, 0), "HP");
 	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 100 / 1000), fy + 40.0f, GetColor(255, 0, 0), TRUE);
 	DrawBoxAA(fx, fy + 20.0f, fx + 100.0f, fy + 40.0f, GetColor(0, 0, 0), FALSE);
 }

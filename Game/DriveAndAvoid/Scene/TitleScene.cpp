@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
+#include"time.h"
 
 TitleScene::TitleScene():background_image(NULL),menu_image(NULL),cursor_image(NULL),menu_cursor(0)
 {
@@ -34,6 +35,7 @@ void TitleScene::Initialize()
 		throw("Resource/images/cone.bmpがありません\n");
 	}
 	
+	start_time = GetNowCount();
 }
 
 // 更新処理
@@ -91,6 +93,8 @@ void TitleScene::Draw() const
 
 	// カーソル画像の描画
 	DrawRotaGraph(90, 220 + menu_cursor * 40, 0.7, DX_PI / 2.0, cursor_image, TRUE);
+	DrawFormatString(100, 150, GetColor(255, 255, 255), "HP");
+	DrawFormatString(100, 200, GetColor(255, 0, 0), "時間経過:%d秒", start_time/1000);
 }
 
 // 終了時処理
