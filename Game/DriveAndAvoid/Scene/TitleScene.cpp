@@ -19,7 +19,7 @@ void TitleScene::Initialize()
 	background_image = LoadGraph("Resource/images/Title_Back.png");
 	background_font = LoadGraph("Resource/images/Title_Font2.png");
 	menu_image = LoadGraph("Resource/images/MENU_F3.png");
-	cursor_image = LoadGraph("Resource/images/cone.bmp");
+	cursor_image = LoadGraph("Resource/images/icon2.png");
 
 	// エラーチェック
 	if (background_image == -1)
@@ -36,7 +36,7 @@ void TitleScene::Initialize()
 	}
 	if (cursor_image == -1)
 	{
-		throw("Resource/images/cone.bmpがありません\n");
+		throw("Resource/images/icon2.pngがありません\n");
 	}
 	
 }
