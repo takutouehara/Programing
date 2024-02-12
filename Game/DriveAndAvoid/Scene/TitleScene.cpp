@@ -18,7 +18,7 @@ void TitleScene::Initialize()
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Title_Back.png");
 	background_font = LoadGraph("Resource/images/Title_Font2.png");
-	menu_image = LoadGraph("Resource/images/menu.bmp");
+	menu_image = LoadGraph("Resource/images/MENU_F.png");
 	cursor_image = LoadGraph("Resource/images/cone.bmp");
 
 	// エラーチェック
@@ -32,7 +32,7 @@ void TitleScene::Initialize()
 	}
 	if (menu_image == -1)
 	{
-		throw("Resource/images/menu.bmpがありません\n");
+		throw("Resource/images/MENU_F.pngがありません\n");
 	}
 	if (cursor_image == -1)
 	{
@@ -47,9 +47,9 @@ eSceneType TitleScene::Update()
 	// カーソル下移動
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN))
 	{
-		menu_cursor++;
+		menu_cursor+=2;
 		// 一番下に到達したら一番上にする
-		if (menu_cursor > 3)
+		if (menu_cursor > 6)
 		{
 			menu_cursor = 0;
 		}
