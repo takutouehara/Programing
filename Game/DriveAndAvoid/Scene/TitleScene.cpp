@@ -2,7 +2,7 @@
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
 
-TitleScene::TitleScene():background_image(NULL),menu_image(NULL),cursor_image(NULL),menu_cursor(0)
+TitleScene::TitleScene():background_image(NULL),background_font(NULL), menu_image(NULL), cursor_image(NULL), menu_cursor(0)
 {
 
 }
@@ -17,7 +17,7 @@ void TitleScene::Initialize()
 {
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Title_Back.png");
-	
+	background_font = LoadGraph("Resource/images/Title_F.png");
 	menu_image = LoadGraph("Resource/images/menu.bmp");
 	cursor_image = LoadGraph("Resource/images/cone.bmp");
 
@@ -25,6 +25,10 @@ void TitleScene::Initialize()
 	if (background_image == -1)
 	{
 		throw("Resource/images/Title_Back.pngがありません\n");
+	}
+	if (background_font == -1)
+	{
+		throw("Resource/images/Title_F.pngがありません\n");
 	}
 	if (menu_image == -1)
 	{
@@ -87,6 +91,9 @@ void TitleScene::Draw() const
 	// タイトル画面の描画
 	DrawGraph(0, 0, background_image, FALSE);
 
+	// タイトル名の描画
+	DrawGraph(20, 20, background_font, FALSE);
+
 	// メニュー画面の描画
 	DrawGraph(120, 200, menu_image, TRUE);
 
@@ -99,6 +106,7 @@ void TitleScene::Finalize()
 {
 	// 読み込ん画像の削除
 	DeleteGraph(background_image);
+	DeleteGraph(background_font);
 	DeleteGraph(menu_image);
 	DeleteGraph(cursor_image);
 }
