@@ -62,7 +62,7 @@ eSceneType GameMainScene::Update()
 	mileage += (int)player->GetSpeed() + 5;
 
 	// “G¶¬ˆ—
-	if (mileage / 20 % 100 == 0)
+	if (mileage / 5 % 100 == 0)
 	{
 		Enemy::ComentType type = Enemy::ComentType::LAUGTH;
 		enemy.emplace_back(std::make_shared<Enemy>(enemy_image,type,SetComent(type)));
@@ -77,7 +77,7 @@ eSceneType GameMainScene::Update()
 			e->Update(player->GetSpeed());
 
 			// ‰æ–ÊŠO‚És‚Á‚½‚ç“G‚ğíœ‚µ‚ÄƒXƒRƒA‰ÁZ
-			if (e->GetLocation().x + e->GetBoxSize().x >= 1280.0f)
+			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
 			{
 				//enemy_count[e->GetType()]++;
 				enemy.erase(enemy.begin() + i);
@@ -268,8 +268,10 @@ void GameMainScene::SetComentText()
 std::string GameMainScene::SetComent(Enemy::ComentType type)
 {
 	std::string coment;
+
+	int max = comentText[type].size();
 	
-	coment = comentText[type].at(0);
+	coment = comentText[type].at(GetRand(max - 1));
 
 	return coment;
 }

@@ -17,13 +17,14 @@ Enemy::~Enemy()
 void Enemy::Initialize(ComentType type, std::string text)
 {
 	// 出現させるｘ座標パターンを取得
-	float random_y = (float)(GetRand(6) * 105 + 40);
+	float random_x = static_cast<float>(GetRand(3) * 50 + 1340);
+	float random_y = static_cast<float>(GetRand(13) * 50 + 30);
 	// 生成位置の設定
-	location = Vector2D(1000, random_y);
+	location = Vector2D(1340, random_y);
 	// 当たり判定の設定
 	box_size = Vector2D(31.0f, 60.0f);
 	// 速さの設定
-	speed = 10.0f;
+	speed = 15.0f;
 	
 	isExplosion = false;
 
