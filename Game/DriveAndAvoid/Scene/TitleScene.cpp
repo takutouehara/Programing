@@ -17,7 +17,7 @@ void TitleScene::Initialize()
 {
 	// ‰æ‘œ‚Ì“Ç‚İ‚İ
 	background_image = LoadGraph("Resource/images/Title_Back.png");
-	background_font = LoadGraph("Resource/images/Title_Font.png");
+	background_font = LoadGraph("Resource/images/Title_Font2.png");
 	menu_image = LoadGraph("Resource/images/menu.bmp");
 	cursor_image = LoadGraph("Resource/images/cone.bmp");
 
@@ -28,7 +28,7 @@ void TitleScene::Initialize()
 	}
 	if (background_font == -1)
 	{
-		throw("Resource/images/Title_Font.png‚ª‚ ‚è‚Ü‚¹‚ñ\n");
+		throw("Resource/images/Title_Font2.png‚ª‚ ‚è‚Ü‚¹‚ñ\n");
 	}
 	if (menu_image == -1)
 	{
