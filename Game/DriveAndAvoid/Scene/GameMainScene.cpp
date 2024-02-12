@@ -158,7 +158,7 @@ void GameMainScene::Draw() const
 	DrawFormatString(510, 240, GetColor(0, 0, 0), "スピード");
 	DrawFormatString(555, 260, GetColor(255, 255, 255), "%08.1f", player->GetSpeed());
 
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "残り:%d秒",  starttime / 1000);
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "経過時間:%d秒",  starttime / 1000);
 
 	// バリア枚数の描画
 	for (int i = 0; i < player->GetBarriarCount(); i++)
