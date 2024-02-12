@@ -5,6 +5,7 @@
 #include "../Object/Enemy.h"
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 class GameMainScene :public SceneBase
 {
@@ -19,6 +20,9 @@ private:
 	
 	//敵（コメント）配列
 	std::vector<std::shared_ptr<Enemy>> enemy;
+	//コメントテキスト格納配列
+	std::unique_ptr<std::unordered_map<Enemy::ComentType, std::vector<std::string>>>comentText;
+	//std::unordered_map<Enemy::ComentType, std::vector<std::string>>comentText;
 	
 public:
 	GameMainScene();
@@ -36,4 +40,8 @@ private:
 	void ReadHighScore();
 	// 当たり判定
 	bool IsHitCheck(Player* p, std::shared_ptr<Enemy> e);
+	//コメントテキスト読み込み関数
+	void LoadComentText();
+	//コメント設定関数
+	std::string SetComent(Enemy::ComentType type);
 };

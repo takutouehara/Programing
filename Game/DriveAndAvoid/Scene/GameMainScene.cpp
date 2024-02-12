@@ -2,6 +2,7 @@
 #include "../Object//RankingData.h"
 #include "DxLib.h"
 #include <math.h>
+#include <fstream>
 
 GameMainScene::GameMainScene():high_score(0),back_ground(NULL),barrier_image(NULL),mileage(0),player(nullptr)
 {
@@ -61,8 +62,8 @@ eSceneType GameMainScene::Update()
 	// 敵生成処理
 	if (mileage / 20 % 100 == 0)
 	{
-		int type = GetRand(3) % 3;
-		enemy.emplace_back(std::make_shared<Enemy>());
+		Enemy::ComentType type = Enemy::ComentType::NORMAL;
+		enemy.emplace_back(std::make_shared<Enemy>(enemy_image,type,SetComent(type)));
 	}
 
 	// 敵の更新と当たり判定チェック
@@ -76,9 +77,10 @@ eSceneType GameMainScene::Update()
 			// 画面外に行ったら敵を削除してスコア加算
 			if (e->GetLocation().x + e->GetBoxSize().x >= 1280.0f)
 			{
-				enemy_count[e->GetType()]++;
+				//enemy_count[e->GetType()]++;
 				enemy.erase(enemy.begin() + i);
 				e = nullptr;
+				continue;
 			}
 
 			// 当たり判定の確認
@@ -87,8 +89,10 @@ eSceneType GameMainScene::Update()
 				player->SetActive(false);
 				player->DecreaseHp(-50.0f);
 				e->Finalize();
-				enemy.erase(enemy.begin() + i);
-				e = nullptr;
+				if (e == nullptr)
+				{
+					enemy.erase(enemy.begin() + i);
+				}
 			}
 		}
 		i++;
@@ -245,4 +249,51 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 
 	// コリジョンデータより位置情報の差分が小さいならヒット判定とする
 	return ((fabsf(diff_location.x) < box_ex.x) && (fabsf(diff_location.y) < box_ex.y));
+}
+
+//ファイル読み込み
+void GameMainScene::LoadComentText()
+{
+	//パスの指定
+	std::string normalComentPass = "Resource/comentText/normalComent.csv";
+	std::string laugthComentPass = "Resource/comentText/laugthComent.csv";
+
+	std::ifstream normalFile(normalComentPass);
+	std::ifstream laugthFile(laugthComentPass);
+
+	//ファイルを読み込めない場合は終了
+	if (!normalFile)
+	{
+		OutputDebugString("ComentFile not Found!\n");
+		std::exit(0);
+	}
+	if (!laugthFile)
+	{
+		OutputDebugString("ComentFile not Found!\n");
+		std::exit(0);
+	}
+
+	std::string line;
+
+	while (std::getline(laugthFile, line))
+	{
+		comentText->at(Enemy::ComentType::NORMAL).push_back(line);
+	}
+	normalFile.close();
+	line = "";
+	while (std::getline(normalFile, line))
+	{
+		comentText->at(Enemy::ComentType::LAUGTH).push_back(line);
+	}
+	laugthFile.close();
+
+}
+
+std::string GameMainScene::SetComent(Enemy::ComentType type)
+{
+	std::string coment;
+	
+	coment = comentText->at(type).at(0);
+
+	return coment;
 }

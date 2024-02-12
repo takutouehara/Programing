@@ -1,14 +1,11 @@
 #include "Enemy.h"
 #include "DxLib.h"
+#include <memory>
 
-Enemy::Enemy() :type(type), speed(0.0f), location(0.0f), box_size(0.0f)
+Enemy::Enemy(int* image, ComentType type, std::string text) :type(type), speed(0.0f), location(0.0f), box_size(0.0f)
 {
-	fontSize = 20;
-	font = CreateFontToHandle("UD デジタル 教科書体 N-B", fontSize, 10, DX_FONTTYPE_ANTIALIASING_8X8);
-	coment = "";
-	type = 0;
-
-	Initialize();
+	Initialize(type,text);
+	explosionImage = image;
 }
 
 Enemy::~Enemy()
@@ -17,7 +14,7 @@ Enemy::~Enemy()
 }
 
 // 初期化処理
-void Enemy::Initialize()
+void Enemy::Initialize(ComentType type, std::string text)
 {
 	// 出現させるｘ座標パターンを取得
 	float random_y = (float)(GetRand(6) * 105 + 40);
@@ -26,32 +23,51 @@ void Enemy::Initialize()
 	// 当たり判定の設定
 	box_size = Vector2D(31.0f, 60.0f);
 	// 速さの設定
-	speed = (float)(this->type * 2);
+	speed = 10.0f;
 	
+	isExplosion = false;
+
 	//コメントを生成
-	GenerateComent();
+	CreateComent(type,text);
 }
 
 void Enemy::Update(float speed)
 {
-	// 位置情報に移動量を加算する
-	location += Vector2D(this->speed + speed - 6, 0.0f);
+	if (isExplosion == false)
+	{
+		// 位置情報に移動量を加算する
+		location.x += speed;
+	}
+	else
+	{
+		//爆発アニメーション
+		explosionAnimation++;
+	}
+
+
 }
 
 void Enemy::Draw() const
 {
-	// コメント表示
-	DrawFormatStringToHandle(location.x, location.y, 0xffffff, font, coment.c_str());
+	if (isExplosion == false)
+	{
+		// コメント表示
+		DrawFormatStringToHandle(location.x, location.y, 0xffffff, font, coment.c_str());
+	}
+	else
+	{
+		//爆発アニメーション再生
+	}
 
 }
 
 void Enemy::Finalize()
 {
-
+	explosionImage = nullptr;
 }
 
 // 敵タイプを取得
-int Enemy::GetType() const
+Enemy::ComentType Enemy::GetType() const
 {
 	return type;
 }
@@ -69,11 +85,29 @@ Vector2D Enemy::GetBoxSize() const
 }
 
 //コメント生成
-void Enemy::GenerateComent()
+void Enemy::CreateComent(ComentType type, std::string text)
 {
-	coment = "wwww";
+
+	fontSize = 20;
+	font = CreateFontToHandle("UD デジタル 教科書体 N-B", fontSize, 10, DX_FONTTYPE_ANTIALIASING_8X8);
+
+	coment = text;
+
+	this->type = type;
 
 	int bX = fontSize * coment.size();
 	int bY = fontSize;
 	box_size = Vector2D(bX, bY);
+}
+
+void Enemy::SetComentString(ComentType type)
+{
+
+	
+}
+
+//爆発
+void Enemy::Explosion()
+{
+	isExplosion = true;
 }
