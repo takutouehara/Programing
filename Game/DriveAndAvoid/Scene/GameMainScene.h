@@ -8,6 +8,7 @@ class GameMainScene :public SceneBase
 {
 private:
 	int starttime;
+	int FPSCount;
 	int high_score;		// ハイスコア
 	int back_ground;	// 背景画像
 	int barrier_image;	// バリア画像

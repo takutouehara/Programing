@@ -34,14 +34,18 @@ void TitleScene::Initialize()
 	{
 		throw("Resource/images/cone.bmpがありません\n");
 	}
-	
+	FPSCount = 0;
+	start_time = 0;
 }
 
 // 更新処理
 eSceneType TitleScene::Update()
 {
-	start_time = GetNowCount();
-
+	FPSCount++;
+	if (FPSCount == 60) {
+		FPSCount = 0;
+		start_time++;
+	}
 	// カーソル下移動
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN))
 	{
@@ -95,7 +99,7 @@ void TitleScene::Draw() const
 	// カーソル画像の描画
 	DrawRotaGraph(90, 220 + menu_cursor * 40, 0.7, DX_PI / 2.0, cursor_image, TRUE);
 	DrawFormatString(100, 150, GetColor(255, 255, 255), "HP");
-	DrawFormatString(100, 200, GetColor(255, 0, 0), "時間経過:%d秒", start_time/1000);
+	DrawFormatString(100, 200, GetColor(255, 0, 0), "時間経過:%d秒", start_time);
 }
 
 // 終了時処理

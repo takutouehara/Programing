@@ -22,6 +22,7 @@ void GameMainScene::Initialize()
 {
 
 	starttime = 0;
+	FPSCount = 0;
 	// 高得点を読み込む
 	ReadHighScore();
 
@@ -67,7 +68,10 @@ eSceneType GameMainScene::Update()
 	// プレイヤーの更新
 	player->Update();
 
-	starttime = GetNowCount();
+	if (FPSCount == 60) {
+		FPSCount = 0;
+		starttime++;
+	}
 
 
 	// 移動距離の更新
@@ -160,7 +164,7 @@ void GameMainScene::Draw() const
 	DrawFormatString(510, 240, GetColor(0, 0, 0), "スピード");
 	DrawFormatString(555, 260, GetColor(255, 255, 255), "%08.1f", player->GetSpeed());
 
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "経過時間:%d秒",  starttime / 1000);
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "経過時間:%d秒",  starttime);
 
 	// バリア枚数の描画
 	for (int i = 0; i < player->GetBarriarCount(); i++)

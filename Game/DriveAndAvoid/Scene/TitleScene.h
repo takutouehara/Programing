@@ -12,7 +12,7 @@ private:
 	int cursor_image;		// カーソル画像
 	int menu_cursor;		// メニューカーソル画像
 	int start_time;
-
+	int FPSCount;          // FPS計測
 public:
 	TitleScene();
 	virtual ~TitleScene();
