@@ -169,28 +169,80 @@ bool Player::IsBarrier() const
 // 移動処理
 void Player::Movement()
 {
+	int  stick_y = InputControl::GetleftStick().y;
+	int  stick_x = InputControl::GetleftStick().x;
+	//スティックが上に移動した場合
+	if (stick_y > 0) {
+		angle = -DX_PI_F / 18;
+	}
+	// スティックが下に移動した場合
+	else if (stick_y < 0) {
+		angle = DX_PI_F / 18;
+	}
+
+
 	Vector2D move = Vector2D(0.0f);
 	angle = 0.0f;
 
-	// 十字移動処理
-	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_LEFT))
-	{
-		move += Vector2D(-1.0f, 0.0f);
-		angle = -DX_PI_F / 18;
+	if (stick_y != 0 || stick_x != 0) {
+		move += Vector2D( stick_x,-stick_y);
+
+		//スティックが上に移動した場合
+		if (stick_y > 0) {
+			angle = -DX_PI_F / 18;
+		}
+		// スティックが下に移動した場合
+		else if (stick_y < 0) {
+			angle = DX_PI_F / 18;
+		}
 	}
-	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_RIGHT))
-	{
-		move += Vector2D(1.0f, 0.0f);
-		angle = DX_PI_F / 18;
-	}
-	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_UP))
-	{
-		move += Vector2D(0.0f, -1.0f);
-	}
-	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_DOWN))
-	{
-		move += Vector2D(0.0f, 1.0f);
-	}
+
+	//// スティックが上に移動した場合
+	//if (stick_y > 0) {
+	//	move += Vector2D(0.0f, -1.0f);
+	//}
+	//// スティックが下に移動した場合
+	//else if (stick_y < 0) {
+	//	move += Vector2D(0.0f, 1.0f);
+	//}
+
+	//// スティックが右に移動した場合
+	//if (stick_x > 0) {
+	//	
+	//	move += Vector2D(1.0f, 0.0f);
+	//	angle = -DX_PI_F / 18;
+	//}
+	//// スティックが左に移動した場合
+	//else if (stick_x < 0) {
+	//	move += Vector2D(-1.0f, 0.0f);
+	//	angle = DX_PI_F / 18;
+	//	
+	//}
+
+
+
+	//Vector2D move = Vector2D(0.0f);
+	//angle = 0.0f;
+
+	//// 十字移動処理
+	//if (InputControl::GetButton(XINPUT_BUTTON_DPAD_LEFT))
+	//{
+	//	move += Vector2D(-1.0f, 0.0f);
+	//	angle = -DX_PI_F / 18;
+	//}
+	//if (InputControl::GetButton(XINPUT_BUTTON_DPAD_RIGHT))
+	//{
+	//	move += Vector2D(1.0f, 0.0f);
+	//	angle = DX_PI_F / 18;
+	//}
+	//if (InputControl::GetButton(XINPUT_BUTTON_DPAD_UP))
+	//{
+	//	move += Vector2D(0.0f, -1.0f);
+	//}
+	//if (InputControl::GetButton(XINPUT_BUTTON_DPAD_DOWN))
+	//{
+	//	move += Vector2D(0.0f, 1.0f);
+	//}
 	location += move;
 
 	// 画面外に行かないように制限する

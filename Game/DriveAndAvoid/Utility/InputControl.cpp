@@ -1,11 +1,14 @@
 #include "InputControl.h"
 #include "DxLib.h"
+#include<math.h>
 
 // 静的メンバ変数定義
 bool InputControl::now_button[16] = {};
 bool InputControl::old_button[16] = {};
 float InputControl::trigger[2] = {};
 Vector2D InputControl::stick[2] = {};
+float InputControl::LstickRadX;
+float InputControl::LstickRadY;
 
 // 入力機能：更新処理
 void InputControl::Update()
@@ -60,6 +63,10 @@ void InputControl::Update()
 	{
 		stick[1].y = -((float)input_state.ThumbRY / (float)SHRT_MIN);
 	}
+
+	LstickRadX = input_state.ThumbLX / MAXL_X;
+	LstickRadY = input_state.ThumbLY / MAXL_Y;
+	
 }
 
 // ボタン取得：押している間
@@ -108,4 +115,14 @@ Vector2D InputControl::GetRightStick()
 bool InputControl::CheckButtonRange(int button)
 {
 	return (0 <= button && button < 16);
+}
+
+float InputControl::GetLstickRadX()
+{
+	return LstickRadX;
+}
+
+float InputControl::GetLstickRadY()
+{
+	return LstickRadY;
 }

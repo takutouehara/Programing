@@ -3,6 +3,8 @@
 #include "DxLib.h"
 #include <math.h>
 
+#include "../Utility/InputControl.h"
+
 GameMainScene::GameMainScene():high_score(0),back_ground(NULL),barrier_image(NULL),mileage(0),player(nullptr),enemy(nullptr)
 {
 	for (int i = 0; i < 3; i++)
@@ -169,6 +171,11 @@ void GameMainScene::Draw() const
 	DrawFormatStringF(fx, fy, GetColor(0, 0, 0), "PLAYER HP");
 	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 100 / 1000), fy + 40.0f, GetColor(255, 0, 0), TRUE);
 	DrawBoxAA(fx, fy + 20.0f, fx + 100.0f, fy + 40.0f, GetColor(0, 0, 0), FALSE);
+
+	float  stick_y = InputControl::GetLstickRadX();
+	float  stick_x = InputControl::GetLstickRadY();
+	DrawFormatString(34, 54, GetColor(0, 0, 0), "%f", stick_y);
+	//DrawFormatString(34, 74, GetColor(0, 0, 0), "%f", stick_x);
 }
 
 // èIóπéûèàóù
