@@ -3,6 +3,8 @@
 #include "SceneBase.h"
 #include "../Object/Player.h"
 #include "../Object/Enemy.h"
+#include <vector>
+#include <memory>
 
 class GameMainScene :public SceneBase
 {
@@ -14,8 +16,10 @@ private:
 	int enemy_image[3];	// 敵画像
 	int enemy_count[3];	// 通り過ぎた敵カウント
 	Player* player;		// プレイヤー
-	Enemy** enemy;		// 敵
-
+	
+	//敵（コメント）配列
+	std::vector<std::shared_ptr<Enemy>> enemy;
+	
 public:
 	GameMainScene();
 	virtual ~GameMainScene();
@@ -31,5 +35,5 @@ private:
 	// ハイスコア読み込み処理
 	void ReadHighScore();
 	// 当たり判定
-	bool IsHitCheck(Player* p, Enemy* e);
+	bool IsHitCheck(Player* p, std::shared_ptr<Enemy> e);
 };
