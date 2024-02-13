@@ -16,12 +16,12 @@ RankingInputScene::~RankingInputScene()
 void RankingInputScene::Initialize()
 {
 	// 画像の読み込み
-	background_image = LoadGraph("Resource/images/Ranking.bmp");
+	background_image = LoadGraph("Resource/images/Ranking_Back.png");
 
 	// エラーチェック
 	if (background_image == -1)
 	{
-		throw("Resource/images/Ranking.bmpがありません\n");
+		throw("Resource/images/Ranking_Back.pngがありません\n");
 	}
 
 	// メモリの動的確保
