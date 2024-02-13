@@ -28,12 +28,12 @@ void Player::Initialize()
 	barrier_count = 3;
 
 	// 画像の読み込み
-	image = LoadGraph("Resource/images/car1pol.bmp");
+	image = LoadGraph("Resource/images/Player_Acter.png");
 
 	// エラーチェック
 	if (image == -1)
 	{
-		throw("Resource/images/car1pol.bmpがありません\n");
+		throw("Resource/images/Player_Acter.pngがありません\n");
 	}
 }
 
@@ -67,7 +67,7 @@ void Player::Update()
 	}
 
 	// バリア処理
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_B) && barrier_count > 0)
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_A) && barrier_count > 0)
 	{
 		if (barrier == nullptr)
 		{
