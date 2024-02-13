@@ -23,16 +23,15 @@ void Enemy::Initialize(ComentType type, std::string text)
 
 	// 出現させるｘ座標パターンを取得
 	float random_x = static_cast<float>(GetRand(3) * 50 + 1340);
-	float random_y = static_cast<float>(GetRand(13) * 50 + 30);
+	float random_y = static_cast<float>(GetRand(10) * 50 + 200);
 	// 生成位置の設定
 	location = Vector2D(1340, random_y);
-	// 当たり判定の設定
-	box_size = Vector2D(31.0f, 60.0f);
+	
 	// 速さの設定
 	std::uniform_int_distribution<> randSpeed(3, 7);
 	speed = static_cast<float>(randSpeed(mt));
 	
-	isExplosion = false;
+	exprosionState = ExprosionState::NONE;
 
 	//コメントを生成
 	CreateComent(type,text);
@@ -40,13 +39,19 @@ void Enemy::Initialize(ComentType type, std::string text)
 
 void Enemy::Update()
 {
-	if (isExplosion == false)
+	if (exprosionState == ExprosionState::NONE)
 	{
 		// 位置情報に移動量を加算する
 		location.x -= speed;
 	}
 	else
 	{
+		if (5 < explosionAnimation)
+		{
+			//爆破アニメーションの終了
+			exprosionState = ExprosionState::FINISH;
+		}
+
 		//爆発アニメーション
 		explosionAnimation++;
 	}
@@ -56,14 +61,16 @@ void Enemy::Update()
 
 void Enemy::Draw() const
 {
-	if (isExplosion == false)
+	if (exprosionState == ExprosionState::NONE)
 	{
 		// コメント表示
 		DrawFormatStringToHandle(location.x, location.y, 0xffffff, font, coment.c_str());
+		//DrawBoxAA(location.x, location.y, location.x + box_size.x, location.y + box_size.y, 0xff0000, FALSE);
 	}
 	else
 	{
 		//爆発アニメーション再生
+		//DrawGraphF(location.x, location.y, explosionImage[explosionAnimation], TRUE);
 	}
 
 }
@@ -102,7 +109,7 @@ void Enemy::CreateComent(ComentType type, std::string text)
 
 	this->type = type;
 
-	int bX = fontSize * coment.size();
+	int bX = fontSize * (coment.size() / 2);
 	int bY = fontSize;
 	box_size = Vector2D(bX, bY);
 }
@@ -116,5 +123,5 @@ void Enemy::SetComentString(ComentType type)
 //爆発
 void Enemy::Explosion()
 {
-	isExplosion = true;
+	exprosionState = ExprosionState::EXPROSION;
 }
