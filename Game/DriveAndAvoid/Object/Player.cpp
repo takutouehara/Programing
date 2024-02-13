@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
+ 
+#define PleyerMoveSpeed 5	//プレイヤーの移動速度
 
 Player::Player() :is_active(false), image(NULL), location(0.0f), box_size(0.0f),
 angle(0.0f), speed(0.0f), hp(0.0f), fuel(0.0f), barrier_count(0), barrier(nullptr)
@@ -176,7 +178,7 @@ void Player::Movement()
 	angle = 0.0f;
 
 	if (stick_y != 0.0f || stick_x != 0.0f) {
-		move += Vector2D( stick_x*5,-stick_y*5);
+		move += Vector2D(stick_x * PleyerMoveSpeed, -stick_y * PleyerMoveSpeed);
 	}
 
 	location += move;
