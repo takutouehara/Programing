@@ -169,32 +169,14 @@ bool Player::IsBarrier() const
 // 移動処理
 void Player::Movement()
 {
-	int  stick_y = InputControl::GetleftStick().y;
-	int  stick_x = InputControl::GetleftStick().x;
-	//スティックが上に移動した場合
-	if (stick_y > 0) {
-		angle = -DX_PI_F / 18;
-	}
-	// スティックが下に移動した場合
-	else if (stick_y < 0) {
-		angle = DX_PI_F / 18;
-	}
-
+	float  stick_y = InputControl::GetLstickRadY();
+	float  stick_x = InputControl::GetLstickRadX();
 
 	Vector2D move = Vector2D(0.0f);
 	angle = 0.0f;
 
-	if (stick_y != 0 || stick_x != 0) {
-		move += Vector2D( stick_x,-stick_y);
-
-		//スティックが上に移動した場合
-		if (stick_y > 0) {
-			angle = -DX_PI_F / 18;
-		}
-		// スティックが下に移動した場合
-		else if (stick_y < 0) {
-			angle = DX_PI_F / 18;
-		}
+	if (stick_y != 0.0f || stick_x != 0.0f) {
+		move += Vector2D( stick_x*3,-stick_y*3);
 	}
 
 	//// スティックが上に移動した場合
