@@ -39,7 +39,7 @@ void RankingDispScene::Initialize()
 eSceneType RankingDispScene::Update()
 {
 	// Bボタンが押されたら、タイトルに戻る
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_B))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
 		return eSceneType::E_TITLE;
 	}
@@ -51,8 +51,8 @@ void RankingDispScene::Draw() const
 {
 	// 背景画像の描画
 	DrawGraph(0, 0, background_image, FALSE);
+	// 文字画像の描画
 	DrawGraph(50, 35, background_font, TRUE);
-
 	
 	// 取得したランキングデータを描画する
 	SetFontSize(70);

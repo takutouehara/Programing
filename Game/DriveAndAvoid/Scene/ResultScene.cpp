@@ -21,17 +21,18 @@ ResultScene::~ResultScene()
 void ResultScene::Initialize()
 {
 	// 画像の読み込み
-	back_ground = LoadGraph("Resource/images/back.bmp");
-	int result = LoadDivGraph("Resource/images/car.bmp", 3, 3, 1, 63, 120, enemy_image);
+	back_ground = LoadGraph("Resource/images/Stage_Back.png");
+	int acter = LoadGraph("Resource/images/Player_Acter.png");
+	//int result = LoadDivGraph("Resource/images/car.bmp", 3, 3, 1, 63, 120, enemy_image);
 
 	// エラーチェック
 	if (back_ground == -1)
 	{
-		throw("Resource/images/back.bmpがありません\n");
+		throw("Resource/images/Stage_Back.pngがありません\n");
 	}
-	if (result == -1)
+	if (acter == -1)
 	{
-		throw("Resource/images/car.bmpがありません\n");
+		throw("Resource/images/Player_Acter.pngがありません\n");
 	}
 
 	// ゲーム結果の読み込み
@@ -42,7 +43,7 @@ void ResultScene::Initialize()
 eSceneType ResultScene::Update()
 {
 	// Bボタンでランキングに遷移する
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_B))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
 		return eSceneType::E_RANKING_INPUT;
 	}
@@ -57,10 +58,10 @@ void ResultScene::Draw() const
 	DrawGraph(0, 0, back_ground, TRUE);
 
 	// スコア等表示領域
-	DrawBox(150, 150, 490, 330, GetColor(0, 153, 0), TRUE);
-	DrawBox(150, 150, 490, 330, GetColor(0, 0, 0), FALSE);
+	DrawBox(128, 72, 1152, 648, GetColor(0, 153, 0), TRUE);
+	DrawBox(128, 72, 1152, 648, GetColor(0, 0, 0), FALSE);
 
-	DrawBox(500, 0, 640, 480, GetColor(0, 153, 0), TRUE);
+	//DrawBox(500, 0, 640, 480, GetColor(0, 153, 0), TRUE);
 
 	SetFontSize(20);
 	DrawString(220, 170, "GAMEOVER", GetColor(204, 0, 0));
