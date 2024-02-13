@@ -40,6 +40,7 @@ public:
 private:
 	// ハイスコア読み込み処理
 	void ReadHighScore();
+	bool IsHitCheck(Player* p, Enemy* e);
 	// 当たり判定
 	bool IsHitCheck(Player* p, std::shared_ptr<Enemy> e);
 	//コメントテキスト設定関数
