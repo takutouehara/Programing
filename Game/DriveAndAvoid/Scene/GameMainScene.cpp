@@ -2,10 +2,9 @@
 #include "../Object//RankingData.h"
 #include "DxLib.h"
 #include <math.h>
+#include <fstream>
 
-#include "../Utility/InputControl.h"
-
-GameMainScene::GameMainScene():high_score(0),back_ground(NULL),barrier_image(NULL),mileage(0),player(nullptr),enemy(nullptr)
+GameMainScene::GameMainScene():high_score(0),back_ground(NULL),barrier_image(NULL),mileage(0),player(nullptr)
 {
 	for (int i = 0; i < 3; i++)
 	{
@@ -45,15 +44,12 @@ void GameMainScene::Initialize()
 
 	// オブジェクトの生成
 	player = new Player;
-	enemy = new Enemy * [10];
 
 	// オブジェクトの初期化
 	player->Initialize();
 
-	for (int i = 0; i < 10; i++)
-	{
-		enemy[i] = nullptr;
-	}
+	//コメント読み込み
+	SetComentText();
 }
 
 // 更新処理
@@ -66,46 +62,42 @@ eSceneType GameMainScene::Update()
 	mileage += (int)player->GetSpeed() + 5;
 
 	// 敵生成処理
-	if (mileage / 20 % 100 == 0)
+	if (mileage / 5 % 100 == 0)
 	{
-		for (int i = 0; i < 10; i++)
-		{
-			if (enemy[i] == nullptr)
-			{
-				int type = GetRand(3) % 3;
-				enemy[i] = new Enemy(type, enemy_image[type]);
-				enemy[i]->Initialize();
-				break;
-			}
-		}
+		Enemy::ComentType type = Enemy::ComentType::LAUGTH;
+		enemy.emplace_back(std::make_shared<Enemy>(enemy_image,type,SetComent(type)));
 	}
 
 	// 敵の更新と当たり判定チェック
-	for (int i = 0; i < 10; i++)
+	int i = 0;
+	for (auto& e : enemy)
 	{
-		if (enemy[i] != nullptr)
+		if (e != nullptr)
 		{
-			enemy[i]->Update(player->GetSpeed());
+			e->Update(player->GetSpeed());
 
 			// 画面外に行ったら敵を削除してスコア加算
-			if (enemy[i]->GetLocation().y >= 640.0f)
+			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
 			{
-				enemy_count[enemy[i]->GetType()]++;
-				enemy[i]->Finalize();
-				delete enemy[i];
-				enemy[i] = nullptr;
+				//enemy_count[e->GetType()]++;
+				enemy.erase(enemy.begin() + i);
+				e = nullptr;
+				continue;
 			}
 
 			// 当たり判定の確認
-			if (IsHitCheck(player, enemy[i]))
+			if (IsHitCheck(player, enemy.at(i)))
 			{
 				player->SetActive(false);
 				player->DecreaseHp(-50.0f);
-				enemy[i]->Finalize();
-				delete enemy[i];
-				enemy[i] = nullptr;
+				e->Finalize();
+				if (e == nullptr)
+				{
+					enemy.erase(enemy.begin() + i);
+				}
 			}
 		}
+		i++;
 	}
 
 	// プレイヤーの燃料か体力が０未満ならリザルトに遷移する
@@ -121,22 +113,22 @@ eSceneType GameMainScene::Update()
 void GameMainScene::Draw() const
 {
 	// 背景画像の描画
-	DrawGraph(0, mileage % 480 - 480, back_ground, TRUE);
-	DrawGraph(0, mileage % 480, back_ground, TRUE);
+	/*DrawGraph(0, mileage % 480 - 480, back_ground, TRUE);
+	DrawGraph(0, mileage % 480, back_ground, TRUE);*/
 
 	// 敵の描画
-	for (int i = 0; i < 10; i++)
+	for (auto& e : enemy)
 	{
-		if (enemy[i] != nullptr)
+		if (e != nullptr)
 		{
-			enemy[i]->Draw();
+			e->Draw();
 		}
 	}
 
-	// プレイヤーの描画
+	 //プレイヤーの描画
 	player->Draw();
 
-	// UIの描画
+	 //UIの描画
 	DrawBox(500, 0, 640, 480, GetColor(0, 153, 0), TRUE);
 	SetFontSize(16);
 	DrawFormatString(510, 20, GetColor(0, 0, 0), "ハイスコア");
@@ -213,17 +205,10 @@ void GameMainScene::Finalize()
 	player->Finalize();
 	delete player;
 
-	for (int i = 0; i < 10; i++)
-	{
-		if (enemy[i] != nullptr)
-		{
-			enemy[i]->Finalize();
-			delete enemy[i];
-			enemy[i] = nullptr;
-		}
-	}
+	//enemyのメモリ開放
+	enemy.clear();
+	enemy.shrink_to_fit();
 
-	delete[] enemy;
 }
 
 // 現在のシーン情報を取得
@@ -244,7 +229,7 @@ void GameMainScene::ReadHighScore()
 }
 
 // 当たり判定処理（プレイヤーと敵）
-bool GameMainScene::IsHitCheck(Player* p, Enemy* e)
+bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 {
 	// プレイヤーがバリアを貼っていたら当たり判定を無視する
 	if (p->IsBarrier())
@@ -266,4 +251,27 @@ bool GameMainScene::IsHitCheck(Player* p, Enemy* e)
 
 	// コリジョンデータより位置情報の差分が小さいならヒット判定とする
 	return ((fabsf(diff_location.x) < box_ex.x) && (fabsf(diff_location.y) < box_ex.y));
+}
+
+//コメントテキスト設定
+void GameMainScene::SetComentText()
+{
+	std::vector<std::string> normalComent{ "タヒネ","ここすき","うぽつ" };
+	std::vector<std::string> laughtComent{ "wwwww","草","爆笑"};
+
+	comentText[Enemy::ComentType::NORMAL] = normalComent;
+	comentText[Enemy::ComentType::LAUGTH] = laughtComent;
+
+}
+
+//コメント決定
+std::string GameMainScene::SetComent(Enemy::ComentType type)
+{
+	std::string coment;
+
+	int max = comentText[type].size();
+	
+	coment = comentText[type].at(GetRand(max - 1));
+
+	return coment;
 }
