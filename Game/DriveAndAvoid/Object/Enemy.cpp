@@ -65,7 +65,7 @@ void Enemy::Draw() const
 	{
 		// ÉRÉÅÉìÉgï\é¶
 		DrawFormatStringToHandle(location.x, location.y, 0xffffff, font, coment.c_str());
-		DrawBoxAA(location.x, location.y, location.x + box_size.x, location.y + box_size.y, 0xff0000, FALSE);
+		//DrawBoxAA(location.x, location.y, location.x + box_size.x, location.y + box_size.y, 0xff0000, FALSE);
 	}
 	else
 	{
