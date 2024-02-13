@@ -176,13 +176,13 @@ void Player::Movement()
 	angle = 0.0f;
 
 	if (stick_y != 0.0f || stick_x != 0.0f) {
-		move += Vector2D( stick_x*3,-stick_y*3);
+		move += Vector2D( stick_x*5,-stick_y*5);
 	}
 
 	location += move;
 
 	// âÊñ äOÇ…çsÇ©Ç»Ç¢ÇÊÇ§Ç…êßå¿Ç∑ÇÈ
-	if ((location.x < box_size.x) || (location.x >= 640.0f - 180.0f) || (location.y < box_size.y) || (location.y >= 480.0f - box_size.y))
+	if ((location.x < box_size.x) || (location.x >= 1280.0f - box_size.x) || (location.y < box_size.y) || (location.y >= 720.0f - box_size.y))
 	{
 		location -= move;
 	}
