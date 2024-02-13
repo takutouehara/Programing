@@ -17,7 +17,7 @@ void TitleScene::Initialize()
 {
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Title_Back.png");
-	background_font = LoadGraph("Resource/images/Title_Font_2.png");
+	background_font = LoadGraph("Resource/images/Title_Font.png");
 	menu_image = LoadGraph("Resource/images/Menu_Font.png");
 	cursor_image = LoadGraph("Resource/images/Menu_Icon.png");
 
@@ -28,7 +28,7 @@ void TitleScene::Initialize()
 	}
 	if (background_font == -1)
 	{
-		throw("Resource/images/Title_Font_2.pngがありません\n");
+		throw("Resource/images/Title_Font.pngがありません\n");
 	}
 	if (menu_image == -1)
 	{
@@ -92,7 +92,7 @@ void TitleScene::Draw() const
 	DrawGraph(0, 0, background_image, FALSE);
 
 	// タイトル名の描画
-	DrawGraph(20, 20, background_font, TRUE);
+	DrawGraph(20, 25, background_font, TRUE);
 
 	// メニュー画面の描画
 	DrawGraph(120, 228, menu_image, TRUE);
