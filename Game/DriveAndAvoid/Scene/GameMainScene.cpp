@@ -156,10 +156,10 @@ void GameMainScene::Draw() const
 	}
 	DrawFormatString(1010, 200, GetColor(0, 0, 255), "走行距離");
 	DrawFormatString(1055, 220, GetColor(255, 255, 255), "%08d", mileage / 10);
-	DrawFormatString(910, 240, GetColor(255, 0, 0), "スピード");
+	DrawFormatString(1010, 240, GetColor(255, 0, 0), "スピード");
 	DrawFormatString(1055, 260, GetColor(255, 255, 255), "%08.1f", player->GetSpeed());
 
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "時間経過:%d秒",starttime);
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "経過時間:%d秒",starttime);
 
 	// バリア枚数の描画
 	for (int i = 0; i < player->GetBarriarCount(); i++)
@@ -177,8 +177,8 @@ void GameMainScene::Draw() const
 	// 体力ゲージの描画
 	fx = 1010.0f;
 	fy = 630.0f;
-	DrawFormatStringF(fx, fy, GetColor(255, 0, 0), "HP");
-	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 100 / 1000), fy + 40.0f, GetColor(255, 0, 0), TRUE);
+	DrawFormatStringF(fx, fy, GetColor(0, 255, 0), "HP");
+	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 100 / 1000), fy + 40.0f, GetColor(0, 255, 0), TRUE);
 	DrawBoxAA(fx, fy + 20.0f, fx + 100.0f, fy + 40.0f, GetColor(0, 0, 0), FALSE);
 }
 
