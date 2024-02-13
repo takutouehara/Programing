@@ -218,6 +218,9 @@ void GameMainScene::Finalize()
 	// ‘–s‹——£‚ğ•Û‘¶
 	fprintf(fp, "%d,\n", mileage / 10);
 
+	// Œo‰ßŠÔ‚ğ•Û‘¶
+	fprintf(fp, "%d,\n", starttime);
+
 	// ”ğ‚¯‚½”‚Æ“¾“_‚ğ•Û‘¶
 	for (int i = 0; i < 3; i++)
 	{
