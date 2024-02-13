@@ -10,12 +10,18 @@
 class GameMainScene :public SceneBase
 {
 private:
+	int starttime;
+	int FPSCount;
 	int high_score;		// ハイスコア
 	int back_ground;	// 背景画像
 	int barrier_image;	// バリア画像
 	int mileage;		// 走行距離
 	int enemy_image[3];	// 敵画像
 	int enemy_count[3];	// 通り過ぎた敵カウント
+	//int Hp_width;       // Hpゲージの横幅
+	//int Hp;             // 体力
+	//int MaxHp;          // 体力の最大値
+	//int HpGauge;
 	Player* player;		// プレイヤー
 	
 	//敵（コメント）配列
@@ -38,6 +44,7 @@ public:
 private:
 	// ハイスコア読み込み処理
 	void ReadHighScore();
+	bool IsHitCheck(Player* p, Enemy* e);
 	// 当たり判定
 	bool IsHitCheck(Player* p, std::shared_ptr<Enemy> e);
 	//コメントテキスト設定関数
