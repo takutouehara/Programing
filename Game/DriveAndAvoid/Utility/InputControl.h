@@ -2,6 +2,9 @@
 
 #include "Vector2D.h"
 
+#define MAXL_X 32767.f  //左スティックX軸の最大値(float型)
+#define MAXL_Y 32767.f  //左スティックY軸の最大値(float型)
+
 // 入力管理機能
 class InputControl
 {
@@ -10,6 +13,8 @@ private:
 	static bool old_button[16]; // 過去フレーム入力値
 	static float trigger[2];	// 左右トリガー入力値
 	static Vector2D stick[2];	// 左右スティック入力値
+	static float LstickRadX;		// 左スティックx角度
+	static float LstickRadY;		// 左スティックy角度
 
 public:
 	static void Update();	// 更新処理
@@ -26,6 +31,9 @@ public:
 	// スティック入力取得処理
 	static Vector2D GetleftStick();		// 左スティック
 	static Vector2D GetRightStick();	// 右スティック	
+
+	static float GetLstickRadX();//スティックx角度取得
+	static float GetLstickRadY();//スティックy角度取得
 
 private:
 	// ボタン配列範囲チェック

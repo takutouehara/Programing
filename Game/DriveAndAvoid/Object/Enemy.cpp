@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "DxLib.h"
 #include <memory>
+#include <random>
 
 Enemy::Enemy(int* image, ComentType type, std::string text) :type(type), speed(0.0f), location(0.0f), box_size(0.0f)
 {
@@ -16,6 +17,10 @@ Enemy::~Enemy()
 // 初期化処理
 void Enemy::Initialize(ComentType type, std::string text)
 {
+	//乱数生成
+	std::random_device rnd;
+	std::mt19937 mt(rnd());
+
 	// 出現させるｘ座標パターンを取得
 	float random_x = static_cast<float>(GetRand(3) * 50 + 1340);
 	float random_y = static_cast<float>(GetRand(13) * 50 + 30);
@@ -24,7 +29,8 @@ void Enemy::Initialize(ComentType type, std::string text)
 	// 当たり判定の設定
 	box_size = Vector2D(31.0f, 60.0f);
 	// 速さの設定
-	speed = 15.0f;
+	std::uniform_int_distribution<> randSpeed(3, 7);
+	speed = static_cast<float>(randSpeed(mt));
 	
 	isExplosion = false;
 
@@ -32,7 +38,7 @@ void Enemy::Initialize(ComentType type, std::string text)
 	CreateComent(type,text);
 }
 
-void Enemy::Update(float speed)
+void Enemy::Update()
 {
 	if (isExplosion == false)
 	{

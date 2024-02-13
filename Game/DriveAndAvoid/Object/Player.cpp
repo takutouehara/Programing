@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
+ 
+#define PleyerMoveSpeed 5	//プレイヤーの移動速度
 
 Player::Player() :is_active(false), image(NULL), location(0.0f), box_size(0.0f),
 angle(0.0f), speed(0.0f), hp(0.0f), fuel(0.0f), barrier_count(0), barrier(nullptr)
@@ -169,32 +171,20 @@ bool Player::IsBarrier() const
 // 移動処理
 void Player::Movement()
 {
+	float  stick_y = InputControl::GetLstickRadY();
+	float  stick_x = InputControl::GetLstickRadX();
+
 	Vector2D move = Vector2D(0.0f);
 	angle = 0.0f;
 
-	// 十字移動処理
-	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_LEFT))
-	{
-		move += Vector2D(-1.0f, 0.0f);
-		angle = -DX_PI_F / 18;
+	if (stick_y != 0.0f || stick_x != 0.0f) {
+		move += Vector2D(stick_x * PleyerMoveSpeed, -stick_y * PleyerMoveSpeed);
 	}
-	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_RIGHT))
-	{
-		move += Vector2D(1.0f, 0.0f);
-		angle = DX_PI_F / 18;
-	}
-	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_UP))
-	{
-		move += Vector2D(0.0f, -1.0f);
-	}
-	if (InputControl::GetButton(XINPUT_BUTTON_DPAD_DOWN))
-	{
-		move += Vector2D(0.0f, 1.0f);
-	}
+
 	location += move;
 
 	// 画面外に行かないように制限する
-	if ((location.x < box_size.x) || (location.x >= 640.0f - 180.0f) || (location.y < box_size.y) || (location.y >= 480.0f - box_size.y))
+	if ((location.x < box_size.x) || (location.x >= 1280.0f - box_size.x) || (location.y < box_size.y) || (location.y >= 720.0f - box_size.y))
 	{
 		location -= move;
 	}
