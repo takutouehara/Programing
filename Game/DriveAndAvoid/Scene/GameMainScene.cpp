@@ -67,7 +67,7 @@ eSceneType GameMainScene::Update()
 {
 	// プレイヤーの更新
 	player->Update();
-
+	FPSCount++;
 	if (FPSCount == 60) {
 		FPSCount = 0;
 		starttime++;
