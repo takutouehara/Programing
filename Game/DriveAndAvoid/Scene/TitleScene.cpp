@@ -78,7 +78,8 @@ eSceneType TitleScene::Update()
 		case 6:
 			return eSceneType::E_HELP;
 		default:
-			return eSceneType::E_END;
+			//return eSceneType::E_END;
+			return eSceneType::E_RESULT;
 		}
 	}
 	
@@ -117,3 +118,4 @@ eSceneType TitleScene::GetNowScene() const
 {
 	return eSceneType::E_TITLE;
 }
+
