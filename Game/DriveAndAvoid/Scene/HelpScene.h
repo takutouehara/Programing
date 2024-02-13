@@ -5,7 +5,9 @@
 class HelpScene :public SceneBase
 {
 private:
+	int background_font;	// •¶š‰æ‘œ
 	int background_image;	// ”wŒi‰æ‘œ
+	int color;				// •¶šF
 
 public:
 	HelpScene();
