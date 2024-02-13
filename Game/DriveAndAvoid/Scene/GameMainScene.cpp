@@ -11,6 +11,8 @@ GameMainScene::GameMainScene() :high_score(0), back_ground(NULL), barrier_image(
 		enemy_image[i] = NULL;
 		enemy_count[i] = NULL;
 	}
+	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
+	PlayMovieToGraph(movieHandle);
 }
 
 GameMainScene::~GameMainScene()
@@ -56,6 +58,8 @@ void GameMainScene::Initialize()
 
 	//コメント読み込み
 	SetComentText();
+
+	
 }
 
 // 更新処理
@@ -75,9 +79,6 @@ eSceneType GameMainScene::Update()
 	// プレイヤーの更新
 	player->Update();
 
-	clsDx();
-	printfDx("%d", enemy.size());
-
 	// 移動距離の更新
 	mileage += (int)player->GetSpeed() + 5;
 
@@ -95,6 +96,18 @@ eSceneType GameMainScene::Update()
 		{
 			e->Update();
 
+			// 当たり判定の確認
+			if (IsHitCheck(player, enemy.at(i)))
+			{
+				player->SetActive(false);
+				player->DecreaseHp(-50.0f);
+				e->Finalize();
+				if (e == nullptr)
+				{
+					enemy.erase(enemy.begin() + i);
+				}
+			}
+
 			// 画面外に行ったら敵を削除してスコア加算
 			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
 			{
@@ -105,17 +118,6 @@ eSceneType GameMainScene::Update()
 				continue;
 			}
 
-			// 当たり判定の確認
-			if (IsHitCheck(player, enemy.at(i)))
-			{
-				player->SetActive(false);
-				//player->DecreaseHp(-50.0f);
-				e->Finalize();
-				if (e == nullptr)
-				{
-					enemy.erase(enemy.begin() + i);
-				}
-			}
 		}
 		i++;
 	}
@@ -129,17 +131,25 @@ eSceneType GameMainScene::Update()
 		return eSceneType::E_RESULT;
 	}
 
+	//動画ループ処理
+	if (GetMovieStateToGraph(movieHandle) != 1)
+	{
+		SeekMovieToGraph(movieHandle, 0);
+		PlayMovieToGraph(movieHandle);
+	}
+
 	return GetNowScene();
 }
 
 // 描画処理
 void GameMainScene::Draw() const
 {
+	DrawGraph(0, 0, movieHandle, FALSE);
 	// 背景画像の描画
 	/*DrawGraph(0, mileage % 480 - 480, back_ground, TRUE);
 	DrawGraph(0, mileage % 480, back_ground, TRUE);*/
 
-	// 敵の描画
+	 //敵の描画
 	for (auto& e : enemy)
 	{
 		if (e != nullptr)
@@ -153,42 +163,32 @@ void GameMainScene::Draw() const
 
 	//UIの描画
 	DrawBox(500, 0, 640, 480, GetColor(0, 153, 0), TRUE);
+	DrawBox(0, 0, 700, 100, GetColor(100, 200, 255), TRUE);
 	//DrawBox(50, 50, 50 + HpGauge, 70, GetColor(0, 255, 0), true);
-	SetFontSize(16);
-	DrawFormatString(510, 20, GetColor(0, 0, 0), "ハイスコア");
-	DrawFormatString(560, 40, GetColor(255, 255, 255), "%08d", high_score);
-	DrawFormatString(510, 80, GetColor(0, 0, 0), "避けた数");
-	for (int i = 0; i < 3; i++)
-	{
-		DrawRotaGraph(523 + (i * 50), 120, 0.3, 0, enemy_image[i], TRUE, FALSE);
-		DrawFormatString(510 + (i * 50), 140, GetColor(255, 255, 255), "%03d", enemy_count[i]);
-	}
-	DrawFormatString(1010, 200, GetColor(0, 0, 255), "走行距離");
-	DrawFormatString(1055, 220, GetColor(255, 255, 255), "%08d", mileage / 10);
-	DrawFormatString(1010, 240, GetColor(255, 0, 0), "スピード");
-	DrawFormatString(1055, 260, GetColor(255, 255, 255), "%08.1f", player->GetSpeed());
+	SetFontSize(20);
+	DrawFormatString(50, 10, GetColor(255, 255, 255), "経過時間");
+	DrawFormatString(80, 50, GetColor(255, 255, 255), "%d", starttime);
 
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "経過時間:%d秒",starttime);
+	DrawFormatString(180, 10, GetColor(255, 0, 0), "走行距離");
+	DrawFormatString(180, 50, GetColor(255, 255, 255), "%08d", mileage / 10);
+	
+
+	DrawFormatString(300, 10, GetColor(0, 0, 255), "残りのバリア");
 
 	// バリア枚数の描画
 	for (int i = 0; i < player->GetBarriarCount(); i++)
 	{
-		DrawRotaGraph(1020 + i * 25, 340, 0.2f, 0, barrier_image, TRUE, FALSE);
+		DrawRotaGraph(320 + i * 25, 60, 0.2f, 0, barrier_image, TRUE, FALSE);
 	}
 
-	// 燃料ゲージの描画
-	float fx = 1010.0f;
-	float fy = 590.0f;
-	DrawFormatString(fx, fy, GetColor(0, 0, 255), "FUEL METER");
-	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetFuel() * 100 / 20000), fy + 40.0f, GetColor(0, 102, 204), TRUE);
-	DrawBoxAA(fx, fy + 20.0f, fx + 100.0f, fy + 40.0f, GetColor(0, 0, 0), FALSE);
+	
 
 	// 体力ゲージの描画
-	fx = 1010.0f;
-	fy = 630.0f;
-	DrawFormatStringF(fx, fy, GetColor(0, 255, 0), "HP");
-	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 100 / 1000), fy + 40.0f, GetColor(0, 255, 0), TRUE);
-	DrawBoxAA(fx, fy + 20.0f, fx + 100.0f, fy + 40.0f, GetColor(0, 0, 0), FALSE);
+	float fx = 450.0f;
+	float fy = 30.0f;
+	DrawFormatStringF(fx, fy - 10, GetColor(0, 255, 0), "HP METER");
+	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 200 / 1000), fy + 50.0f, GetColor(0, 255, 0), TRUE);
+	DrawBoxAA(fx, fy + 20.0f, fx + 200.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
 }
 
 // 終了時処理
