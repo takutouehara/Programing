@@ -2,14 +2,11 @@
 #include "../Object/RankingData.h"
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
+#include "GameMainScene.h"
 
-ResultScene::ResultScene():back_ground(NULL),score(0),mileage(0)
+ResultScene::ResultScene():back_ground(NULL),starttime(0),test(603)
 {
-	for (int i = 0; i < 3; i++)
-	{
-		enemy_image[i] = NULL;
-		enemy_count[i] = NULL;
-	}
+	
 }
 
 ResultScene::~ResultScene()
@@ -22,17 +19,11 @@ void ResultScene::Initialize()
 {
 	// 画像の読み込み
 	back_ground = LoadGraph("Resource/images/Stage_Back.png");
-	int acter = LoadGraph("Resource/images/Player_Acter.png");
-	//int result = LoadDivGraph("Resource/images/car.bmp", 3, 3, 1, 63, 120, enemy_image);
-
+	
 	// エラーチェック
 	if (back_ground == -1)
 	{
 		throw("Resource/images/Stage_Back.pngがありません\n");
-	}
-	if (acter == -1)
-	{
-		throw("Resource/images/Player_Acter.pngがありません\n");
 	}
 
 	// ゲーム結果の読み込み
@@ -58,26 +49,40 @@ void ResultScene::Draw() const
 	DrawGraph(0, 0, back_ground, TRUE);
 
 	// スコア等表示領域
-	DrawBox(128, 72, 1152, 648, GetColor(0, 153, 0), TRUE);
+	DrawBox(128, 72, 1152, 648, 0x87cefa, TRUE);
 	DrawBox(128, 72, 1152, 648, GetColor(0, 0, 0), FALSE);
 
-	//DrawBox(500, 0, 640, 480, GetColor(0, 153, 0), TRUE);
+	SetFontSize(80);
+	DrawString(225,100,"R E S U L T  T I M E",0x7fff00);
 
-	SetFontSize(20);
-	DrawString(220, 170, "GAMEOVER", GetColor(204, 0, 0));
-	SetFontSize(16);
-	DrawString(180, 200, "走行距離", GetColor(0, 0, 0));
-	DrawFormatString(260, 200, GetColor(255, 255, 255), "%6d x %4d = %6d", mileage, 10, mileage * 10);
-	for (int i = 0; i < 3; i++)
+	SetFontSize(350);
+
+	if (test / 60 < 60 )
 	{
-		DrawRotaGraph(230, 230 +(i * 20), 0.3f, DX_PI_F / 2, enemy_image[i], TRUE);
-		DrawFormatString(260, 222 + (i * 21), GetColor(255, 255, 255), "%6d x %4d = %6d", enemy_count[i], (i + 1) * 50, (i + 1) * 50 * enemy_count[i]);
+		if (test / 60 < 10 && test % 60 < 10)
+		{
+			DrawFormatString(180, 240, 0xffffff, "0%d:0%d", test / 60, test % 60);
+		}
+		if (test / 60 < 10 && test % 60 > 9)
+		{
+			DrawFormatString(180, 240, 0xee0000, "0%d:%d", test / 60, test % 60);
+		}
+		if (test / 60 > 9 && test % 60 < 10)
+		{
+			DrawFormatString(180, 240, 0xffffff, "%d:0%d", test / 60, test % 60);
+		}
+		if (test / 60 > 9 && test % 60 > 9)
+		{
+			DrawFormatString(180, 240, 0xffffff, "%d %d", test / 60, test % 60);
+		}
 	}
-	SetFontSize(25);
-	DrawString(220, 290, "スコア", GetColor(255, 0, 255));
-	DrawFormatString(220, 290, 0xFF00FF, "       =%6d", score);
-	SetFontSize(16);
-
+	else if (test / 60 > 59)
+	{
+		DrawString(150, 100, "error", 0xee0000);
+	}
+	
+	SetFontSize(40);
+	DrawString(245, 580, "---- Aボタンを押してタイトルへ戻る ----", 0xdd0000, 0);
 }
 
 // 終了時処理
@@ -85,10 +90,6 @@ void ResultScene::Finalize()
 {
 	// 読み込んだ画像を削除
 	DeleteGraph(back_ground);
-	for (int i = 0; i < 3; i++)
-	{
-		DeleteGraph(enemy_image[i]);
-	}
 }
 
 // 現在のシーン情報を取得
@@ -110,15 +111,7 @@ void ResultScene::ReadResultData()
 		throw("Resource/dat/result_data.csvが読み込めません\n");
 	}
 
-	// 結果を読み込む
-	fscanf_s(fp, "%6d,\n", &score);
-	fscanf_s(fp, "%6d,\n", &mileage);
-
-	// 避けた数と得点を取得
-	for (int i = 0; i < 3; i++)
-	{
-		fscanf_s(fp, "%6d,\n", &enemy_count[i]);
-	}
+	fscanf_s(fp, "%6d,\n", &starttime);
 
 	// ファイルクローズ
 	fclose(fp);
