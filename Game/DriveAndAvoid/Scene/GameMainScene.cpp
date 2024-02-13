@@ -11,6 +11,8 @@ GameMainScene::GameMainScene() :high_score(0), back_ground(NULL), barrier_image(
 		enemy_image[i] = NULL;
 		enemy_count[i] = NULL;
 	}
+	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
+	PlayMovieToGraph(movieHandle);
 }
 
 GameMainScene::~GameMainScene()
@@ -56,6 +58,8 @@ void GameMainScene::Initialize()
 
 	//コメント読み込み
 	SetComentText();
+
+	
 }
 
 // 更新処理
@@ -75,9 +79,6 @@ eSceneType GameMainScene::Update()
 	// プレイヤーの更新
 	player->Update();
 
-	clsDx();
-	printfDx("%d", enemy.size());
-
 	// 移動距離の更新
 	mileage += (int)player->GetSpeed() + 5;
 
@@ -95,6 +96,18 @@ eSceneType GameMainScene::Update()
 		{
 			e->Update();
 
+			// 当たり判定の確認
+			if (IsHitCheck(player, enemy.at(i)))
+			{
+				player->SetActive(false);
+				player->DecreaseHp(-50.0f);
+				e->Finalize();
+				if (e == nullptr)
+				{
+					enemy.erase(enemy.begin() + i);
+				}
+			}
+
 			// 画面外に行ったら敵を削除してスコア加算
 			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
 			{
@@ -105,17 +118,6 @@ eSceneType GameMainScene::Update()
 				continue;
 			}
 
-			// 当たり判定の確認
-			if (IsHitCheck(player, enemy.at(i)))
-			{
-				player->SetActive(false);
-				//player->DecreaseHp(-50.0f);
-				e->Finalize();
-				if (e == nullptr)
-				{
-					enemy.erase(enemy.begin() + i);
-				}
-			}
 		}
 		i++;
 	}
@@ -129,17 +131,25 @@ eSceneType GameMainScene::Update()
 		return eSceneType::E_RESULT;
 	}
 
+	//動画ループ処理
+	if (GetMovieStateToGraph(movieHandle) != 1)
+	{
+		SeekMovieToGraph(movieHandle, 0);
+		PlayMovieToGraph(movieHandle);
+	}
+
 	return GetNowScene();
 }
 
 // 描画処理
 void GameMainScene::Draw() const
 {
+	DrawGraph(0, 0, movieHandle, FALSE);
 	// 背景画像の描画
 	/*DrawGraph(0, mileage % 480 - 480, back_ground, TRUE);
 	DrawGraph(0, mileage % 480, back_ground, TRUE);*/
 
-	// 敵の描画
+	 //敵の描画
 	for (auto& e : enemy)
 	{
 		if (e != nullptr)

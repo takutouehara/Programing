@@ -32,6 +32,8 @@ private:
 	int laughtLengthNum;
 	//ƒRƒƒ“ƒg¶¬ŠÔŠuŠÔ
 	int spawnInterval;
+
+	int movieHandle;
 	
 public:
 	GameMainScene();
