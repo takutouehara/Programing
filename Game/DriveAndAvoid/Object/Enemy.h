@@ -10,7 +10,17 @@ public:
 	enum class ComentType
 	{
 		NORMAL,			//普通のコメント
-		LAUGTH			//笑いに類似されるコメント
+		LAUGTH,			//笑いに類似されるコメント
+		HEAL_HP,		//回復コメント
+		HEAL_BARRIER	//バリア回復コメント
+	};
+
+	//爆破ステータス
+	enum class ExprosionState
+	{
+		NONE,			//爆破していない
+		EXPROSION,		//爆破中
+		FINISH			//爆破終了
 	};
 
 private:
@@ -25,8 +35,8 @@ private:
 	int font;
 	//文字の大きさ
 	int fontSize;
-	//爆発用フラグ
-	bool isExplosion;
+	//爆発ステータス
+	ExprosionState exprosionState;
 	//爆発アニメーション番号
 	int explosionAnimation;
 	//爆発画像
@@ -41,7 +51,8 @@ public:
 	void Draw()const;
 	void Finalize();
 	
-	Enemy::ComentType GetType() const;			// タイプ取得
+	ComentType GetType() const;			// タイプ取得
+	ExprosionState GetExprosionState()const { return exprosionState; }
 	Vector2D GetLocation()const;	// 位置情報の取得
 	Vector2D GetBoxSize()const;		// 当たり判定の大きさを取得
 

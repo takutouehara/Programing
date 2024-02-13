@@ -96,28 +96,61 @@ eSceneType GameMainScene::Update()
 		{
 			e->Update();
 
+
+			//爆破アニメーションが終了してから削除
+			if (e->GetType() == Enemy::ComentType::LAUGTH && e->GetExprosionState() == Enemy::ExprosionState::FINISH)
+			{
+				enemy.erase(enemy.begin() + i);
+			}
+
 			// 当たり判定の確認
-			if (IsHitCheck(player, enemy.at(i)))
+			if (IsHitCheck(player,e))
 			{
 				player->SetActive(false);
-				player->DecreaseHp(-50.0f);
-				e->Finalize();
-				if (e == nullptr)
+
+				Enemy::ComentType type = e->GetType();
+
+				//コメントの種類に応じて処理を変更
+				switch (type)
+				{
+				case Enemy::ComentType::NORMAL:
+					player->DecreaseHp(-50.0f);
+					break;
+				case Enemy::ComentType::LAUGTH:
+					player->DecreaseHp(-150.0f);
+					e->Explosion();
+					break;
+				case Enemy::ComentType::HEAL_HP:
+					player->DecreaseHp(100);
+					break;
+				case Enemy::ComentType::HEAL_BARRIER:
+					player->AddBarriarCount();
+					break;
+				default:
+					break;
+				}
+				
+				if (e->GetType() != Enemy::ComentType::LAUGTH)
 				{
 					enemy.erase(enemy.begin() + i);
 				}
-			}
-
-			// 画面外に行ったら敵を削除してスコア加算
-			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
-			{
-				//enemy_count[e->GetType()]++;
-				enemy.erase(enemy.begin() + i);
-				e = nullptr;
+				
 				i++;
 				continue;
 			}
 
+			// 画面外に行ったら敵を削除
+			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
+			{
+				enemy.erase(enemy.begin() + i);
+				i++;
+				continue;
+			}
+
+		}
+		else
+		{
+			enemy.erase(enemy.begin() + i);
 		}
 		i++;
 	}
@@ -125,8 +158,8 @@ eSceneType GameMainScene::Update()
 	//HpGauge = Hp_width * Hp / MaxHp;
 
 
-	// プレイヤーの燃料か体力が０未満ならリザルトに遷移する
-	if (player->GetFuel() < 0.0f || player->GetHp() < 0.0f)
+	// プレイヤーの体力が０未満ならリザルトに遷移する
+	if (player->GetHp() < 0.0f)
 	{
 		return eSceneType::E_RESULT;
 	}
@@ -293,7 +326,7 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 void GameMainScene::SetComentText()
 {
 	std::vector<std::string> normalComent{ "タヒネ","ここすき","うぽつ" };
-	std::vector<std::string> laughtComent{ "wwwww","草","爆笑" };
+	std::vector<std::string> laughtComent{ "ｗｗｗｗ","草","爆笑" };
 
 	comentText[Enemy::ComentType::NORMAL] = normalComent;
 	comentText[Enemy::ComentType::LAUGTH] = laughtComent;
