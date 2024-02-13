@@ -17,6 +17,11 @@ private:
 	int barrier_count;	// バリアの枚数
 	Barrier* barrier;	// バリア
 
+	//デバック用
+	Vector2D BoxLocation1;	//左上隅の座標
+	Vector2D BoxLocation2;	//右上隅の座標
+
+
 public:
 	Player();
 	~Player();

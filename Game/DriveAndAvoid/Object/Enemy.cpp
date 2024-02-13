@@ -7,6 +7,10 @@ Enemy::Enemy(int* image, ComentType type, std::string text) :type(type), speed(0
 {
 	Initialize(type,text);
 	explosionImage = image;
+
+	//デバック用
+	BoxLocation1 = Vector2D(0.0f, 0.0f);
+	BoxLocation2 = Vector2D(0.0f, 0.0f);
 }
 
 Enemy::~Enemy()
@@ -51,6 +55,9 @@ void Enemy::Update()
 		explosionAnimation++;
 	}
 
+	//デバック用
+	BoxLocation1 = location - (box_size / 2);
+	BoxLocation2 = location + (box_size / 2);
 
 }
 
@@ -66,6 +73,8 @@ void Enemy::Draw() const
 		//爆発アニメーション再生
 	}
 
+	//デバック用
+	DrawBoxAA(BoxLocation1.x, BoxLocation1.y, BoxLocation2.x, BoxLocation2.y, 0xff0000, false);
 }
 
 void Enemy::Finalize()

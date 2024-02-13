@@ -34,6 +34,8 @@ private:
 	int spawnInterval;
 
 	int movieHandle;
+
+
 	
 public:
 	GameMainScene();

@@ -32,6 +32,11 @@ private:
 	//爆発画像
 	int* explosionImage;
 
+	//デバック用
+	Vector2D BoxLocation1;	//左上隅の座標
+	Vector2D BoxLocation2;	//右上隅の座標
+
+
 public:
 	Enemy(int* image, ComentType type, std::string text);
 	~Enemy();

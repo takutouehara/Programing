@@ -35,6 +35,11 @@ void Player::Initialize()
 	{
 		throw("Resource/images/Player_Acter.pngがありません\n");
 	}
+
+	//デバック用
+	BoxLocation1 = Vector2D(0.0f, 0.0f);
+	BoxLocation2 = Vector2D(0.0f, 0.0f);
+
 }
 
 // 更新処理
@@ -86,6 +91,11 @@ void Player::Update()
 			barrier = nullptr;
 		}
 	}
+
+	//デバック用
+	BoxLocation1 = location - (box_size / 2);
+	BoxLocation2 = location + (box_size / 2);
+
 }
 
 // 描画処理
@@ -99,6 +109,9 @@ void Player::Draw()
 	{
 		barrier->Draw(this->location);
 	}
+
+	//デバック用
+	DrawBoxAA(BoxLocation1.x,BoxLocation1.y, BoxLocation2.x, BoxLocation2.y,0xff0000,false );
 }
 
 // 終了時処理
