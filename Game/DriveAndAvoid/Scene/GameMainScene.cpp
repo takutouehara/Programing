@@ -153,44 +153,32 @@ void GameMainScene::Draw() const
 
 	//UIの描画
 	DrawBox(500, 0, 640, 480, GetColor(0, 153, 0), TRUE);
-	DrawBox(0, 0, 1500, 100, GetColor(100, 200, 255), TRUE);
+	DrawBox(0, 0, 700, 100, GetColor(100, 200, 255), TRUE);
 	//DrawBox(50, 50, 50 + HpGauge, 70, GetColor(0, 255, 0), true);
 	SetFontSize(20);
-	DrawFormatString(1100, 10, GetColor(255, 0, 200), "ハイスコア");
-	DrawFormatString(1110, 50, GetColor(255, 255, 255), "%08d", high_score);
-	DrawFormatString(520, 10, GetColor(0, 0, 0), "避けた数");
-	for (int i = 0; i < 3; i++)
-	{
-		DrawRotaGraph(520 + (i * 50), 60, 0.3, 0, enemy_image[i], TRUE, FALSE);
-		DrawFormatString(500+ (i * 50), 80, GetColor(255, 255, 255), "%03d", enemy_count[i]);
-	}
-	DrawFormatString(250, 10, GetColor(0, 0, 255), "走行距離");
-	DrawFormatString(250, 50, GetColor(255, 255, 255), "%08d", mileage / 10);
-	DrawFormatString(380, 10, GetColor(255, 0, 0), "スピード");
-	DrawFormatString(380, 50, GetColor(255, 255, 255), "%08.1f", player->GetSpeed());
+	DrawFormatString(50, 10, GetColor(255, 255, 255), "経過時間");
+	DrawFormatString(80, 50, GetColor(255, 255, 255), "%d", starttime);
 
-	DrawFormatString(100, 10, GetColor(255, 255, 255), "経過時間");
-	DrawFormatString(130, 50, GetColor(255, 255, 255), "%d",starttime);
+	DrawFormatString(180, 10, GetColor(255, 0, 0), "走行距離");
+	DrawFormatString(180, 50, GetColor(255, 255, 255), "%08d", mileage / 10);
+	
+
+	DrawFormatString(300, 10, GetColor(0, 0, 255), "残りのバリア");
 
 	// バリア枚数の描画
 	for (int i = 0; i < player->GetBarriarCount(); i++)
 	{
-		DrawRotaGraph(1000 + i * 25, 50, 0.2f, 0, barrier_image, TRUE, FALSE);
+		DrawRotaGraph(320 + i * 25, 60, 0.2f, 0, barrier_image, TRUE, FALSE);
 	}
 
-	// 燃料ゲージの描画
-	float fx = 700.0f;
-	float fy = 30.0f;
-	DrawFormatString(fx, fy - 10, GetColor(0, 0, 255), "FUEL METER");
-	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetFuel() * 100 / 20000), fy + 50.0f, GetColor(0, 102, 204), TRUE);
-	DrawBoxAA(fx, fy + 20.0f, fx + 100.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
+	
 
 	// 体力ゲージの描画
-	fx = 850.0f;
-	fy = 30.0f;
+	float fx = 450.0f;
+	float fy = 30.0f;
 	DrawFormatStringF(fx, fy - 10, GetColor(0, 255, 0), "HP METER");
-	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 100 / 1000), fy + 50.0f, GetColor(0, 255, 0), TRUE);
-	DrawBoxAA(fx, fy + 20.0f, fx + 100.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
+	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 200 / 1000), fy + 50.0f, GetColor(0, 255, 0), TRUE);
+	DrawBoxAA(fx, fy + 20.0f, fx + 200.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
 }
 
 // 終了時処理
