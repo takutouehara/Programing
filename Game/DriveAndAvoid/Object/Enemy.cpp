@@ -6,7 +6,10 @@
 Enemy::Enemy(int* image, ComentType type, std::string text) :type(type), speed(0.0f), location(0.0f), box_size(0.0f)
 {
 	Initialize(type,text);
-	explosionImage = image;
+	if (type == ComentType::LAUGTH)
+	{
+		explosionImage = image;
+	}
 }
 
 Enemy::~Enemy()
@@ -32,6 +35,8 @@ void Enemy::Initialize(ComentType type, std::string text)
 	speed = static_cast<float>(randSpeed(mt));
 	
 	exprosionState = ExprosionState::NONE;
+	explosionAnimationCount = 0;
+	animationUpdateTime = 0;
 
 	//コメントを生成
 	CreateComent(type,text);
@@ -46,14 +51,14 @@ void Enemy::Update()
 	}
 	else
 	{
-		if (5 < explosionAnimation)
+		if (++animationUpdateTime % 3 == 0 && explosionAnimationCount < 10)
 		{
-			//爆破アニメーションの終了
-			exprosionState = ExprosionState::FINISH;
+			explosionAnimationCount++;
+			if (10 <= explosionAnimationCount)
+			{
+				exprosionState = ExprosionState::FINISH;
+			}
 		}
-
-		//爆発アニメーション
-		explosionAnimation++;
 	}
 
 
@@ -67,17 +72,21 @@ void Enemy::Draw() const
 		DrawFormatStringToHandle(location.x, location.y, 0xffffff, font, coment.c_str());
 		//DrawBoxAA(location.x, location.y, location.x + box_size.x, location.y + box_size.y, 0xff0000, FALSE);
 	}
-	else
+	else if (exprosionState == ExprosionState::EXPROSION)
 	{
-		//爆発アニメーション再生
-		//DrawGraphF(location.x, location.y, explosionImage[explosionAnimation], TRUE);
+		DrawGraphF(location.x, location.y, explosionImage[explosionAnimationCount],TRUE);
 	}
-
 }
 
 void Enemy::Finalize()
 {
-	explosionImage = nullptr;
+	for (int i = 0; i < 10; i++)
+	{
+		if (explosionImage[i] == NULL)
+		{
+			DeleteGraph(explosionImage[i]);
+		}
+	}
 }
 
 // 敵タイプを取得
@@ -112,12 +121,6 @@ void Enemy::CreateComent(ComentType type, std::string text)
 	int bX = fontSize * (coment.size() / 2);
 	int bY = fontSize;
 	box_size = Vector2D(bX, bY);
-}
-
-void Enemy::SetComentString(ComentType type)
-{
-
-	
 }
 
 //爆発

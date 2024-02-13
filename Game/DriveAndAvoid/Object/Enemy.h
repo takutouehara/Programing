@@ -37,11 +37,12 @@ private:
 	int fontSize;
 	//爆発ステータス
 	ExprosionState exprosionState;
-	//爆発アニメーション番号
-	int explosionAnimation;
 	//爆発画像
 	int* explosionImage;
-
+	//爆発アニメーションカウンター
+	int explosionAnimationCount;
+	//爆発アニメーション更新時間
+	int animationUpdateTime;
 public:
 	Enemy(int* image, ComentType type, std::string text);
 	~Enemy();
@@ -58,10 +59,6 @@ public:
 
 	//コメント作成関数
 	void CreateComent(ComentType type, std::string text);
-	//コメント文字列設定関数
-	void SetComentString(ComentType type);
 	//爆発させる
 	void Explosion();
-	//爆発アニメーション番号のGetter
-	int GetImage() { return explosionAnimation; }
 };

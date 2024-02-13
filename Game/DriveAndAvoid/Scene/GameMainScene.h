@@ -13,10 +13,8 @@ private:
 	int starttime;
 	int FPSCount;
 	int high_time;		// ハイスコア
-	int back_ground;	// 背景画像
 	int barrier_image;	// バリア画像
 	int mileage;		// 走行距離
-	int enemy_image[3];	// 敵画像
 	int enemy_count[3];	// 通り過ぎた敵カウント
 	//int Hp_width;       // Hpゲージの横幅
 	//int Hp;             // 体力
@@ -32,8 +30,10 @@ private:
 	int laughtLengthNum;
 	//コメント生成間隔時間
 	int spawnInterval;
-
+	//背景動画ハンドル
 	int movieHandle;
+	//爆発アニメーション画像
+	int exprosionImage[10];
 	
 public:
 	GameMainScene();

@@ -4,11 +4,10 @@
 #include <math.h>
 #include <random>
 
-GameMainScene::GameMainScene() :high_time(0), back_ground(NULL), barrier_image(NULL), mileage(0), player(nullptr), starttime(0)
+GameMainScene::GameMainScene() :high_time(0), barrier_image(NULL), mileage(0), player(nullptr), starttime(0)
 {
 	for (int i = 0; i < 3; i++)
 	{
-		enemy_image[i] = NULL;
 		enemy_count[i] = NULL;
 	}
 	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
@@ -33,18 +32,10 @@ void GameMainScene::Initialize()
 	ReadHighTime();
 
 	// 画像の読み込み
-	back_ground = LoadGraph("Resource/images/back.bmp");
 	barrier_image = LoadGraph("Resource/images/barrier.png");
-	int result = LoadDivGraph("Resource/images/car.bmp", 3, 3, 1, 63, 120, enemy_image);
+	LoadDivGraph("Resource/images/exprosion.png", 10, 10, 1, 108, 108, exprosionImage);
+	
 	// エラーチェック
-	if (back_ground == -1)
-	{
-		throw("Resource/images/back.bmpがありません\n");
-	}
-	if (result == -1)
-	{
-		throw("Resource/images/car.bmpがありません\n");
-	}
 	if (barrier_image == -1)
 	{
 		throw("Resource/images/barrierがありません\n");
@@ -83,11 +74,10 @@ eSceneType GameMainScene::Update()
 	mileage += (int)player->GetSpeed() + 5;
 
 	// 敵生成処理
-	if (FPSCount % spawnInterval == 0)
+	if (FPSCount % spawnInterval == 0 && enemy.size()<10)
 	{
 		SpawnCooment(starttime);
 	}
-
 	// 敵の更新と当たり判定チェック
 	int i = 0;
 	for (auto& e : enemy)
@@ -101,6 +91,7 @@ eSceneType GameMainScene::Update()
 			if (e->GetType() == Enemy::ComentType::LAUGTH && e->GetExprosionState() == Enemy::ExprosionState::FINISH)
 			{
 				enemy.erase(enemy.begin() + i);
+				continue;
 			}
 
 			// 当たり判定の確認
@@ -133,8 +124,8 @@ eSceneType GameMainScene::Update()
 				if (e->GetType() != Enemy::ComentType::LAUGTH)
 				{
 					enemy.erase(enemy.begin() + i);
+					continue;
 				}
-				
 				i++;
 				continue;
 			}
@@ -143,7 +134,6 @@ eSceneType GameMainScene::Update()
 			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
 			{
 				enemy.erase(enemy.begin() + i);
-				i++;
 				continue;
 			}
 
@@ -151,6 +141,7 @@ eSceneType GameMainScene::Update()
 		else
 		{
 			enemy.erase(enemy.begin() + i);
+			continue;
 		}
 		i++;
 	}
@@ -195,7 +186,6 @@ void GameMainScene::Draw() const
 	player->Draw();
 
 	//UIの描画
-	DrawBox(500, 0, 640, 480, GetColor(0, 153, 0), TRUE);
 	DrawBox(0, 0, 700, 100, GetColor(100, 200, 255), TRUE);
 	//DrawBox(50, 50, 50 + HpGauge, 70, GetColor(0, 255, 0), true);
 	SetFontSize(20);
@@ -271,6 +261,7 @@ void GameMainScene::Finalize()
 	enemy.clear();
 	enemy.shrink_to_fit();
 
+	InitGraph();
 }
 
 // 現在のシーン情報を取得
@@ -358,5 +349,5 @@ void GameMainScene::SpawnCooment(int time)
 		type = Enemy::ComentType::LAUGTH;
 	}
 
-	enemy.emplace_back(std::make_shared<Enemy>(enemy_image, type, SetComent(type)));
+	enemy.emplace_back(std::make_shared<Enemy>(exprosionImage, type, SetComent(type)));
 }
