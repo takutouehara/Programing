@@ -3,9 +3,9 @@
 #include <memory>
 #include <random>
 
-Enemy::Enemy(int* image, ComentType type, std::string text) :type(type), speed(0.0f), location(0.0f), box_size(0.0f)
+Enemy::Enemy(int* image, ComentType type, std::string text, int font) :type(type), speed(0.0f), location(0.0f), box_size(0.0f)
 {
-	Initialize(type,text);
+	Initialize(type,text,font);
 	if (type == ComentType::LAUGTH)
 	{
 		explosionImage = image;
@@ -18,7 +18,7 @@ Enemy::~Enemy()
 }
 
 // 初期化処理
-void Enemy::Initialize(ComentType type, std::string text)
+void Enemy::Initialize(ComentType type, std::string text, int font)
 {
 	//乱数生成
 	std::random_device rnd;
@@ -37,7 +37,7 @@ void Enemy::Initialize(ComentType type, std::string text)
 	exprosionState = ExprosionState::NONE;
 	explosionAnimationCount = 0;
 	animationUpdateTime = 0;
-
+	this->font = font;
 	//コメントを生成
 	CreateComent(type,text);
 }
@@ -69,7 +69,7 @@ void Enemy::Draw() const
 	if (exprosionState == ExprosionState::NONE)
 	{
 		// コメント表示
-		DrawFormatStringToHandle(location.x, location.y, 0xffffff, font, coment.c_str());
+		DrawFormatStringToHandle(location.x, location.y, textColor, font, coment.c_str());
 		//DrawBoxAA(location.x, location.y, location.x + box_size.x, location.y + box_size.y, 0xff0000, FALSE);
 	}
 	else if (exprosionState == ExprosionState::EXPROSION)
@@ -80,13 +80,21 @@ void Enemy::Draw() const
 
 void Enemy::Finalize()
 {
-	for (int i = 0; i < 10; i++)
+	if (type == ComentType::LAUGTH)
 	{
-		if (explosionImage[i] == NULL)
+		if (explosionImage != nullptr)
 		{
-			DeleteGraph(explosionImage[i]);
+			for (int i = 0; i < 10; i++)
+			{
+				if (explosionImage[i] == NULL)
+				{
+					DeleteGraph(explosionImage[i]);
+				}
+			}
 		}
 	}
+
+	font = 0;
 }
 
 // 敵タイプを取得
@@ -112,7 +120,15 @@ void Enemy::CreateComent(ComentType type, std::string text)
 {
 
 	fontSize = 20;
-	font = CreateFontToHandle("UD デジタル 教科書体 N-B", fontSize, 10, DX_FONTTYPE_ANTIALIASING_8X8);
+	
+	if (type == ComentType::NORMAL || type == ComentType::LAUGTH)
+	{
+		textColor = 0xffffff;
+	}
+	else
+	{
+		textColor = 0x5AFF19;
+	}
 
 	coment = text;
 

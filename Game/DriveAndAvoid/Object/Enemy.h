@@ -35,6 +35,8 @@ private:
 	int font;
 	//文字の大きさ
 	int fontSize;
+	//文字色
+	int textColor;
 	//爆発ステータス
 	ExprosionState exprosionState;
 	//爆発画像
@@ -44,10 +46,10 @@ private:
 	//爆発アニメーション更新時間
 	int animationUpdateTime;
 public:
-	Enemy(int* image, ComentType type, std::string text);
+	Enemy(int* image, ComentType type, std::string text,int font);
 	~Enemy();
 
-	void Initialize(ComentType type, std::string text);
+	void Initialize(ComentType type, std::string text, int font);
 	void Update();
 	void Draw()const;
 	void Finalize();

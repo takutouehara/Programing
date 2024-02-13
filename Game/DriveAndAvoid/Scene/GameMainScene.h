@@ -26,6 +26,8 @@ private:
 	std::vector<std::shared_ptr<Enemy>> enemy;
 	//コメントテキスト格納配列
 	std::unordered_map<Enemy::ComentType, std::vector<std::string>>comentText;
+	//コメントフォント
+	int comentFont;
 	//laughtコメントを生成する乱数値の範囲
 	int laughtLengthNum;
 	//コメント生成間隔時間
@@ -34,7 +36,8 @@ private:
 	int movieHandle;
 	//爆発アニメーション画像
 	int exprosionImage[10];
-	
+	//バリアコメントが存在しているかのフラグ
+	bool isSpawnBaria;
 public:
 	GameMainScene();
 	virtual ~GameMainScene();

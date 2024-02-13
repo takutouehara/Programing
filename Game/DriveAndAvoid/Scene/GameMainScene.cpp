@@ -50,7 +50,8 @@ void GameMainScene::Initialize()
 	//コメント読み込み
 	SetComentText();
 
-	
+	comentFont = CreateFontToHandle("UD デジタル 教科書体 N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
+	isSpawnBaria = false;
 }
 
 // 更新処理
@@ -116,6 +117,7 @@ eSceneType GameMainScene::Update()
 					break;
 				case Enemy::ComentType::HEAL_BARRIER:
 					player->AddBarriarCount();
+					isSpawnBaria = false;
 					break;
 				default:
 					break;
@@ -262,6 +264,7 @@ void GameMainScene::Finalize()
 	enemy.shrink_to_fit();
 
 	InitGraph();
+	DeleteFontToHandle(comentFont);
 }
 
 // 現在のシーン情報を取得
@@ -309,11 +312,15 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 //コメントテキスト設定
 void GameMainScene::SetComentText()
 {
-	std::vector<std::string> normalComent{ "タヒネ","ここすき","うぽつ" };
+	std::vector<std::string> normalComent{ "タヒネ","きっしょ","〇す","56す"};
 	std::vector<std::string> laughtComent{ "ｗｗｗｗ","草","爆笑" };
+	std::vector<std::string> healComent{ "ここすき"};
+	std::vector<std::string> bariaComent{ "バリア" };
 
 	comentText[Enemy::ComentType::NORMAL] = normalComent;
 	comentText[Enemy::ComentType::LAUGTH] = laughtComent;
+	comentText[Enemy::ComentType::HEAL_HP] = healComent;
+	comentText[Enemy::ComentType::HEAL_BARRIER] = bariaComent;
 
 }
 
@@ -349,5 +356,19 @@ void GameMainScene::SpawnCooment(int time)
 		type = Enemy::ComentType::LAUGTH;
 	}
 
-	enemy.emplace_back(std::make_shared<Enemy>(exprosionImage, type, SetComent(type)));
+	//5%の確立で回復コメント生成
+	std::uniform_int_distribution<> healProbability(1, 20);
+	if (healProbability(mt) == 20)
+	{
+		type = Enemy::ComentType::HEAL_HP;
+	}
+
+	//４０秒ごとにバリア回復コメント生成
+	if (time % 40 == 0 && time != 0 && isSpawnBaria == false)
+	{
+		type = Enemy::ComentType::HEAL_BARRIER;
+		isSpawnBaria = true;
+	}
+
+	enemy.emplace_back(std::make_shared<Enemy>(exprosionImage, type, SetComent(type),comentFont));
 }
