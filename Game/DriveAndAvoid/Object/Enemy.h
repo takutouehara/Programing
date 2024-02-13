@@ -37,7 +37,7 @@ public:
 	~Enemy();
 
 	void Initialize(ComentType type, std::string text);
-	void Update(float speed);
+	void Update();
 	void Draw()const;
 	void Finalize();
 	

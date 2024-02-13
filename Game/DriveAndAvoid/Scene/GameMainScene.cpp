@@ -2,7 +2,7 @@
 #include "../Object//RankingData.h"
 #include "DxLib.h"
 #include <math.h>
-#include <fstream>
+#include <random>
 
 GameMainScene::GameMainScene() :high_score(0), back_ground(NULL), barrier_image(NULL), mileage(0), player(nullptr)
 {
@@ -22,6 +22,7 @@ void GameMainScene::Initialize()
 {
 	FPSCount = 0;
 	starttime = 0;
+	spawnInterval = 10;
 	/*Hp_width = 200;
 	Hp = 100;
 	MaxHp = 100;
@@ -65,18 +66,25 @@ eSceneType GameMainScene::Update()
 	{
 		FPSCount = 0;
 		starttime++;
+		//３０秒ごとにコメント生成間隔を早くする
+		if (starttime % 20 == 0 && spawnInterval != 1)
+		{
+			spawnInterval--;
+		}
 	}
 	// プレイヤーの更新
 	player->Update();
+
+	clsDx();
+	printfDx("%d", enemy.size());
 
 	// 移動距離の更新
 	mileage += (int)player->GetSpeed() + 5;
 
 	// 敵生成処理
-	if (mileage / 5 % 100 == 0)
+	if (FPSCount % spawnInterval == 0)
 	{
-		Enemy::ComentType type = Enemy::ComentType::LAUGTH;
-		enemy.emplace_back(std::make_shared<Enemy>(enemy_image, type, SetComent(type)));
+		SpawnCooment(starttime);
 	}
 
 	// 敵の更新と当たり判定チェック
@@ -85,7 +93,7 @@ eSceneType GameMainScene::Update()
 	{
 		if (e != nullptr)
 		{
-			e->Update(player->GetSpeed());
+			e->Update();
 
 			// 画面外に行ったら敵を削除してスコア加算
 			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
@@ -93,6 +101,7 @@ eSceneType GameMainScene::Update()
 				//enemy_count[e->GetType()]++;
 				enemy.erase(enemy.begin() + i);
 				e = nullptr;
+				i++;
 				continue;
 			}
 
@@ -100,7 +109,7 @@ eSceneType GameMainScene::Update()
 			if (IsHitCheck(player, enemy.at(i)))
 			{
 				player->SetActive(false);
-				player->DecreaseHp(-50.0f);
+				//player->DecreaseHp(-50.0f);
 				e->Finalize();
 				if (e == nullptr)
 				{
@@ -291,4 +300,27 @@ std::string GameMainScene::SetComent(Enemy::ComentType type)
 	coment = comentText[type].at(GetRand(max - 1));
 
 	return coment;
+}
+
+void GameMainScene::SpawnCooment(int time)
+{
+	Enemy::ComentType type = Enemy::ComentType::NORMAL;
+
+	if (time % 20 == 0)
+	{
+		laughtLengthNum++;
+	}
+
+	//乱数生成
+	std::random_device rnd;
+	std::mt19937 mt(rnd());
+
+	 std::uniform_int_distribution<> randNum(1, 10);
+
+	if (randNum(mt) <= laughtLengthNum)
+	{
+		type = Enemy::ComentType::LAUGTH;
+	}
+
+	enemy.emplace_back(std::make_shared<Enemy>(enemy_image, type, SetComent(type)));
 }

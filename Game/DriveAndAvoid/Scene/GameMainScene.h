@@ -28,7 +28,10 @@ private:
 	std::vector<std::shared_ptr<Enemy>> enemy;
 	//コメントテキスト格納配列
 	std::unordered_map<Enemy::ComentType, std::vector<std::string>>comentText;
-	//std::unordered_map<Enemy::ComentType, std::vector<std::string>>comentText;
+	//laughtコメントを生成する乱数値の範囲
+	int laughtLengthNum;
+	//コメント生成間隔時間
+	int spawnInterval;
 	
 public:
 	GameMainScene();
@@ -44,11 +47,12 @@ public:
 private:
 	// ハイスコア読み込み処理
 	void ReadHighScore();
-	bool IsHitCheck(Player* p, Enemy* e);
 	// 当たり判定
 	bool IsHitCheck(Player* p, std::shared_ptr<Enemy> e);
 	//コメントテキスト設定関数
 	void SetComentText();
 	//コメント設定関数
 	std::string SetComent(Enemy::ComentType type);
+	//コメント生成関数
+	void SpawnCooment(int time);
 };
