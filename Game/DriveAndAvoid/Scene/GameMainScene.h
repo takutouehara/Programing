@@ -12,7 +12,7 @@ class GameMainScene :public SceneBase
 private:
 	int starttime;
 	int FPSCount;
-	int high_score;		// ハイスコア
+	int high_time;		// ハイスコア
 	int back_ground;	// 背景画像
 	int barrier_image;	// バリア画像
 	int mileage;		// 走行距離
@@ -48,7 +48,7 @@ public:
 
 private:
 	// ハイスコア読み込み処理
-	void ReadHighScore();
+	void ReadHighTime();
 	// 当たり判定
 	bool IsHitCheck(Player* p, std::shared_ptr<Enemy> e);
 	//コメントテキスト設定関数

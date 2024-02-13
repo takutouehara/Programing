@@ -6,7 +6,7 @@ RankingData::RankingData()
 {
 	for (int i = 0; i < 6; i++)
 	{
-		score[i] = NULL;
+		time[i] = NULL;
 		rank[i] = NULL;
 		for (int j = 0; j < 15; j++)
 		{
@@ -38,14 +38,14 @@ void RankingData::Initialize()
 	// 対象ファイルから読み込む
 	for (int i = 0; i < 5; i++)
 	{
-		fscanf_s(fp, "%6d,%2d,%[^,],\n", &score[i], &rank[i], name[i], 15);
+		fscanf_s(fp, "%6d,%2d,%[^,],\n", &time[i], &rank[i], name[i], 15);
 	}
 
 	// ファイルクローズ
 	fclose(fp);
 
 	// 末尾データの設定
-	score[5] = 0;
+	time[5] = 0;
 	rank[5] = 0;
 	name[5][0] = '\0';
 }
@@ -57,18 +57,18 @@ void RankingData::Finalize()
 }
 
 // データ設定処理
-void RankingData::SetRankingData(int score, const char* name)
+void RankingData::SetRankingData(int time, const char* name)
 {
-	this->score[5] = score;
+	this->time[5] = time;
 	strcpy_s(this->name[5], name);
 
 	SortData();
 }
 
 // スコア取得処理
-int RankingData::GetScore(int value) const
+int RankingData::GetTime(int value) const
 {
-	return score[value];
+	return time[value];
 }
 
 // ランク取得処理
@@ -91,11 +91,11 @@ void RankingData::SortData()
 	{
 		for (int j = i + 1; j < 6; j++)
 		{
-			if (score[i] <= score[j])
+			if (time[i] <= time[j])
 			{
-				int tmp = score[i];
-				score[i] = score[j];
-				score[j] = tmp;
+				int tmp = time[i];
+				time[i] = time[j];
+				time[j] = tmp;
 
 				char buf[15]{};
 				strcpy_s(buf, name[i]);
@@ -114,7 +114,7 @@ void RankingData::SortData()
 	{
 		for (int j = i + 1; j < 6; j++)
 		{
-			if (score[i] > score[j])
+			if (time[i] > time[j])
 			{
 				rank[j]++;
 			}
@@ -136,7 +136,7 @@ void RankingData::SortData()
 	// 対象ファイルに書き込み
 	for (int i = 0; i < 5; i++)
 	{
-		fprintf(fp, "%d,%d,%s,\n", score[i], rank[i], name[i]);
+		fprintf(fp, "%d,%d,%s,\n", time[i], rank[i], name[i]);
 	}
 
 	// ファイルクローズ

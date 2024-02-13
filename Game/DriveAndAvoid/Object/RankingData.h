@@ -3,7 +3,7 @@
 class RankingData
 {
 private:
-	int score[6];		// スコアデータ
+	int time[6];		// スコアデータ
 	int rank[6];		// ランクデータ
 	char name[6][15];	// 名前データ
 
@@ -16,9 +16,9 @@ public:
 
 public:
 	// ランキングデータの設定
-	void SetRankingData(int score, const char* name);
+	void SetRankingData(int time, const char* name);
 	// スコア取得処理
-	int GetScore(int value) const;
+	int GetTime(int value) const;
 	// ランク取得処理
 	int GetRank(int value) const;
 	// 名前取得処理

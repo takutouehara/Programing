@@ -4,7 +4,7 @@
 #include <math.h>
 #include <random>
 
-GameMainScene::GameMainScene() :high_score(0), back_ground(NULL), barrier_image(NULL), mileage(0), player(nullptr)
+GameMainScene::GameMainScene() :high_time(0), back_ground(NULL), barrier_image(NULL), mileage(0), player(nullptr), starttime(0)
 {
 	for (int i = 0; i < 3; i++)
 	{
@@ -30,7 +30,7 @@ void GameMainScene::Initialize()
 	MaxHp = 100;
 	HpGauge = 0;*/
 	// 高得点を読み込む
-	ReadHighScore();
+	ReadHighTime();
 
 	// 画像の読み込み
 	back_ground = LoadGraph("Resource/images/back.bmp");
@@ -195,10 +195,10 @@ void GameMainScene::Draw() const
 void GameMainScene::Finalize()
 {
 	// スコアを加算する
-	int score = (mileage / 10 * 10);
+	int time = (mileage / 10 * 10);
 	for (int i = 0; i < 3; i++)
 	{
-		score += (i + 1) * 50 * enemy_count[i];
+		time += (i + 1) * 50 * enemy_count[i];
 	}
 
 	// リザルトデータの書き込み
@@ -213,19 +213,19 @@ void GameMainScene::Finalize()
 	}
 
 	// スコアを保存
-	fprintf(fp, "%d,\n", score);
+	//fprintf(fp, "%d,\n", time);
 
 	// 走行距離を保存
-	fprintf(fp, "%d,\n", mileage / 10);
+	//fprintf(fp, "%d,\n", mileage / 10);
 
 	// 経過時間を保存
 	fprintf(fp, "%d,\n", starttime);
 
 	// 避けた数と得点を保存
-	for (int i = 0; i < 3; i++)
-	{
-		fprintf(fp, "%d,\n", enemy_count[i]);
-	}
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	fprintf(fp, "%d,\n", enemy_count[i]);
+	//}
 
 	// ファイルクローズ
 	fclose(fp);
@@ -247,12 +247,12 @@ eSceneType GameMainScene::GetNowScene() const
 }
 
 // ハイスコアの読み込み
-void GameMainScene::ReadHighScore()
+void GameMainScene::ReadHighTime()
 {
 	RankingData data;
 	data.Initialize();
 
-	high_score = data.GetScore(0);
+	high_time = data.GetTime(0);
 
 	data.Finalize();
 }

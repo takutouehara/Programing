@@ -59,7 +59,7 @@ void RankingDispScene::Draw() const
 	for (int i = 0; i < 5; i++)
 	{
 		DrawFormatString(50, 170 + i * 100, 0xff0000, "%2d", ranking->GetRank(i));
-		DrawFormatString(200, 170 + i * 100, 0xffffff, "%-15s %6d", ranking->GetName(i), ranking->GetScore(i));
+		DrawFormatString(200, 170 + i * 100, 0xffffff, "%-15s %6d", ranking->GetName(i), ranking->GetTime(i));
 
 	}
 }
