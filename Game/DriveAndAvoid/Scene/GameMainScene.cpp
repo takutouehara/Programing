@@ -63,7 +63,7 @@ eSceneType GameMainScene::Update()
 	{
 		FPSCount = 0;
 		starttime++;
-		//３０秒ごとにコメント生成間隔を早くする
+		//２０秒ごとにコメント生成間隔を早くする
 		if (starttime % 20 == 0 && spawnInterval != 1)
 		{
 			spawnInterval--;
@@ -71,7 +71,7 @@ eSceneType GameMainScene::Update()
 	}
 	// プレイヤーの更新
 	player->Update();
-
+	
 	// 移動距離の更新
 	mileage += (int)player->GetSpeed() + 5;
 
@@ -97,10 +97,8 @@ eSceneType GameMainScene::Update()
 			}
 
 			// 当たり判定の確認
-			if (IsHitCheck(player,e))
+			if (IsHitCheck(player,e) && player->GetActive() == true)
 			{
-				player->SetActive(false);
-
 				Enemy::ComentType type = e->GetType();
 
 				//コメントの種類に応じて処理を変更
@@ -108,9 +106,11 @@ eSceneType GameMainScene::Update()
 				{
 				case Enemy::ComentType::NORMAL:
 					player->DecreaseHp(-50.0f);
+					player->SetActive(false);
 					break;
 				case Enemy::ComentType::LAUGTH:
 					player->DecreaseHp(-150.0f);
+					player->SetActive(false);
 					e->Explosion();
 					break;
 				case Enemy::ComentType::HEAL_HP:
@@ -123,7 +123,7 @@ eSceneType GameMainScene::Update()
 				default:
 					break;
 				}
-				
+
 				if (e->GetType() != Enemy::ComentType::LAUGTH)
 				{
 					enemy.erase(enemy.begin() + i);
@@ -300,10 +300,13 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 	}
 
 	// 位置情報の差分を取得
-	Vector2D diff_location = p->GetLocation() - e->GetLocation();
+	Vector2D e_location = e->GetLocation();
+	e_location.x += e->GetBoxSize().x / 2;
+	e_location.y += e->GetBoxSize().y / 2;
+	Vector2D diff_location = p->GetLocation() - e_location;
 
 	// 当たり判定サイズの大きさを取得
-	Vector2D box_ex = p->GetBoxSize() + e->GetBoxSize();
+	Vector2D box_ex = p->GetBoxSize() + (e->GetBoxSize() / 2);
 
 	// コリジョンデータより位置情報の差分が小さいならヒット判定とする
 	return ((fabsf(diff_location.x) < box_ex.x) && (fabsf(diff_location.y) < box_ex.y));
@@ -314,9 +317,10 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 //コメントテキスト設定
 void GameMainScene::SetComentText()
 {
-	std::vector<std::string> normalComent{ "タヒネ","きっしょ","〇す","56す","ktkr"};
-	std::vector<std::string> laughtComent{ "ｗｗｗｗ","草","爆笑","lol"};
-	std::vector<std::string> healComent{ "ここすき","ネ申"};
+	std::vector<std::string> normalComent{ "タヒネ","きっしょ","〇す","56す","つ、まんね","い、くわ",
+											"■■■■■■■■■■","ぶっさ"};
+	std::vector<std::string> laughtComent{ "ｗｗｗｗ","草","爆笑","ｌｏｌ","ｗｗｗｗｗｗｗｗｗｗ","大草原不可避" };
+	std::vector<std::string> healComent{ "ここすき","ネ申","ｋｔｋｒ" };
 	std::vector<std::string> bariaComent{ "バリア" };
 
 	comentText[Enemy::ComentType::NORMAL] = normalComent;
