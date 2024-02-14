@@ -12,6 +12,7 @@ private:
 	int menu_image;			// メニュー画像
 	int cursor_image;		// カーソル画像
 	int menu_cursor;		// メニューカーソル画像
+	int acter;				// アクター画像
 	int BGM;				// タイトルBGM
 	int cursor_se;			// カーソル音
 	int enter_se;			// 決定音
