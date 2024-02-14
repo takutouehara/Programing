@@ -17,7 +17,8 @@ void RankingInputScene::Initialize()
 {
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Ranking_Back.png");
-
+	cursor_se = LoadSoundMem("Resource/sound/select01.mp3");
+	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
 	// エラーチェック
 	if (background_image == -1)
 	{
@@ -139,6 +140,7 @@ bool RankingInputScene::InputName()
 	// カーソル操作処理
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_LEFT))
 	{
+
 		if (cursor_x > 0)
 		{
 			cursor_x--;
@@ -147,9 +149,12 @@ bool RankingInputScene::InputName()
 		{
 			cursor_x = 12;
 		}
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 	}
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_RIGHT))
 	{
+
 		if (cursor_x < 12)
 		{
 			cursor_x++;
@@ -158,16 +163,22 @@ bool RankingInputScene::InputName()
 		{
 			cursor_x = 0;
 		}
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 	}
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_UP))
 	{
+
 		if (cursor_y > 0)
 		{
 			cursor_y--;
 		}
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 	}
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN))
 	{
+
 		if (cursor_y < 4)
 		{
 			cursor_y++;
@@ -176,13 +187,18 @@ bool RankingInputScene::InputName()
 				cursor_x = 0;
 			}
 		}
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 	}
 
 	// カーソル位置の文字を決定する
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
+
 		if (cursor_y < 2)
 		{
+			PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 			name[name_num++] = 'a' + cursor_x + (cursor_y * 13);
 			if (name_num == 14)
 			{
@@ -192,6 +208,8 @@ bool RankingInputScene::InputName()
 		}
 		else if (cursor_y < 4)
 		{
+			PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 			name[name_num++] = 'A' + cursor_x + ((cursor_y - 2) * 13);
 			if (name_num == 14)
 			{
@@ -203,11 +221,15 @@ bool RankingInputScene::InputName()
 		{
 			if (cursor_x == 0)
 			{
+				PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 				name[name_num] = '\0';
 				return true;
 			}
 			else
 			{
+				PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 				name[name_num--] = NULL;
 			}
 		}
