@@ -20,7 +20,8 @@ void TitleScene::Initialize()
 	background_font = LoadGraph("Resource/images/Title_Font.png");
 	menu_image = LoadGraph("Resource/images/Menu_Font.png");
 	cursor_image = LoadGraph("Resource/images/Menu_Icon.png");
-
+	cursor_se = LoadSoundMem("Resource/sound/select01.mp3");
+	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
 	// エラーチェック
 	if (background_image == -1)
 	{
@@ -48,6 +49,7 @@ eSceneType TitleScene::Update()
 	// カーソル下移動
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN))
 	{
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
 		menu_cursor += 2;
 		// 一番下に到達したら一番上にする
 		if (menu_cursor > 8)
@@ -58,6 +60,8 @@ eSceneType TitleScene::Update()
 	// カーソル上移動
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_UP))
 	{
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 		menu_cursor -= 2;
 		// 一番上に到達したら一番下にする
 		if (menu_cursor < 2)
@@ -69,6 +73,8 @@ eSceneType TitleScene::Update()
 	// カーソル決定（決定した画面に遷移する）
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
+		PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 		switch (menu_cursor)
 		{
 		case 2:

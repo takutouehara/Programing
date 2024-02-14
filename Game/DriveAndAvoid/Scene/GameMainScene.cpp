@@ -285,9 +285,9 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 //コメントテキスト設定
 void GameMainScene::SetComentText()
 {
-	std::vector<std::string> normalComent{ "タヒネ","ここすき","うぽつ" };
-	std::vector<std::string> laughtComent{ "wwwww","草","爆笑" };
-
+	std::vector<std::string> normalComent{ "タヒネ","ここすき","うぽつ" ,"ktkr","わこつ"};
+	std::vector<std::string> laughtComent{ "wwwww","草","爆笑" ,"lol"};
+	// 回復コメント :うp乙,スゲェ,ネ申
 	comentText[Enemy::ComentType::NORMAL] = normalComent;
 	comentText[Enemy::ComentType::LAUGTH] = laughtComent;
 
