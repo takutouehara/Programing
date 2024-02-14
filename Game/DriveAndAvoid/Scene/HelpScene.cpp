@@ -59,8 +59,8 @@ void HelpScene::Draw() const
 	DrawBox(260, 185, 1000, 340, GetColor(155, 0, 0), TRUE);
 
 	DrawString(450, 190, "操作方法", color, 0);
-	DrawString(290, 240, "移動        　　　　    スティック", color, 0);
-	DrawString(290, 290, "決定/キャンセル/バリア　Aボタン", color, 0);
+	DrawString(290, 240, "移動         十字ボタン/スティック", color, 0);
+	DrawString(290, 290, "決定/キャンセル/バリア　   Aボタン", color, 0);
 
 	DrawString(80, 350, "・流れてくるコメントに当たるとダメージ", color, 0);
 	DrawString(80, 400, "・'笑い'に関する言葉に当たると爆発して大ダメージ", color, 0);
