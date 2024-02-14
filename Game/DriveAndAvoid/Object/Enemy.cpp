@@ -10,13 +10,7 @@ Enemy::Enemy(int* image, ComentType type, std::string text, int font) :type(type
 	{
 		explosionImage = image;
 	}
-}
-	Initialize(type,text);
-	explosionImage = image;
 
-	//デバック用
-	BoxLocation1 = Vector2D(0.0f, 0.0f);
-	BoxLocation2 = Vector2D(0.0f, 0.0f);
 }
 
 Enemy::~Enemy()
@@ -68,10 +62,6 @@ void Enemy::Update()
 		}
 	}
 
-	//デバック用
-	BoxLocation1 = location - (box_size / 2);
-	BoxLocation2 = location + (box_size / 2);
-
 }
 
 void Enemy::Draw() const
@@ -86,9 +76,6 @@ void Enemy::Draw() const
 	{
 		DrawGraphF(location.x, location.y, explosionImage[explosionAnimationCount],TRUE);
 	}
-
-	//デバック用
-	DrawBoxAA(BoxLocation1.x, BoxLocation1.y, BoxLocation2.x, BoxLocation2.y, 0xff0000, false);
 }
 
 void Enemy::Finalize()

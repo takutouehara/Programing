@@ -46,10 +46,6 @@ private:
 	//爆発アニメーション更新時間
 	int animationUpdateTime;
 
-	//デバック用
-	Vector2D BoxLocation1;	//左上隅の座標
-	Vector2D BoxLocation2;	//右上隅の座標
-
 
 public:
 	Enemy(int* image, ComentType type, std::string text,int font);
