@@ -20,7 +20,7 @@ void Player::Initialize()
 {
 	is_active = true;
 	location = Vector2D(320.0f, 380.0f);
-	box_size = Vector2D(31.0f, 60.0f);
+	box_size = Vector2D(17.0f, 20.5f);
 	angle = 0.0f;
 	speed = 3.0f;
 	hp = 1000;
@@ -35,6 +35,11 @@ void Player::Initialize()
 	{
 		throw("Resource/images/Player_Acter.pngがありません\n");
 	}
+
+	//デバック用
+	BoxLocation1 = Vector2D(0.0f, 0.0f);
+	BoxLocation2 = Vector2D(0.0f, 0.0f);
+
 }
 
 // 更新処理
@@ -86,6 +91,11 @@ void Player::Update()
 			barrier = nullptr;
 		}
 	}
+
+	//デバック用
+	BoxLocation1 = location - (box_size );
+	BoxLocation2 = location + (box_size );
+
 }
 
 // 描画処理
@@ -99,6 +109,9 @@ void Player::Draw()
 	{
 		barrier->Draw(this->location);
 	}
+
+	//デバック用
+	//DrawBoxAA(BoxLocation1.x,BoxLocation1.y, BoxLocation2.x, BoxLocation2.y,0xff0000,false );
 }
 
 // 終了時処理
@@ -171,13 +184,13 @@ bool Player::IsBarrier() const
 // 移動処理
 void Player::Movement()
 {
-	float  stick_y = InputControl::GetLstickRadY();
+	float  stick_y = InputControl::GetLstickRadY() ;
 	float  stick_x = InputControl::GetLstickRadX();
 
 	Vector2D move = Vector2D(0.0f);
 	angle = 0.0f;
 
-	if (stick_y != 0.0f || stick_x != 0.0f) {
+	if (stick_y != 0 || stick_x != 0) {
 		move += Vector2D(stick_x * PleyerMoveSpeed, -stick_y * PleyerMoveSpeed);
 	}
 

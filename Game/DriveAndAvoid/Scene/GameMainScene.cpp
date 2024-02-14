@@ -12,6 +12,7 @@ GameMainScene::GameMainScene() :high_time(0), barrier_image(NULL), mileage(0), p
 	}
 	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
 	PlayMovieToGraph(movieHandle);
+
 }
 
 GameMainScene::~GameMainScene()
@@ -214,6 +215,7 @@ void GameMainScene::Draw() const
 	DrawFormatStringF(fx, fy - 10, GetColor(0, 255, 0), "HP METER");
 	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 200 / 1000), fy + 50.0f, GetColor(0, 255, 0), TRUE);
 	DrawBoxAA(fx, fy + 20.0f, fx + 200.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
+
 }
 
 // 終了時処理
@@ -307,6 +309,8 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 
 	// コリジョンデータより位置情報の差分が小さいならヒット判定とする
 	return ((fabsf(diff_location.x) < box_ex.x) && (fabsf(diff_location.y) < box_ex.y));
+
+	
 }
 
 //コメントテキスト設定

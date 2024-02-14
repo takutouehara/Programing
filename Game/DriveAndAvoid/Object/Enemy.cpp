@@ -10,6 +10,7 @@ Enemy::Enemy(int* image, ComentType type, std::string text, int font) :type(type
 	{
 		explosionImage = image;
 	}
+
 }
 
 Enemy::~Enemy()
@@ -60,7 +61,6 @@ void Enemy::Update()
 			}
 		}
 	}
-
 
 }
 
