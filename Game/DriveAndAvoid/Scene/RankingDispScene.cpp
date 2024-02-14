@@ -60,7 +60,6 @@ void RankingDispScene::Draw() const
 	{
 		DrawFormatString(50, 170 + i * 100, 0xff0000, "%2d", ranking->GetRank(i));
 		DrawFormatString(200, 170 + i * 100, 0xffffff, "%-15s %6d", ranking->GetName(i), ranking->GetTime(i));
-
 	}
 }
 
