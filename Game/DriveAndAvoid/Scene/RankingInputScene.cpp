@@ -18,6 +18,7 @@ void RankingInputScene::Initialize()
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Ranking_Back.png");
 	cursor_se = LoadSoundMem("Resource/sound/select01.mp3");
+	ChangeVolumeSoundMem(100, cursor_se);
 	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
 	// エラーチェック
 	if (background_image == -1)
@@ -50,6 +51,8 @@ void RankingInputScene::Initialize()
 // 更新処理
 eSceneType RankingInputScene::Update()
 {
+	clsDx();
+	printfDx("x:%d  y:%d", cursor_x, cursor_y);
 	bool is_change = false;
 
 	// 名前入力処理
@@ -106,11 +109,15 @@ void RankingInputScene::Draw() const
 	{
 		if (cursor_x == 0)
 		{
-			DrawBox(600, 100, font_size, font_size, GetColor(0, 0, 255), FALSE);
+			int x = 5 * font_size;
+			int y = 4 * font_size + 265;
+			DrawBox(x, y, x + font_size * 2, y + font_size, GetColor(0, 0, 255), FALSE);
 		}
 		else
 		{
-			DrawBox(0, 0, font_size, font_size, GetColor(255, 0, 0), FALSE);
+			int x = 10 * font_size - 30;
+			int y = 4 * font_size + 265;
+			DrawBox(x, y, x + font_size * 2, y + font_size, GetColor(255, 0, 0), FALSE);
 		}
 	}
 }
@@ -121,8 +128,9 @@ void RankingInputScene::Finalize()
 	// ランキングにデータを格納
 	ranking->SetRankingData(time, name);
 
-	// 読み込んだ画像を削除
-	DeleteGraph(background_image);
+	// 読み込んだデータを削除
+	InitGraph();
+	InitSoundMem();
 
 	// 動的メモリの解放
 	delete ranking;
@@ -137,8 +145,11 @@ eSceneType RankingInputScene::GetNowScene() const
 // 名前入力処理
 bool RankingInputScene::InputName()
 {
+	//スティック入力値
+	Vector2D lstick = InputControl::GetleftStick();
+
 	// カーソル操作処理
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_LEFT))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_LEFT) || lstick.x == -1.0f)
 	{
 
 		if (cursor_x > 0)
@@ -148,11 +159,15 @@ bool RankingInputScene::InputName()
 		else
 		{
 			cursor_x = 12;
+			if (cursor_y == 4)
+			{
+				cursor_x = 1;
+			}
 		}
 		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
 
 	}
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_RIGHT))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_RIGHT) || lstick.x == 1.0f)
 	{
 
 		if (cursor_x < 12)
@@ -162,21 +177,45 @@ bool RankingInputScene::InputName()
 		else
 		{
 			cursor_x = 0;
+
 		}
 		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
 
 	}
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_UP))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_UP) || lstick.y == 1.0f)
 	{
 
 		if (cursor_y > 0)
 		{
+			if (cursor_y == 4)
+			{
+				if (cursor_x == 0)
+				{
+					cursor_x = 3;
+				}
+				else
+				{
+					cursor_x = 8;
+				}
+			}
 			cursor_y--;
+		}
+		else
+		{
+			cursor_y = 4;
+			if (cursor_x <= 6)
+			{
+				cursor_x = 0;
+			}
+			else
+			{
+				cursor_x = 1;
+			}
 		}
 		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
 
 	}
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN) || lstick.y == -1.0f)
 	{
 
 		if (cursor_y < 4)
@@ -184,7 +223,26 @@ bool RankingInputScene::InputName()
 			cursor_y++;
 			if (cursor_y == 4)
 			{
-				cursor_x = 0;
+				if (cursor_x <= 6)
+				{
+					cursor_x = 0;
+				}
+				else
+				{
+					cursor_x = 1;
+				}
+			}
+		}
+		else
+		{
+			cursor_y = 0;
+			if (cursor_x == 0)
+			{
+				cursor_x = 3;
+			}
+			else
+			{
+				cursor_x = 8;
 			}
 		}
 		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
