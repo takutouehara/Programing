@@ -53,6 +53,8 @@ void GameMainScene::Initialize()
 
 	comentFont = CreateFontToHandle("UD デジタル 教科書体 N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
 	isSpawnBaria = false;
+
+	playerHit = false;
 }
 
 // 更新処理
