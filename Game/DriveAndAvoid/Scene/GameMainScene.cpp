@@ -12,13 +12,14 @@ GameMainScene::GameMainScene() :high_time(0), barrier_image(NULL), mileage(0), p
 	}
 	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
 	PlayMovieToGraph(movieHandle);
+
 }
 
 GameMainScene::~GameMainScene()
 {
 }
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ‰Šú‰»ˆ—
 void GameMainScene::Initialize()
 {
 	FPSCount = 0;
@@ -28,33 +29,33 @@ void GameMainScene::Initialize()
 	Hp = 100;
 	MaxHp = 100;
 	HpGauge = 0;*/
-	// ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
+	// ‚“¾“_‚ğ“Ç‚İ‚Ş
 	ReadHighTime();
 
-	// ï¿½æ‘œï¿½Ì“Ç‚İï¿½ï¿½ï¿½
+	// ‰æ‘œ‚Ì“Ç‚İ‚İ
 	barrier_image = LoadGraph("Resource/images/barrier.png");
 	LoadDivGraph("Resource/images/exprosion.png", 10, 10, 1, 108, 108, exprosionImage);
 	
-	// ï¿½Gï¿½ï¿½ï¿½[ï¿½`ï¿½Fï¿½bï¿½N
+	// ƒGƒ‰[ƒ`ƒFƒbƒN
 	if (barrier_image == -1)
 	{
-		throw("Resource/images/barrierï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n");
+		throw("Resource/images/barrier‚ª‚ ‚è‚Ü‚¹‚ñ\n");
 	}
 
-	// ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½ï¿½ï¿½
+	// ƒIƒuƒWƒFƒNƒg‚Ì¶¬
 	player = new Player;
 
-	// ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½
+	// ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»
 	player->Initialize();
 
-	//ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Ç‚İï¿½ï¿½ï¿½
+	//ƒRƒƒ“ƒg“Ç‚İ‚İ
 	SetComentText();
 
-	comentFont = CreateFontToHandle("UD ï¿½fï¿½Wï¿½^ï¿½ï¿½ ï¿½ï¿½ï¿½Èï¿½ï¿½ï¿½ N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
+	comentFont = CreateFontToHandle("UD ƒfƒWƒ^ƒ‹ ‹³‰È‘‘Ì N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
 	isSpawnBaria = false;
 }
 
-// ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½
+// XVˆ—
 eSceneType GameMainScene::Update()
 {
 	FPSCount++;
@@ -62,24 +63,24 @@ eSceneType GameMainScene::Update()
 	{
 		FPSCount = 0;
 		starttime++;
-		//ï¿½Rï¿½Oï¿½bï¿½ï¿½ï¿½Æ‚ÉƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ÔŠuï¿½ğ‘‚ï¿½ï¿½ï¿½ï¿½ï¿½
+		//‚R‚O•b‚²‚Æ‚ÉƒRƒƒ“ƒg¶¬ŠÔŠu‚ğ‘‚­‚·‚é
 		if (starttime % 20 == 0 && spawnInterval != 1)
 		{
 			spawnInterval--;
 		}
 	}
-	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌXï¿½V
+	// ƒvƒŒƒCƒ„[‚ÌXV
 	player->Update();
 
-	// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌXï¿½V
+	// ˆÚ“®‹——£‚ÌXV
 	mileage += (int)player->GetSpeed() + 5;
 
-	// ï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// “G¶¬ˆ—
 	if (FPSCount % spawnInterval == 0 && enemy.size()<10)
 	{
 		SpawnCooment(starttime);
 	}
-	// ï¿½Gï¿½ÌXï¿½Vï¿½Æ“ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½`ï¿½Fï¿½bï¿½N
+	// “G‚ÌXV‚Æ“–‚½‚è”»’èƒ`ƒFƒbƒN
 	int i = 0;
 	for (auto& e : enemy)
 	{
@@ -88,21 +89,21 @@ eSceneType GameMainScene::Update()
 			e->Update();
 
 
-			//ï¿½ï¿½ï¿½jï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½íœ
+			//”š”jƒAƒjƒ[ƒVƒ‡ƒ“‚ªI—¹‚µ‚Ä‚©‚çíœ
 			if (e->GetType() == Enemy::ComentType::LAUGTH && e->GetExprosionState() == Enemy::ExprosionState::FINISH)
 			{
 				enemy.erase(enemy.begin() + i);
 				continue;
 			}
 
-			// ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½ÌŠmï¿½F
+			// “–‚½‚è”»’è‚ÌŠm”F
 			if (IsHitCheck(player,e))
 			{
 				player->SetActive(false);
 
 				Enemy::ComentType type = e->GetType();
 
-				//ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Ìï¿½Ş‚É‰ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ÏX
+				//ƒRƒƒ“ƒg‚Ìí—Ş‚É‰‚¶‚Äˆ—‚ğ•ÏX
 				switch (type)
 				{
 				case Enemy::ComentType::NORMAL:
@@ -132,7 +133,7 @@ eSceneType GameMainScene::Update()
 				continue;
 			}
 
-			// ï¿½ï¿½ÊŠOï¿½Ésï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½íœ
+			// ‰æ–ÊŠO‚És‚Á‚½‚ç“G‚ğíœ
 			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
 			{
 				enemy.erase(enemy.begin() + i);
@@ -151,13 +152,13 @@ eSceneType GameMainScene::Update()
 	//HpGauge = Hp_width * Hp / MaxHp;
 
 
-	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì‘Ì—Í‚ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½È‚çƒŠï¿½Uï¿½ï¿½ï¿½gï¿½É‘Jï¿½Ú‚ï¿½ï¿½ï¿½
+	// ƒvƒŒƒCƒ„[‚Ì‘Ì—Í‚ª‚O–¢–‚È‚çƒŠƒUƒ‹ƒg‚É‘JˆÚ‚·‚é
 	if (player->GetHp() < 0.0f)
 	{
 		return eSceneType::E_RESULT;
 	}
 
-	//ï¿½ï¿½ï¿½æƒ‹ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
+	//“®‰æƒ‹[ƒvˆ—
 	if (GetMovieStateToGraph(movieHandle) != 1)
 	{
 		SeekMovieToGraph(movieHandle, 0);
@@ -167,15 +168,15 @@ eSceneType GameMainScene::Update()
 	return GetNowScene();
 }
 
-// ï¿½`ï¿½æˆï¿½ï¿½
+// •`‰æˆ—
 void GameMainScene::Draw() const
 {
 	DrawGraph(0, 0, movieHandle, FALSE);
-	// ï¿½wï¿½iï¿½æ‘œï¿½Ì•`ï¿½ï¿½
+	// ”wŒi‰æ‘œ‚Ì•`‰æ
 	/*DrawGraph(0, mileage % 480 - 480, back_ground, TRUE);
 	DrawGraph(0, mileage % 480, back_ground, TRUE);*/
 
-	 //ï¿½Gï¿½Ì•`ï¿½ï¿½
+	 //“G‚Ì•`‰æ
 	for (auto& e : enemy)
 	{
 		if (e != nullptr)
@@ -184,23 +185,23 @@ void GameMainScene::Draw() const
 		}
 	}
 
-	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì•`ï¿½ï¿½
+	//ƒvƒŒƒCƒ„[‚Ì•`‰æ
 	player->Draw();
 
-	//UIï¿½Ì•`ï¿½ï¿½
+	//UI‚Ì•`‰æ
 	DrawBox(0, 0, 700, 100, GetColor(100, 200, 255), TRUE);
 	//DrawBox(50, 50, 50 + HpGauge, 70, GetColor(0, 255, 0), true);
 	SetFontSize(20);
-	DrawFormatString(50, 10, GetColor(255, 255, 255), "ï¿½oï¿½ßï¿½ï¿½ï¿½");
+	DrawFormatString(50, 10, GetColor(255, 255, 255), "Œo‰ßŠÔ");
 	DrawFormatString(80, 50, GetColor(255, 255, 255), "%d", starttime);
 
-	DrawFormatString(180, 10, GetColor(255, 0, 0), "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½");
+	DrawFormatString(180, 10, GetColor(255, 0, 0), "‘–s‹——£");
 	DrawFormatString(180, 50, GetColor(255, 255, 255), "%08d", mileage / 10);
 	
 
-	DrawFormatString(300, 10, GetColor(0, 0, 255), "ï¿½cï¿½ï¿½Ìƒoï¿½ï¿½ï¿½A");
+	DrawFormatString(300, 10, GetColor(0, 0, 255), "c‚è‚ÌƒoƒŠƒA");
 
-	// ï¿½oï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Ì•`ï¿½ï¿½
+	// ƒoƒŠƒA–‡”‚Ì•`‰æ
 	for (int i = 0; i < player->GetBarriarCount(); i++)
 	{
 		DrawRotaGraph(320 + i * 25, 60, 0.2f, 0, barrier_image, TRUE, FALSE);
@@ -208,58 +209,59 @@ void GameMainScene::Draw() const
 
 	
 
-	// ï¿½Ì—ÍƒQï¿½[ï¿½Wï¿½Ì•`ï¿½ï¿½
+	// ‘Ì—ÍƒQ[ƒW‚Ì•`‰æ
 	float fx = 450.0f;
 	float fy = 30.0f;
 	DrawFormatStringF(fx, fy - 10, GetColor(0, 255, 0), "HP METER");
 	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 200 / 1000), fy + 50.0f, GetColor(0, 255, 0), TRUE);
 	DrawBoxAA(fx, fy + 20.0f, fx + 200.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
+
 }
 
-// ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// I—¹ˆ—
 void GameMainScene::Finalize()
 {
-	// ï¿½Xï¿½Rï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½
+	// ƒXƒRƒA‚ğ‰ÁZ‚·‚é
 	int time = (mileage / 10 * 10);
 	for (int i = 0; i < 3; i++)
 	{
 		time += (i + 1) * 50 * enemy_count[i];
 	}
 
-	// ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½gï¿½fï¿½[ï¿½^ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ƒŠƒUƒ‹ƒgƒf[ƒ^‚Ì‘‚«‚İ
 	FILE* fp = nullptr;
-	// ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½
+	// ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“
 	errno_t result = fopen_s(&fp, "Resource/dat/result_data.csv", "w");
 
-	// ï¿½Gï¿½ï¿½ï¿½[ï¿½`ï¿½Fï¿½bï¿½N
+	// ƒGƒ‰[ƒ`ƒFƒbƒN
 	if (result != 0)
 	{
-		throw("Resource/dat/result.csvï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n");
+		throw("Resource/dat/result.csv‚ªŠJ‚¯‚Ü‚¹‚ñ\n");
 	}
 
-	// ï¿½Xï¿½Rï¿½Aï¿½ï¿½Û‘ï¿½
+	// ƒXƒRƒA‚ğ•Û‘¶
 	//fprintf(fp, "%d,\n", time);
 
-	// ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û‘ï¿½
+	// ‘–s‹——£‚ğ•Û‘¶
 	//fprintf(fp, "%d,\n", mileage / 10);
 
-	// ï¿½oï¿½ßï¿½ï¿½Ô‚ï¿½Û‘ï¿½
+	// Œo‰ßŠÔ‚ğ•Û‘¶
 	fprintf(fp, "%d,\n", starttime);
 
-	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ“ï¿½ï¿½_ï¿½ï¿½Û‘ï¿½
+	// ”ğ‚¯‚½”‚Æ“¾“_‚ğ•Û‘¶
 	//for (int i = 0; i < 3; i++)
 	//{
 	//	fprintf(fp, "%d,\n", enemy_count[i]);
 	//}
 
-	// ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Y
+	// ƒtƒ@ƒCƒ‹ƒNƒ[ƒY
 	fclose(fp);
 
-	// ï¿½ï¿½ï¿½Iï¿½mï¿½Û‚ï¿½ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½ï¿½
+	// “®“IŠm•Û‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğíœ‚·‚é
 	player->Finalize();
 	delete player;
 
-	//enemyï¿½Ìƒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½
+	//enemy‚Ìƒƒ‚ƒŠŠJ•ú
 	enemy.clear();
 	enemy.shrink_to_fit();
 
@@ -267,13 +269,13 @@ void GameMainScene::Finalize()
 	DeleteFontToHandle(comentFont);
 }
 
-// ï¿½ï¿½ï¿½İ‚ÌƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
+// Œ»İ‚ÌƒV[ƒ“î•ñ‚ğæ“¾
 eSceneType GameMainScene::GetNowScene() const
 {
 	return eSceneType::E_MAIN;
 }
 
-// ï¿½nï¿½Cï¿½Xï¿½Rï¿½Aï¿½Ì“Ç‚İï¿½ï¿½ï¿½
+// ƒnƒCƒXƒRƒA‚Ì“Ç‚İ‚İ
 void GameMainScene::ReadHighTime()
 {
 	RankingData data;
@@ -284,38 +286,40 @@ void GameMainScene::ReadHighTime()
 	data.Finalize();
 }
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½èˆï¿½ï¿½ï¿½iï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Æ“Gï¿½j
+// “–‚½‚è”»’èˆ—iƒvƒŒƒCƒ„[‚Æ“Gj
 bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 {
-	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½ï¿½\ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ç“–ï¿½ï¿½ï¿½è”»ï¿½ï¿½ğ–³ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ƒvƒŒƒCƒ„[‚ªƒoƒŠƒA‚ğ“\‚Á‚Ä‚¢‚½‚ç“–‚½‚è”»’è‚ğ–³‹‚·‚é
 	if (p->IsBarrier())
 	{
 		return false;
 	}
 
-	// ï¿½Gï¿½ï¿½ñ‚ª–ï¿½ï¿½ï¿½ï¿½ï¿½Î“ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½ğ–³ï¿½ï¿½ï¿½ï¿½ï¿½
+	// “Gî•ñ‚ª–³‚¯‚ê‚Î“–‚½‚è”»’è‚ğ–³‹‚·‚é
 	if (e == nullptr)
 	{
 		return false;
 	}
 
-	// ï¿½Ê’uï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
+	// ˆÊ’uî•ñ‚Ì·•ª‚ğæ“¾
 	Vector2D diff_location = p->GetLocation() - e->GetLocation();
 
-	// ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½Tï¿½Cï¿½Yï¿½Ì‘å‚«ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
+	// “–‚½‚è”»’èƒTƒCƒY‚Ì‘å‚«‚³‚ğæ“¾
 	Vector2D box_ex = p->GetBoxSize() + e->GetBoxSize();
 
-	// ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½qï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½
+	// ƒRƒŠƒWƒ‡ƒ“ƒf[ƒ^‚æ‚èˆÊ’uî•ñ‚Ì·•ª‚ª¬‚³‚¢‚È‚çƒqƒbƒg”»’è‚Æ‚·‚é
 	return ((fabsf(diff_location.x) < box_ex.x) && (fabsf(diff_location.y) < box_ex.y));
+
+	
 }
 
-//ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½eï¿½Lï¿½Xï¿½gï¿½İ’ï¿½
+//ƒRƒƒ“ƒgƒeƒLƒXƒgİ’è
 void GameMainScene::SetComentText()
 {
-	std::vector<std::string> normalComent{ "ï¿½^ï¿½qï¿½l","ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","ï¿½Zï¿½ï¿½","56ï¿½ï¿½"};
-	std::vector<std::string> laughtComent{ "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½ï¿½ï¿½" };
-	std::vector<std::string> healComent{ "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"};
-	std::vector<std::string> bariaComent{ "ï¿½oï¿½ï¿½ï¿½A" };
+	std::vector<std::string> normalComent{ "ƒ^ƒqƒl","‚«‚Á‚µ‚å","Z‚·","56‚·"};
+	std::vector<std::string> laughtComent{ "‚—‚—‚—‚—","‘","”šÎ" };
+	std::vector<std::string> healComent{ "‚±‚±‚·‚«"};
+	std::vector<std::string> bariaComent{ "ƒoƒŠƒA" };
 
 	comentText[Enemy::ComentType::NORMAL] = normalComent;
 	comentText[Enemy::ComentType::LAUGTH] = laughtComent;
@@ -324,7 +328,7 @@ void GameMainScene::SetComentText()
 
 }
 
-//ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½
+//ƒRƒƒ“ƒgŒˆ’è
 std::string GameMainScene::SetComent(Enemy::ComentType type)
 {
 	std::string coment;
@@ -345,7 +349,7 @@ void GameMainScene::SpawnCooment(int time)
 		laughtLengthNum++;
 	}
 
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//—”¶¬
 	std::random_device rnd;
 	std::mt19937 mt(rnd());
 
@@ -356,14 +360,14 @@ void GameMainScene::SpawnCooment(int time)
 		type = Enemy::ComentType::LAUGTH;
 	}
 
-	//5%ï¿½ÌŠmï¿½ï¿½ï¿½Å‰ñ•œƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½
+	//5%‚ÌŠm—§‚Å‰ñ•œƒRƒƒ“ƒg¶¬
 	std::uniform_int_distribution<> healProbability(1, 20);
 	if (healProbability(mt) == 20)
 	{
 		type = Enemy::ComentType::HEAL_HP;
 	}
 
-	//ï¿½Sï¿½Oï¿½bï¿½ï¿½ï¿½Æ‚Éƒoï¿½ï¿½ï¿½Aï¿½ñ•œƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½
+	//‚S‚O•b‚²‚Æ‚ÉƒoƒŠƒA‰ñ•œƒRƒƒ“ƒg¶¬
 	if (time % 40 == 0 && time != 0 && isSpawnBaria == false)
 	{
 		type = Enemy::ComentType::HEAL_BARRIER;

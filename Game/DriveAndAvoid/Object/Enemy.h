@@ -45,6 +45,8 @@ private:
 	int explosionAnimationCount;
 	//爆発アニメーション更新時間
 	int animationUpdateTime;
+
+
 public:
 	Enemy(int* image, ComentType type, std::string text,int font);
 	~Enemy();

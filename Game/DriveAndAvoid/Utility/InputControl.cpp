@@ -64,8 +64,8 @@ void InputControl::Update()
 		stick[1].y = -((float)input_state.ThumbRY / (float)SHRT_MIN);
 	}
 
-	LstickRadX = input_state.ThumbLX / MAXL_X;
-	LstickRadY = input_state.ThumbLY / MAXL_Y;
+	LstickRadX = floor(input_state.ThumbLX / MAXL_X * 100) / 100;
+	LstickRadY = floor(input_state.ThumbLY / MAXL_Y * 100) / 100;
 	
 }
 
