@@ -195,24 +195,22 @@ void GameMainScene::Draw() const
 	DrawFormatString(50, 10, GetColor(255, 255, 255), "経過時間");
 	DrawFormatString(80, 50, GetColor(255, 255, 255), "%d", starttime);
 
-	DrawFormatString(180, 10, GetColor(255, 0, 0), "走行距離");
-	DrawFormatString(180, 50, GetColor(255, 255, 255), "%08d", mileage / 10);
 	
 
-	DrawFormatString(300, 10, GetColor(0, 0, 255), "残りのバリア");
+	DrawFormatString(200, 10, GetColor(0, 0, 255), "残りのバリア");
 
 	// バリア枚数の描画
 	for (int i = 0; i < player->GetBarriarCount(); i++)
 	{
-		DrawRotaGraph(320 + i * 25, 60, 0.2f, 0, barrier_image, TRUE, FALSE);
+		DrawRotaGraph(220 + i * 25, 60, 0.2f, 0, barrier_image, TRUE, FALSE);
 	}
 
 	
 
 	// 体力ゲージの描画
-	float fx = 450.0f;
+	float fx = 350.0f;
 	float fy = 30.0f;
-	DrawFormatStringF(fx, fy - 10, GetColor(0, 255, 0), "HP METER");
+	DrawFormatStringF(fx, fy - 5, GetColor(0, 255, 0), "HP");
 	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 200 / 1000), fy + 50.0f, GetColor(0, 255, 0), TRUE);
 	DrawBoxAA(fx, fy + 20.0f, fx + 200.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
 

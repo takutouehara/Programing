@@ -184,7 +184,7 @@ bool Player::IsBarrier() const
 // ˆÚ“®ˆ—
 void Player::Movement()
 {
-	float  stick_y = InputControl::GetLstickRadY() ;
+	float  stick_y = InputControl::GetLstickRadY();
 	float  stick_x = InputControl::GetLstickRadX();
 
 	Vector2D move = Vector2D(0.0f);
