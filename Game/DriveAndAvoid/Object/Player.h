@@ -40,6 +40,7 @@ public:
 	float GetFuel()const;			// 燃料取得
 	float GetHp()const;				// 体力取得
 	int GetBarriarCount()const;		// バリアの枚数取得
+	void AddBarriarCount() { barrier_count++; }
 	bool IsBarrier()const;			// バリアが有効かを取得
 
 private:

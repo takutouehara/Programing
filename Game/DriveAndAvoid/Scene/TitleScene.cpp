@@ -117,3 +117,4 @@ eSceneType TitleScene::GetNowScene() const
 {
 	return eSceneType::E_TITLE;
 }
+

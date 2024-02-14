@@ -4,11 +4,10 @@
 #include <math.h>
 #include <random>
 
-GameMainScene::GameMainScene() :high_score(0), back_ground(NULL), barrier_image(NULL), mileage(0), player(nullptr)
+GameMainScene::GameMainScene() :high_time(0), barrier_image(NULL), mileage(0), player(nullptr), starttime(0)
 {
 	for (int i = 0; i < 3; i++)
 	{
-		enemy_image[i] = NULL;
 		enemy_count[i] = NULL;
 	}
 	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
@@ -31,21 +30,13 @@ void GameMainScene::Initialize()
 	MaxHp = 100;
 	HpGauge = 0;*/
 	// 高得点を読み込む
-	ReadHighScore();
+	ReadHighTime();
 
 	// 画像の読み込み
-	back_ground = LoadGraph("Resource/images/back.bmp");
 	barrier_image = LoadGraph("Resource/images/barrier.png");
-	int result = LoadDivGraph("Resource/images/car.bmp", 3, 3, 1, 63, 120, enemy_image);
+	LoadDivGraph("Resource/images/exprosion.png", 10, 10, 1, 108, 108, exprosionImage);
+	
 	// エラーチェック
-	if (back_ground == -1)
-	{
-		throw("Resource/images/back.bmpがありません\n");
-	}
-	if (result == -1)
-	{
-		throw("Resource/images/car.bmpがありません\n");
-	}
 	if (barrier_image == -1)
 	{
 		throw("Resource/images/barrierがありません\n");
@@ -60,7 +51,8 @@ void GameMainScene::Initialize()
 	//コメント読み込み
 	SetComentText();
 
-	
+	comentFont = CreateFontToHandle("UD デジタル 教科書体 N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
+	isSpawnBaria = false;
 }
 
 // 更新処理
@@ -84,11 +76,10 @@ eSceneType GameMainScene::Update()
 	mileage += (int)player->GetSpeed() + 5;
 
 	// 敵生成処理
-	if (FPSCount % spawnInterval == 0)
+	if (FPSCount % spawnInterval == 0 && enemy.size()<10)
 	{
 		SpawnCooment(starttime);
 	}
-
 	// 敵の更新と当たり判定チェック
 	int i = 0;
 	for (auto& e : enemy)
@@ -97,28 +88,63 @@ eSceneType GameMainScene::Update()
 		{
 			e->Update();
 
-			// 当たり判定の確認
-			if (IsHitCheck(player, enemy.at(i)))
+
+			//爆破アニメーションが終了してから削除
+			if (e->GetType() == Enemy::ComentType::LAUGTH && e->GetExprosionState() == Enemy::ExprosionState::FINISH)
 			{
-				player->SetActive(false);
-				player->DecreaseHp(-50.0f);
-				e->Finalize();
-				if (e == nullptr)
-				{
-					enemy.erase(enemy.begin() + i);
-				}
+				enemy.erase(enemy.begin() + i);
+				continue;
 			}
 
-			// 画面外に行ったら敵を削除してスコア加算
-			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
+			// 当たり判定の確認
+			if (IsHitCheck(player,e))
 			{
-				//enemy_count[e->GetType()]++;
-				enemy.erase(enemy.begin() + i);
-				e = nullptr;
+				player->SetActive(false);
+
+				Enemy::ComentType type = e->GetType();
+
+				//コメントの種類に応じて処理を変更
+				switch (type)
+				{
+				case Enemy::ComentType::NORMAL:
+					player->DecreaseHp(-50.0f);
+					break;
+				case Enemy::ComentType::LAUGTH:
+					player->DecreaseHp(-150.0f);
+					e->Explosion();
+					break;
+				case Enemy::ComentType::HEAL_HP:
+					player->DecreaseHp(100);
+					break;
+				case Enemy::ComentType::HEAL_BARRIER:
+					player->AddBarriarCount();
+					isSpawnBaria = false;
+					break;
+				default:
+					break;
+				}
+				
+				if (e->GetType() != Enemy::ComentType::LAUGTH)
+				{
+					enemy.erase(enemy.begin() + i);
+					continue;
+				}
 				i++;
 				continue;
 			}
 
+			// 画面外に行ったら敵を削除
+			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
+			{
+				enemy.erase(enemy.begin() + i);
+				continue;
+			}
+
+		}
+		else
+		{
+			enemy.erase(enemy.begin() + i);
+			continue;
 		}
 		i++;
 	}
@@ -126,8 +152,8 @@ eSceneType GameMainScene::Update()
 	//HpGauge = Hp_width * Hp / MaxHp;
 
 
-	// プレイヤーの燃料か体力が０未満ならリザルトに遷移する
-	if (player->GetFuel() < 0.0f || player->GetHp() < 0.0f)
+	// プレイヤーの体力が０未満ならリザルトに遷移する
+	if (player->GetHp() < 0.0f)
 	{
 		return eSceneType::E_RESULT;
 	}
@@ -163,7 +189,6 @@ void GameMainScene::Draw() const
 	player->Draw();
 
 	//UIの描画
-	DrawBox(500, 0, 640, 480, GetColor(0, 153, 0), TRUE);
 	DrawBox(0, 0, 700, 100, GetColor(100, 200, 255), TRUE);
 	//DrawBox(50, 50, 50 + HpGauge, 70, GetColor(0, 255, 0), true);
 	SetFontSize(20);
@@ -197,10 +222,10 @@ void GameMainScene::Draw() const
 void GameMainScene::Finalize()
 {
 	// スコアを加算する
-	int score = (mileage / 10 * 10);
+	int time = (mileage / 10 * 10);
 	for (int i = 0; i < 3; i++)
 	{
-		score += (i + 1) * 50 * enemy_count[i];
+		time += (i + 1) * 50 * enemy_count[i];
 	}
 
 	// リザルトデータの書き込み
@@ -215,16 +240,19 @@ void GameMainScene::Finalize()
 	}
 
 	// スコアを保存
-	fprintf(fp, "%d,\n", score);
+	//fprintf(fp, "%d,\n", time);
 
 	// 走行距離を保存
-	fprintf(fp, "%d,\n", mileage / 10);
+	//fprintf(fp, "%d,\n", mileage / 10);
+
+	// 経過時間を保存
+	fprintf(fp, "%d,\n", starttime);
 
 	// 避けた数と得点を保存
-	for (int i = 0; i < 3; i++)
-	{
-		fprintf(fp, "%d,\n", enemy_count[i]);
-	}
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	fprintf(fp, "%d,\n", enemy_count[i]);
+	//}
 
 	// ファイルクローズ
 	fclose(fp);
@@ -237,6 +265,8 @@ void GameMainScene::Finalize()
 	enemy.clear();
 	enemy.shrink_to_fit();
 
+	InitGraph();
+	DeleteFontToHandle(comentFont);
 }
 
 // 現在のシーン情報を取得
@@ -246,12 +276,12 @@ eSceneType GameMainScene::GetNowScene() const
 }
 
 // ハイスコアの読み込み
-void GameMainScene::ReadHighScore()
+void GameMainScene::ReadHighTime()
 {
 	RankingData data;
 	data.Initialize();
 
-	high_score = data.GetScore(0);
+	high_time = data.GetTime(0);
 
 	data.Finalize();
 }
@@ -286,11 +316,15 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 //コメントテキスト設定
 void GameMainScene::SetComentText()
 {
-	std::vector<std::string> normalComent{ "タヒネ","ここすき","うぽつ" };
-	std::vector<std::string> laughtComent{ "wwwww","草","爆笑" };
+	std::vector<std::string> normalComent{ "タヒネ","きっしょ","〇す","56す"};
+	std::vector<std::string> laughtComent{ "ｗｗｗｗ","草","爆笑" };
+	std::vector<std::string> healComent{ "ここすき"};
+	std::vector<std::string> bariaComent{ "バリア" };
 
 	comentText[Enemy::ComentType::NORMAL] = normalComent;
 	comentText[Enemy::ComentType::LAUGTH] = laughtComent;
+	comentText[Enemy::ComentType::HEAL_HP] = healComent;
+	comentText[Enemy::ComentType::HEAL_BARRIER] = bariaComent;
 
 }
 
@@ -326,5 +360,19 @@ void GameMainScene::SpawnCooment(int time)
 		type = Enemy::ComentType::LAUGTH;
 	}
 
-	enemy.emplace_back(std::make_shared<Enemy>(enemy_image, type, SetComent(type)));
+	//5%の確立で回復コメント生成
+	std::uniform_int_distribution<> healProbability(1, 20);
+	if (healProbability(mt) == 20)
+	{
+		type = Enemy::ComentType::HEAL_HP;
+	}
+
+	//４０秒ごとにバリア回復コメント生成
+	if (time % 40 == 0 && time != 0 && isSpawnBaria == false)
+	{
+		type = Enemy::ComentType::HEAL_BARRIER;
+		isSpawnBaria = true;
+	}
+
+	enemy.emplace_back(std::make_shared<Enemy>(exprosionImage, type, SetComent(type),comentFont));
 }
