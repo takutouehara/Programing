@@ -2,7 +2,7 @@
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
 
-TitleScene::TitleScene():background_image(NULL),background_font(NULL), menu_image(NULL), cursor_image(NULL), menu_cursor(2),acter(NULL)
+TitleScene::TitleScene():background_image(NULL),background_font(NULL), menu_image(NULL), cursor_image(NULL), menu_cursor(2)
 {
 
 }
@@ -20,8 +20,8 @@ void TitleScene::Initialize()
 	background_font = LoadGraph("Resource/images/Title_Font.png");
 	menu_image = LoadGraph("Resource/images/Menu_Font.png");
 	cursor_image = LoadGraph("Resource/images/Menu_Icon.png");
-	acter = LoadGraph("Resource/images/Title_Acter.png");
-
+	cursor_se = LoadSoundMem("Resource/sound/select01.mp3");
+	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
 	// エラーチェック
 	if (background_image == -1)
 	{
@@ -39,10 +39,6 @@ void TitleScene::Initialize()
 	{
 		throw("Resource/images/Menu_Icon.pngがありません\n");
 	}
-	if (acter == -1)
-	{
-		throw("Resource/images/Title_Acter.pngがありません\n");
-	}
 	
 }
 
@@ -53,6 +49,7 @@ eSceneType TitleScene::Update()
 	// カーソル下移動
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN))
 	{
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
 		menu_cursor += 2;
 		// 一番下に到達したら一番上にする
 		if (menu_cursor > 8)
@@ -63,6 +60,8 @@ eSceneType TitleScene::Update()
 	// カーソル上移動
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_UP))
 	{
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 		menu_cursor -= 2;
 		// 一番上に到達したら一番下にする
 		if (menu_cursor < 2)
@@ -74,6 +73,8 @@ eSceneType TitleScene::Update()
 	// カーソル決定（決定した画面に遷移する）
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
+		PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 		switch (menu_cursor)
 		{
 		case 2:
@@ -103,9 +104,6 @@ void TitleScene::Draw() const
 	// メニュー画面の描画
 	DrawGraph(120, 228, menu_image, TRUE);
 
-	// アクター画像の描画
-	DrawGraph(700, 280, acter, TRUE);
-
 	// カーソル画像の描画
 	DrawRotaGraph(90, 220 + menu_cursor * 40, 0.7, DX_PI / 2.0, cursor_image, TRUE);
 }
@@ -118,8 +116,6 @@ void TitleScene::Finalize()
 	DeleteGraph(background_font);
 	DeleteGraph(menu_image);
 	DeleteGraph(cursor_image);
-	DeleteGraph(acter);
-
 }
 
 // 現在のシーン情報を取得
