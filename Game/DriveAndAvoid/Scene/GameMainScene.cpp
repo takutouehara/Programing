@@ -12,7 +12,7 @@ GameMainScene::GameMainScene() :high_time(0), barrier_image(NULL), mileage(0), p
 	}
 	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
 	PlayMovieToGraph(movieHandle);
-
+	ChangeMovieVolumeToGraph(100, movieHandle);
 }
 
 GameMainScene::~GameMainScene()
@@ -53,6 +53,12 @@ void GameMainScene::Initialize()
 
 	comentFont = CreateFontToHandle("UD デジタル 教科書体 N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
 	isSpawnBaria = false;
+	seHit = LoadSoundMem("Resource/sound/damaged2.mp3");
+	seExprosion = LoadSoundMem("Resource/sound/mini_bomb1.mp3");
+	seHeal = LoadSoundMem("Resource/sound/heal.mp3");
+	ChangeVolumeSoundMem(100, seHit);
+	ChangeVolumeSoundMem(100, seExprosion);
+	ChangeVolumeSoundMem(100, seHeal);
 }
 
 // 更新処理
@@ -107,18 +113,22 @@ eSceneType GameMainScene::Update()
 				case Enemy::ComentType::NORMAL:
 					player->DecreaseHp(-50.0f);
 					player->SetActive(false);
+					PlaySoundMem(seHit, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				case Enemy::ComentType::LAUGTH:
 					player->DecreaseHp(-150.0f);
 					player->SetActive(false);
 					e->Explosion();
+					PlaySoundMem(seExprosion, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				case Enemy::ComentType::HEAL_HP:
 					player->DecreaseHp(100);
+					PlaySoundMem(seHeal, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				case Enemy::ComentType::HEAL_BARRIER:
 					player->AddBarriarCount();
 					isSpawnBaria = false;
+					PlaySoundMem(seHeal, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				default:
 					break;
@@ -264,6 +274,7 @@ void GameMainScene::Finalize()
 	enemy.shrink_to_fit();
 
 	InitGraph();
+	InitSoundMem();
 	DeleteFontToHandle(comentFont);
 }
 
