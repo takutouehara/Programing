@@ -10,7 +10,17 @@ public:
 	enum class ComentType
 	{
 		NORMAL,			//普通のコメント
-		LAUGTH			//笑いに類似されるコメント
+		LAUGTH,			//笑いに類似されるコメント
+		HEAL_HP,		//回復コメント
+		HEAL_BARRIER	//バリア回復コメント
+	};
+
+	//爆破ステータス
+	enum class ExprosionState
+	{
+		NONE,			//爆破していない
+		EXPROSION,		//爆破中
+		FINISH			//爆破終了
 	};
 
 private:
@@ -25,32 +35,32 @@ private:
 	int font;
 	//文字の大きさ
 	int fontSize;
-	//爆発用フラグ
-	bool isExplosion;
-	//爆発アニメーション番号
-	int explosionAnimation;
+	//文字色
+	int textColor;
+	//爆発ステータス
+	ExprosionState exprosionState;
 	//爆発画像
 	int* explosionImage;
-
+	//爆発アニメーションカウンター
+	int explosionAnimationCount;
+	//爆発アニメーション更新時間
+	int animationUpdateTime;
 public:
-	Enemy(int* image, ComentType type, std::string text);
+	Enemy(int* image, ComentType type, std::string text,int font);
 	~Enemy();
 
-	void Initialize(ComentType type, std::string text);
+	void Initialize(ComentType type, std::string text, int font);
 	void Update();
 	void Draw()const;
 	void Finalize();
 	
-	Enemy::ComentType GetType() const;			// タイプ取得
+	ComentType GetType() const;			// タイプ取得
+	ExprosionState GetExprosionState()const { return exprosionState; }
 	Vector2D GetLocation()const;	// 位置情報の取得
 	Vector2D GetBoxSize()const;		// 当たり判定の大きさを取得
 
 	//コメント作成関数
 	void CreateComent(ComentType type, std::string text);
-	//コメント文字列設定関数
-	void SetComentString(ComentType type);
 	//爆発させる
 	void Explosion();
-	//爆発アニメーション番号のGetter
-	int GetImage() { return explosionAnimation; }
 };

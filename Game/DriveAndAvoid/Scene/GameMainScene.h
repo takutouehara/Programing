@@ -12,11 +12,9 @@ class GameMainScene :public SceneBase
 private:
 	int starttime;
 	int FPSCount;
-	int high_score;		// ハイスコア
-	int back_ground;	// 背景画像
+	int high_time;		// ハイスコア
 	int barrier_image;	// バリア画像
 	int mileage;		// 走行距離
-	int enemy_image[3];	// 敵画像
 	int enemy_count[3];	// 通り過ぎた敵カウント
 	//int Hp_width;       // Hpゲージの横幅
 	//int Hp;             // 体力
@@ -28,13 +26,18 @@ private:
 	std::vector<std::shared_ptr<Enemy>> enemy;
 	//コメントテキスト格納配列
 	std::unordered_map<Enemy::ComentType, std::vector<std::string>>comentText;
+	//コメントフォント
+	int comentFont;
 	//laughtコメントを生成する乱数値の範囲
 	int laughtLengthNum;
 	//コメント生成間隔時間
 	int spawnInterval;
-
+	//背景動画ハンドル
 	int movieHandle;
-	
+	//爆発アニメーション画像
+	int exprosionImage[10];
+	//バリアコメントが存在しているかのフラグ
+	bool isSpawnBaria;
 public:
 	GameMainScene();
 	virtual ~GameMainScene();
@@ -48,7 +51,7 @@ public:
 
 private:
 	// ハイスコア読み込み処理
-	void ReadHighScore();
+	void ReadHighTime();
 	// 当たり判定
 	bool IsHitCheck(Player* p, std::shared_ptr<Enemy> e);
 	//コメントテキスト設定関数

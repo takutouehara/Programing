@@ -4,11 +4,10 @@
 #include <math.h>
 #include <random>
 
-GameMainScene::GameMainScene() :high_score(0), back_ground(NULL), barrier_image(NULL), mileage(0), player(nullptr)
+GameMainScene::GameMainScene() :high_time(0), barrier_image(NULL), mileage(0), player(nullptr), starttime(0)
 {
 	for (int i = 0; i < 3; i++)
 	{
-		enemy_image[i] = NULL;
 		enemy_count[i] = NULL;
 	}
 	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
@@ -19,7 +18,7 @@ GameMainScene::~GameMainScene()
 {
 }
 
-// ‰Šú‰»ˆ—
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void GameMainScene::Initialize()
 {
 	FPSCount = 0;
@@ -29,40 +28,33 @@ void GameMainScene::Initialize()
 	Hp = 100;
 	MaxHp = 100;
 	HpGauge = 0;*/
-	// ‚“¾“_‚ğ“Ç‚İ‚Ş
-	ReadHighScore();
+	// ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
+	ReadHighTime();
 
-	// ‰æ‘œ‚Ì“Ç‚İ‚İ
-	back_ground = LoadGraph("Resource/images/back.bmp");
+	// ï¿½æ‘œï¿½Ì“Ç‚İï¿½ï¿½ï¿½
 	barrier_image = LoadGraph("Resource/images/barrier.png");
-	int result = LoadDivGraph("Resource/images/car.bmp", 3, 3, 1, 63, 120, enemy_image);
-	// ƒGƒ‰[ƒ`ƒFƒbƒN
-	if (back_ground == -1)
-	{
-		throw("Resource/images/back.bmp‚ª‚ ‚è‚Ü‚¹‚ñ\n");
-	}
-	if (result == -1)
-	{
-		throw("Resource/images/car.bmp‚ª‚ ‚è‚Ü‚¹‚ñ\n");
-	}
+	LoadDivGraph("Resource/images/exprosion.png", 10, 10, 1, 108, 108, exprosionImage);
+	
+	// ï¿½Gï¿½ï¿½ï¿½[ï¿½`ï¿½Fï¿½bï¿½N
 	if (barrier_image == -1)
 	{
-		throw("Resource/images/barrier‚ª‚ ‚è‚Ü‚¹‚ñ\n");
+		throw("Resource/images/barrierï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n");
 	}
 
-	// ƒIƒuƒWƒFƒNƒg‚Ì¶¬
+	// ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½ï¿½ï¿½
 	player = new Player;
 
-	// ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»
+	// ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½
 	player->Initialize();
 
-	//ƒRƒƒ“ƒg“Ç‚İ‚İ
+	//ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Ç‚İï¿½ï¿½ï¿½
 	SetComentText();
 
-	
+	comentFont = CreateFontToHandle("UD ï¿½fï¿½Wï¿½^ï¿½ï¿½ ï¿½ï¿½ï¿½Èï¿½ï¿½ï¿½ N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
+	isSpawnBaria = false;
 }
 
-// XVˆ—
+// ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½
 eSceneType GameMainScene::Update()
 {
 	FPSCount++;
@@ -70,25 +62,24 @@ eSceneType GameMainScene::Update()
 	{
 		FPSCount = 0;
 		starttime++;
-		//‚R‚O•b‚²‚Æ‚ÉƒRƒƒ“ƒg¶¬ŠÔŠu‚ğ‘‚­‚·‚é
+		//ï¿½Rï¿½Oï¿½bï¿½ï¿½ï¿½Æ‚ÉƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ÔŠuï¿½ğ‘‚ï¿½ï¿½ï¿½ï¿½ï¿½
 		if (starttime % 20 == 0 && spawnInterval != 1)
 		{
 			spawnInterval--;
 		}
 	}
-	// ƒvƒŒƒCƒ„[‚ÌXV
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌXï¿½V
 	player->Update();
 
-	// ˆÚ“®‹——£‚ÌXV
+	// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌXï¿½V
 	mileage += (int)player->GetSpeed() + 5;
 
-	// “G¶¬ˆ—
-	if (FPSCount % spawnInterval == 0)
+	// ï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	if (FPSCount % spawnInterval == 0 && enemy.size()<10)
 	{
 		SpawnCooment(starttime);
 	}
-
-	// “G‚ÌXV‚Æ“–‚½‚è”»’èƒ`ƒFƒbƒN
+	// ï¿½Gï¿½ÌXï¿½Vï¿½Æ“ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½`ï¿½Fï¿½bï¿½N
 	int i = 0;
 	for (auto& e : enemy)
 	{
@@ -96,28 +87,63 @@ eSceneType GameMainScene::Update()
 		{
 			e->Update();
 
-			// “–‚½‚è”»’è‚ÌŠm”F
-			if (IsHitCheck(player, enemy.at(i)))
+
+			//ï¿½ï¿½ï¿½jï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½íœ
+			if (e->GetType() == Enemy::ComentType::LAUGTH && e->GetExprosionState() == Enemy::ExprosionState::FINISH)
 			{
-				player->SetActive(false);
-				player->DecreaseHp(-50.0f);
-				e->Finalize();
-				if (e == nullptr)
-				{
-					enemy.erase(enemy.begin() + i);
-				}
+				enemy.erase(enemy.begin() + i);
+				continue;
 			}
 
-			// ‰æ–ÊŠO‚És‚Á‚½‚ç“G‚ğíœ‚µ‚ÄƒXƒRƒA‰ÁZ
-			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
+			// ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½ÌŠmï¿½F
+			if (IsHitCheck(player,e))
 			{
-				//enemy_count[e->GetType()]++;
-				enemy.erase(enemy.begin() + i);
-				e = nullptr;
+				player->SetActive(false);
+
+				Enemy::ComentType type = e->GetType();
+
+				//ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Ìï¿½Ş‚É‰ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ÏX
+				switch (type)
+				{
+				case Enemy::ComentType::NORMAL:
+					player->DecreaseHp(-50.0f);
+					break;
+				case Enemy::ComentType::LAUGTH:
+					player->DecreaseHp(-150.0f);
+					e->Explosion();
+					break;
+				case Enemy::ComentType::HEAL_HP:
+					player->DecreaseHp(100);
+					break;
+				case Enemy::ComentType::HEAL_BARRIER:
+					player->AddBarriarCount();
+					isSpawnBaria = false;
+					break;
+				default:
+					break;
+				}
+				
+				if (e->GetType() != Enemy::ComentType::LAUGTH)
+				{
+					enemy.erase(enemy.begin() + i);
+					continue;
+				}
 				i++;
 				continue;
 			}
 
+			// ï¿½ï¿½ÊŠOï¿½Ésï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½íœ
+			if (e->GetLocation().x + e->GetBoxSize().x <= 0.0f)
+			{
+				enemy.erase(enemy.begin() + i);
+				continue;
+			}
+
+		}
+		else
+		{
+			enemy.erase(enemy.begin() + i);
+			continue;
 		}
 		i++;
 	}
@@ -125,13 +151,13 @@ eSceneType GameMainScene::Update()
 	//HpGauge = Hp_width * Hp / MaxHp;
 
 
-	// ƒvƒŒƒCƒ„[‚Ì”R—¿‚©‘Ì—Í‚ª‚O–¢–‚È‚çƒŠƒUƒ‹ƒg‚É‘JˆÚ‚·‚é
-	if (player->GetFuel() < 0.0f || player->GetHp() < 0.0f)
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì‘Ì—Í‚ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½È‚çƒŠï¿½Uï¿½ï¿½ï¿½gï¿½É‘Jï¿½Ú‚ï¿½ï¿½ï¿½
+	if (player->GetHp() < 0.0f)
 	{
 		return eSceneType::E_RESULT;
 	}
 
-	//“®‰æƒ‹[ƒvˆ—
+	//ï¿½ï¿½ï¿½æƒ‹ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½
 	if (GetMovieStateToGraph(movieHandle) != 1)
 	{
 		SeekMovieToGraph(movieHandle, 0);
@@ -141,15 +167,15 @@ eSceneType GameMainScene::Update()
 	return GetNowScene();
 }
 
-// •`‰æˆ—
+// ï¿½`ï¿½æˆï¿½ï¿½
 void GameMainScene::Draw() const
 {
 	DrawGraph(0, 0, movieHandle, FALSE);
-	// ”wŒi‰æ‘œ‚Ì•`‰æ
+	// ï¿½wï¿½iï¿½æ‘œï¿½Ì•`ï¿½ï¿½
 	/*DrawGraph(0, mileage % 480 - 480, back_ground, TRUE);
 	DrawGraph(0, mileage % 480, back_ground, TRUE);*/
 
-	 //“G‚Ì•`‰æ
+	 //ï¿½Gï¿½Ì•`ï¿½ï¿½
 	for (auto& e : enemy)
 	{
 		if (e != nullptr)
@@ -158,24 +184,23 @@ void GameMainScene::Draw() const
 		}
 	}
 
-	//ƒvƒŒƒCƒ„[‚Ì•`‰æ
+	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì•`ï¿½ï¿½
 	player->Draw();
 
-	//UI‚Ì•`‰æ
-	DrawBox(500, 0, 640, 480, GetColor(0, 153, 0), TRUE);
+	//UIï¿½Ì•`ï¿½ï¿½
 	DrawBox(0, 0, 700, 100, GetColor(100, 200, 255), TRUE);
 	//DrawBox(50, 50, 50 + HpGauge, 70, GetColor(0, 255, 0), true);
 	SetFontSize(20);
-	DrawFormatString(50, 10, GetColor(255, 255, 255), "Œo‰ßŠÔ");
+	DrawFormatString(50, 10, GetColor(255, 255, 255), "ï¿½oï¿½ßï¿½ï¿½ï¿½");
 	DrawFormatString(80, 50, GetColor(255, 255, 255), "%d", starttime);
 
-	DrawFormatString(180, 10, GetColor(255, 0, 0), "‘–s‹——£");
+	DrawFormatString(180, 10, GetColor(255, 0, 0), "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½");
 	DrawFormatString(180, 50, GetColor(255, 255, 255), "%08d", mileage / 10);
 	
 
-	DrawFormatString(300, 10, GetColor(0, 0, 255), "c‚è‚ÌƒoƒŠƒA");
+	DrawFormatString(300, 10, GetColor(0, 0, 255), "ï¿½cï¿½ï¿½Ìƒoï¿½ï¿½ï¿½A");
 
-	// ƒoƒŠƒA–‡”‚Ì•`‰æ
+	// ï¿½oï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Ì•`ï¿½ï¿½
 	for (int i = 0; i < player->GetBarriarCount(); i++)
 	{
 		DrawRotaGraph(320 + i * 25, 60, 0.2f, 0, barrier_image, TRUE, FALSE);
@@ -183,7 +208,7 @@ void GameMainScene::Draw() const
 
 	
 
-	// ‘Ì—ÍƒQ[ƒW‚Ì•`‰æ
+	// ï¿½Ì—ÍƒQï¿½[ï¿½Wï¿½Ì•`ï¿½ï¿½
 	float fx = 450.0f;
 	float fy = 30.0f;
 	DrawFormatStringF(fx, fy - 10, GetColor(0, 255, 0), "HP METER");
@@ -191,109 +216,115 @@ void GameMainScene::Draw() const
 	DrawBoxAA(fx, fy + 20.0f, fx + 200.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
 }
 
-// I—¹ˆ—
+// ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void GameMainScene::Finalize()
 {
-	// ƒXƒRƒA‚ğ‰ÁZ‚·‚é
-	int score = (mileage / 10 * 10);
+	// ï¿½Xï¿½Rï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½
+	int time = (mileage / 10 * 10);
 	for (int i = 0; i < 3; i++)
 	{
-		score += (i + 1) * 50 * enemy_count[i];
+		time += (i + 1) * 50 * enemy_count[i];
 	}
 
-	// ƒŠƒUƒ‹ƒgƒf[ƒ^‚Ì‘‚«‚İ
+	// ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½gï¿½fï¿½[ï¿½^ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	FILE* fp = nullptr;
-	// ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“
+	// ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½
 	errno_t result = fopen_s(&fp, "Resource/dat/result_data.csv", "w");
 
-	// ƒGƒ‰[ƒ`ƒFƒbƒN
+	// ï¿½Gï¿½ï¿½ï¿½[ï¿½`ï¿½Fï¿½bï¿½N
 	if (result != 0)
 	{
-		throw("Resource/dat/result.csv‚ªŠJ‚¯‚Ü‚¹‚ñ\n");
+		throw("Resource/dat/result.csvï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½\n");
 	}
 
-	// ƒXƒRƒA‚ğ•Û‘¶
-	fprintf(fp, "%d,\n", score);
+	// ï¿½Xï¿½Rï¿½Aï¿½ï¿½Û‘ï¿½
+	//fprintf(fp, "%d,\n", time);
 
-	// ‘–s‹——£‚ğ•Û‘¶
-	fprintf(fp, "%d,\n", mileage / 10);
+	// ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û‘ï¿½
+	//fprintf(fp, "%d,\n", mileage / 10);
 
-	// Œo‰ßŠÔ‚ğ•Û‘¶
+	// ï¿½oï¿½ßï¿½ï¿½Ô‚ï¿½Û‘ï¿½
 	fprintf(fp, "%d,\n", starttime);
 
-	// ”ğ‚¯‚½”‚Æ“¾“_‚ğ•Û‘¶
-	for (int i = 0; i < 3; i++)
-	{
-		fprintf(fp, "%d,\n", enemy_count[i]);
-	}
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ“ï¿½ï¿½_ï¿½ï¿½Û‘ï¿½
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	fprintf(fp, "%d,\n", enemy_count[i]);
+	//}
 
-	// ƒtƒ@ƒCƒ‹ƒNƒ[ƒY
+	// ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Y
 	fclose(fp);
 
-	// “®“IŠm•Û‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğíœ‚·‚é
+	// ï¿½ï¿½ï¿½Iï¿½mï¿½Û‚ï¿½ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½ï¿½
 	player->Finalize();
 	delete player;
 
-	//enemy‚Ìƒƒ‚ƒŠŠJ•ú
+	//enemyï¿½Ìƒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½
 	enemy.clear();
 	enemy.shrink_to_fit();
 
+	InitGraph();
+	DeleteFontToHandle(comentFont);
 }
 
-// Œ»İ‚ÌƒV[ƒ“î•ñ‚ğæ“¾
+// ï¿½ï¿½ï¿½İ‚ÌƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
 eSceneType GameMainScene::GetNowScene() const
 {
 	return eSceneType::E_MAIN;
 }
 
-// ƒnƒCƒXƒRƒA‚Ì“Ç‚İ‚İ
-void GameMainScene::ReadHighScore()
+// ï¿½nï¿½Cï¿½Xï¿½Rï¿½Aï¿½Ì“Ç‚İï¿½ï¿½ï¿½
+void GameMainScene::ReadHighTime()
 {
 	RankingData data;
 	data.Initialize();
 
-	high_score = data.GetScore(0);
+	high_time = data.GetTime(0);
 
 	data.Finalize();
 }
 
-// “–‚½‚è”»’èˆ—iƒvƒŒƒCƒ„[‚Æ“Gj
+// ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½èˆï¿½ï¿½ï¿½iï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Æ“Gï¿½j
 bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 {
-	// ƒvƒŒƒCƒ„[‚ªƒoƒŠƒA‚ğ“\‚Á‚Ä‚¢‚½‚ç“–‚½‚è”»’è‚ğ–³‹‚·‚é
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Aï¿½ï¿½\ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ç“–ï¿½ï¿½ï¿½è”»ï¿½ï¿½ğ–³ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (p->IsBarrier())
 	{
 		return false;
 	}
 
-	// “Gî•ñ‚ª–³‚¯‚ê‚Î“–‚½‚è”»’è‚ğ–³‹‚·‚é
+	// ï¿½Gï¿½ï¿½ñ‚ª–ï¿½ï¿½ï¿½ï¿½ï¿½Î“ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½ğ–³ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (e == nullptr)
 	{
 		return false;
 	}
 
-	// ˆÊ’uî•ñ‚Ì·•ª‚ğæ“¾
+	// ï¿½Ê’uï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
 	Vector2D diff_location = p->GetLocation() - e->GetLocation();
 
-	// “–‚½‚è”»’èƒTƒCƒY‚Ì‘å‚«‚³‚ğæ“¾
+	// ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½Tï¿½Cï¿½Yï¿½Ì‘å‚«ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
 	Vector2D box_ex = p->GetBoxSize() + e->GetBoxSize();
 
-	// ƒRƒŠƒWƒ‡ƒ“ƒf[ƒ^‚æ‚èˆÊ’uî•ñ‚Ì·•ª‚ª¬‚³‚¢‚È‚çƒqƒbƒg”»’è‚Æ‚·‚é
+	// ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½qï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½
 	return ((fabsf(diff_location.x) < box_ex.x) && (fabsf(diff_location.y) < box_ex.y));
 }
 
-//ƒRƒƒ“ƒgƒeƒLƒXƒgİ’è
+//ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½eï¿½Lï¿½Xï¿½gï¿½İ’ï¿½
 void GameMainScene::SetComentText()
 {
-	std::vector<std::string> normalComent{ "ƒ^ƒqƒl","‚±‚±‚·‚«","‚¤‚Û‚Â" ,"ktkr","‚í‚±‚Â"};
-	std::vector<std::string> laughtComent{ "wwwww","‘","”šÎ" ,"lol"};
-	// ‰ñ•œƒRƒƒ“ƒg :‚¤p‰³,ƒXƒQƒF,ƒl\
+	std::vector<std::string> normalComent{ "ï¿½^ï¿½qï¿½l","ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","ï¿½Zï¿½ï¿½","56ï¿½ï¿½"};
+	std::vector<std::string> laughtComent{ "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","ï¿½ï¿½","ï¿½ï¿½ï¿½ï¿½" };
+	std::vector<std::string> healComent{ "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"};
+	std::vector<std::string> bariaComent{ "ï¿½oï¿½ï¿½ï¿½A" };
+
 	comentText[Enemy::ComentType::NORMAL] = normalComent;
 	comentText[Enemy::ComentType::LAUGTH] = laughtComent;
+	comentText[Enemy::ComentType::HEAL_HP] = healComent;
+	comentText[Enemy::ComentType::HEAL_BARRIER] = bariaComent;
 
 }
 
-//ƒRƒƒ“ƒgŒˆ’è
+//ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½
 std::string GameMainScene::SetComent(Enemy::ComentType type)
 {
 	std::string coment;
@@ -314,7 +345,7 @@ void GameMainScene::SpawnCooment(int time)
 		laughtLengthNum++;
 	}
 
-	//—”¶¬
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::random_device rnd;
 	std::mt19937 mt(rnd());
 
@@ -325,5 +356,19 @@ void GameMainScene::SpawnCooment(int time)
 		type = Enemy::ComentType::LAUGTH;
 	}
 
-	enemy.emplace_back(std::make_shared<Enemy>(enemy_image, type, SetComent(type)));
+	//5%ï¿½ÌŠmï¿½ï¿½ï¿½Å‰ñ•œƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½
+	std::uniform_int_distribution<> healProbability(1, 20);
+	if (healProbability(mt) == 20)
+	{
+		type = Enemy::ComentType::HEAL_HP;
+	}
+
+	//ï¿½Sï¿½Oï¿½bï¿½ï¿½ï¿½Æ‚Éƒoï¿½ï¿½ï¿½Aï¿½ñ•œƒRï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½
+	if (time % 40 == 0 && time != 0 && isSpawnBaria == false)
+	{
+		type = Enemy::ComentType::HEAL_BARRIER;
+		isSpawnBaria = true;
+	}
+
+	enemy.emplace_back(std::make_shared<Enemy>(exprosionImage, type, SetComent(type),comentFont));
 }

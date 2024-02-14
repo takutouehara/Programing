@@ -4,7 +4,7 @@
 #include "DxLib.h"
 #include "GameMainScene.h"
 
-ResultScene::ResultScene():back_ground(NULL),starttime(0),test(603)
+ResultScene::ResultScene():back_ground(NULL),starttime(0)
 {
 	
 }
@@ -57,32 +57,32 @@ void ResultScene::Draw() const
 
 	SetFontSize(350);
 
-	if (test / 60 < 60 )
+	if (starttime / 60 < 60 )
 	{
-		if (test / 60 < 10 && test % 60 < 10)
+		if (starttime / 60 < 10 && starttime % 60 < 10)
 		{
-			DrawFormatString(180, 240, 0xffffff, "0%d:0%d", test / 60, test % 60);
+			DrawFormatString(180, 240, 0xffffff, "0%d:0%d", starttime / 60, starttime % 60);
 		}
-		if (test / 60 < 10 && test % 60 > 9)
+		if (starttime / 60 < 10 && starttime % 60 > 9)
 		{
-			DrawFormatString(180, 240, 0xee0000, "0%d:%d", test / 60, test % 60);
+			DrawFormatString(180, 240, 0xffffff, "0%d:%d", starttime / 60, starttime % 60);
 		}
-		if (test / 60 > 9 && test % 60 < 10)
+		if (starttime / 60 > 9 && starttime % 60 < 10)
 		{
-			DrawFormatString(180, 240, 0xffffff, "%d:0%d", test / 60, test % 60);
+			DrawFormatString(180, 240, 0xffffff, "%d:0%d", starttime / 60, starttime % 60);
 		}
-		if (test / 60 > 9 && test % 60 > 9)
+		if (starttime / 60 > 9 && starttime % 60 > 9)
 		{
-			DrawFormatString(180, 240, 0xffffff, "%d %d", test / 60, test % 60);
+			DrawFormatString(180, 240, 0xffffff, "%d %d", starttime / 60, starttime % 60);
 		}
 	}
-	else if (test / 60 > 59)
+	else if (starttime / 60 > 59)
 	{
-		DrawString(150, 100, "error", 0xee0000);
+		DrawString(180, 240, "error", 0xee0000);
 	}
 	
 	SetFontSize(40);
-	DrawString(245, 580, "---- Aボタンを押してタイトルへ戻る ----", 0xdd0000, 0);
+	DrawString(245, 580, "---- Aボタンを押してランキングへ ----", 0xdd0000, 0);
 }
 
 // 終了時処理
@@ -111,7 +111,7 @@ void ResultScene::ReadResultData()
 		throw("Resource/dat/result_data.csvが読み込めません\n");
 	}
 
-	fscanf_s(fp, "%6d,\n", &starttime);
+	fscanf_s(fp, "%d,\n", &starttime);
 
 	// ファイルクローズ
 	fclose(fp);

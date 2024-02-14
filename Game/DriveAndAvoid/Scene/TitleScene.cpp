@@ -84,8 +84,7 @@ eSceneType TitleScene::Update()
 		case 6:
 			return eSceneType::E_HELP;
 		default:
-			//return eSceneType::E_END;
-			return eSceneType::E_RESULT;
+			return eSceneType::E_END;
 		}
 	}
 	
