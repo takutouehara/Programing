@@ -73,40 +73,43 @@ void RankingInputScene::Draw() const
 	// ”wŒi‰æ‘œ‚Ì•`‰æ
 	DrawGraph(0, 0, background_image, TRUE);
 
-	SetFontSize(16);
+	DrawBox(128, 180, 1152, 650, GetColor(0, 153, 0), TRUE);
+	DrawBox(128, 180, 1152, 650, GetColor(0, 0, 0), FALSE);
+
+	SetFontSize(64);
 	// –¼‘O“ü—ÍŽwŽ¦•¶Žš—ñ‚Ì•`‰æ
-	DrawString(150, 100, "ƒ‰ƒ“ƒLƒ“ƒO‚É“o˜^‚µ‚Ü‚·", 0xFFFFFF);
-	DrawFormatString(100, 220, GetColor(255, 255, 255), ">%s", name);
+	DrawString(280, 90, "ƒ‰ƒ“ƒLƒ“ƒO‚É“o˜^‚µ‚Ü‚·", 0xFF0000);
+	DrawFormatString(180, 200, GetColor(255, 255, 255), ">%s", name);
 
 	// ‘I‘ð—p•¶Žš‚ð•`‰æ
-	const int font_size = 25;
+	const int font_size = 75;
 	for (int i = 0; i < 26; i++)
 	{
-		int x = (i % 13) * font_size + 15;
-		int y = (i / 13) * font_size + 300;
-		DrawFormatString(x, y, GetColor(255, 255, 255), "%-3c", 'a' + i);
-		y = ((i / 13) + 2) * font_size + 300;
+		int x = (i % 13) * font_size + 170;
+		int y = (i / 13) * font_size + 270;
+		DrawFormatString(x, y, GetColor(255, 255, 255), "%-6c", 'a' + i);
+		y = ((i / 13) + 2) * font_size + 270;
 		DrawFormatString(x, y, GetColor(255, 255, 255), "%-3c", 'A' + i);
 	}
-	DrawString(40, 405, "Œˆ’è", GetColor(255, 255, 255));
-	DrawString(40 + font_size * 2, 405, "Á‚·", GetColor(255, 255, 225));
+	DrawString(380, 570, "Œˆ’è", GetColor(255, 0, 0));
+	DrawString(580 + font_size * 2, 570, "Á‚·", GetColor(255, 0, 0));
 
 	// ‘I‘ð•¶Žš‚ðƒtƒH[ƒJƒX‚·‚é
 	if (cursor_y < 4)
 	{
-		int x = cursor_x * font_size + 10;
-		int y = cursor_y * font_size + 295;
+		int x = cursor_x * font_size + 150;
+		int y = cursor_y * font_size + 265;
 		DrawBox(x, y, x + font_size, y + font_size, GetColor(255, 255, 255), FALSE);
 	}
 	else
 	{
 		if (cursor_x == 0)
 		{
-			DrawBox(35, 400, 35 + font_size * 2, 400 + font_size, GetColor(255, 255, 255), FALSE);
+			DrawBox(600, 100, font_size, font_size, GetColor(0, 0, 255), FALSE);
 		}
 		else
 		{
-			DrawBox(0, 0, font_size, font_size, GetColor(255, 255, 255), FALSE);
+			DrawBox(0, 0, font_size, font_size, GetColor(255, 0, 0), FALSE);
 		}
 	}
 }
