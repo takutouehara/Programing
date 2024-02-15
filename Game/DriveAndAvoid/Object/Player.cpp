@@ -2,7 +2,7 @@
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
  
-#define PleyerMoveSpeed 5	//�v���C���[�̈ړ����x
+#define PleyerMoveSpeed 5	//プレイヤーの移動速度
 
 Player::Player() :is_active(false), image(NULL), location(0.0f), box_size(0.0f),
 angle(0.0f), speed(0.0f), hp(0.0f), fuel(0.0f), barrier_count(0), barrier(nullptr)
@@ -15,7 +15,7 @@ Player::~Player()
 
 }
 
-// ����������
+// 初期化処理
 void Player::Initialize()
 {
 	is_active = true;
@@ -27,25 +27,25 @@ void Player::Initialize()
 	fuel = 20000;
 	barrier_count = 3;
 
-	// �摜�̓ǂݍ���
+	// 画像の読み込み
 	image = LoadGraph("Resource/images/Player_Acter.png");
 
-	// �G���[�`�F�b�N
+	// エラーチェック
 	if (image == -1)
 	{
-		throw("Resource/images/Player_Acter.png������܂���\n");
+		throw("Resource/images/Player_Acter.pngがありません\n");
 	}
 
-	//�f�o�b�N�p
+	//デバック用
 	BoxLocation1 = Vector2D(0.0f, 0.0f);
 	BoxLocation2 = Vector2D(0.0f, 0.0f);
 
 }
 
-// �X�V����
+// 更新処理
 void Player::Update()
 {
-	// ����s��Ԃł���΁A���g����]������
+	// 操作不可状態であれば、自身を回転させる
 	if (!is_active)
 	{
 		angle += DX_PI_F / 24.0f;
@@ -57,13 +57,13 @@ void Player::Update()
 		return;
 	}
 
-	// �R���̏���
+	// 燃料の消費
 	fuel -= speed;
 
-	// �ړ�����
+	// 移動処理
 	Movement();
 
-	// ����������
+	// 加減速処理
 	Acceleration();
 
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_START))
@@ -71,7 +71,7 @@ void Player::Update()
 		is_active = false;
 	}
 
-	// �o���A����
+	// バリア処理
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A) && barrier_count > 0)
 	{
 		if (barrier == nullptr)
@@ -81,114 +81,110 @@ void Player::Update()
 		}
 	}
 
-	// �o���A����������Ă�����A�X�V���s��
+	// バリアが生成されていたら、更新を行う
 	if (barrier != nullptr)
 	{
-		// �o���A���Ԃ��o�߂������@���Ă�����A�폜����
-		if (barrier->IsFinished())
+		// バリア時間が経過したか　していたら、削除する
+		if (barrier->IsFinished(this->speed))
 		{
 			delete barrier;
 			barrier = nullptr;
 		}
 	}
 
-	//�f�o�b�N�p
+	//デバック用
 	BoxLocation1 = location - (box_size );
 	BoxLocation2 = location + (box_size );
 
 }
 
-// �`�揈��
+// 描画処理
 void Player::Draw()
 {
-	// �v���C���[�摜�̕`��
+	// プレイヤー画像の描画
 	DrawRotaGraphF(location.x, location.y, 1.0, angle, image, TRUE);
 	
-	// �o���A����������Ă�����A�`����s��
+	// バリアが生成されていたら、描画を行う
 	if (barrier != nullptr)
 	{
 		barrier->Draw(this->location);
 	}
 
-	//�f�o�b�N�p
+	//デバック用
 	//DrawBoxAA(BoxLocation1.x,BoxLocation1.y, BoxLocation2.x, BoxLocation2.y,0xff0000,false );
 }
 
-// �I��������
+// 終了時処理
 void Player::Finalize()
 {
-	// �ǂݍ��񂾉摜���폜
+	// 読み込んだ画像を削除
 	DeleteGraph(image);
 
-	// �o���A����������Ă�����A�폜����
+	// バリアが生成されていたら、削除する
 	if (barrier != nullptr)
 	{
 		delete barrier;
 	}
 }
 
-// ��Ԑݒ菈��
+// 状態設定処理
 void Player::SetActive(bool flg)
 {
 	this->is_active = flg;
 }
 
-// �̗͌�������
+// 体力減少処理
 void Player::DecreaseHp(float value)
 {
 	if (is_active == true && barrier == nullptr)
 	{
 		this->hp += value;
-		if (this->hp < 0)
-		{
-			this->hp = 0;
-		}
 	}
 }
 
-// �ʒu���擾����
+// 位置情報取得処理
 Vector2D Player::GetLocation() const
 {
 	return this->location;
 }
 
-// �����蔻��̑傫���擾����
+// 当たり判定の大きさ取得処理
 Vector2D Player::GetBoxSize() const
 {
 	return this->box_size;
 }
 
-// �����擾����
+// 速さ取得処理
 float Player::GetSpeed() const
 {
 	return this->speed;
 }
 
-// �R���擾����
+// 燃料取得処理
 float Player::GetFuel() const
 {
 	return this->fuel;
 }
 
-// �̗͎擾����
+// 体力取得処理
 float Player::GetHp() const
 {
 	return this->hp;
 }
 
-// �o���A�����擾����
+// バリア枚数取得処理
 int Player::GetBarriarCount() const
 {
 	return this->barrier_count;
 }
 
-// �o���A���L�����@������
+// バリアが有効か　を処理
 bool Player::IsBarrier() const
 {
 	return (barrier != nullptr);
 }
 
-// �ړ�����
+// 移動処理
 void Player::Movement()
 {
 	float  stick_y = InputControl::GetLstickRadY();
@@ -203,23 +199,23 @@ void Player::Movement()
 
 	location += move;
 
-	// ��ʊO�ɍs���Ȃ��悤�ɐ�������
+	// 画面外に行かないように制限する
 	if ((location.x < box_size.x) || (location.x >= 1280.0f - box_size.x) || (location.y < box_size.y) || (location.y >= 720.0f - box_size.y)||(location.y <= 150.0f - box_size.y))
 	{
 		location -= move;
 	}
 }
 
-// ����������
+// 加減速処理
 void Player::Acceleration()
 {
-	// LB�{�^���������ꂽ�猸������
+	// LBボタンが押されたら減速する
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_LEFT_SHOULDER) && speed > 1.0f)
 	{
 		speed -= 1.0f;
 	}
 
-	// RB�{�^���������ꂽ���������
+	// RBボタンが押されたら加速する
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_RIGHT_SHOULDER) && speed < 10.0f)
 	{
 		speed += 1.0f;
