@@ -1,7 +1,7 @@
 #include "Barrier.h"
 #include "DxLib.h"
 
-Barrier::Barrier() :image(NULL), life_span(1000)
+Barrier::Barrier() :image(NULL), life_span(300),drawTimer(40)
 {
 	// ‰æ‘œ‚Ì“Ç‚İ‚İ
 	image = LoadGraph("Resource/images/barrier.png");
@@ -22,12 +22,26 @@ Barrier::~Barrier()
 // •`‰æˆ—
 void Barrier::Draw(const Vector2D& location)
 {
-	DrawRotaGraphF(location.x, location.y, 1.0, 0.0, image, TRUE);
+	if (120 < life_span || (life_span <= 120 && drawTimer <= 20))
+	{
+		DrawRotaGraphF(location.x, location.y, 1.0, 0.0, image, TRUE);
+	}
 }
 
 // õ–½‚ªs‚«‚½‚©
-bool Barrier::IsFinished(float speed)
+bool Barrier::IsFinished()
 {
-	life_span -= speed;
-	return (life_span < 0);
+	if (0 < life_span)
+	{
+		life_span--;
+	}
+	if (life_span <= 120)
+	{
+		drawTimer++;
+		if (40 <= drawTimer)
+		{
+			drawTimer = 0;
+		}
+	}
+	return (life_span <= 0);
 }

@@ -85,7 +85,7 @@ void Player::Update()
 	if (barrier != nullptr)
 	{
 		// バリア時間が経過したか　していたら、削除する
-		if (barrier->IsFinished(this->speed))
+		if (barrier->IsFinished())
 		{
 			delete barrier;
 			barrier = nullptr;
@@ -139,6 +139,10 @@ void Player::DecreaseHp(float value)
 	if (is_active == true && barrier == nullptr)
 	{
 		this->hp += value;
+		if (this->hp < 0)
+		{
+			this->hp = 0;
+		}
 	}
 }
 
