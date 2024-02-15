@@ -84,8 +84,8 @@ void HelpScene::Draw() const
 void HelpScene::Finalize()
 {
 	// “Ç‚İ‚ñ‚¾‰æ‘œ‚ğíœ
-	DeleteGraph(background_image);
-	DeleteGraph(background_font);
+	InitGraph();
+	InitSoundMem();
 }
 
 // Œ»İ‚ÌƒV[ƒ“î•ñ‚ğæ“¾

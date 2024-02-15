@@ -128,6 +128,8 @@ void TitleScene::Finalize()
 	DeleteGraph(menu_image);
 	DeleteGraph(cursor_image);
 	DeleteGraph(acter);
+
+	InitSoundMem();
 }
 
 // Œ»İ‚ÌƒV[ƒ“î•ñ‚ğæ“¾
