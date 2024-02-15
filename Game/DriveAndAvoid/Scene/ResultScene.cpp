@@ -6,7 +6,9 @@
 
 ResultScene::ResultScene():back_ground(NULL),starttime(0)
 {
-	
+	BGM = LoadSoundMem("Resource/sound/maou_bgm_fantasy10.mp3");
+	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
+
 }
 
 ResultScene::~ResultScene()

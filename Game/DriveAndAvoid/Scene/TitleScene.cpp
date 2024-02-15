@@ -4,7 +4,8 @@
 
 TitleScene::TitleScene():background_image(NULL),background_font(NULL), menu_image(NULL), cursor_image(NULL), menu_cursor(2),acter(NULL)
 {
-
+	BGM = LoadSoundMem("Resource/sound/maou_bgm_acoustic10.mp3");
+	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
 }
 
 TitleScene::~TitleScene()
@@ -80,6 +81,7 @@ eSceneType TitleScene::Update()
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
 		PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+		StopSoundMem(BGM, 0);
 
 		switch (menu_cursor)
 		{
