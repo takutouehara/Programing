@@ -211,7 +211,7 @@ void GameMainScene::Draw() const
 	player->Draw();
 
 	//UI‚Ì•`‰æ
-	DrawBox(0, 0, 700, 100, GetColor(100, 200, 255), TRUE);
+	DrawBox(0, 0, 1280, 100, GetColor(100, 200, 255), TRUE);
 	//DrawBox(50, 50, 50 + HpGauge, 70, GetColor(0, 255, 0), true);
 	SetFontSize(20);
 	DrawFormatString(50, 10, GetColor(255, 255, 255), "Œo‰ßŽžŠÔ");
@@ -232,7 +232,7 @@ void GameMainScene::Draw() const
 	// ‘Ì—ÍƒQ[ƒW‚Ì•`‰æ
 	float fx = 350.0f;
 	float fy = 30.0f;
-	DrawFormatStringF(fx, fy - 5, GetColor(0, 255, 0), "HP");
+	DrawFormatStringF(fx, fy - 5, GetColor(0, 0, 0), "HP");
 	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 200 / 1000), fy + 50.0f, GetColor(0, 255, 0), TRUE);
 	DrawBoxAA(fx, fy + 20.0f, fx + 200.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
 
