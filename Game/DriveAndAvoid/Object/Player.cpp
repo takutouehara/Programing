@@ -70,6 +70,9 @@ void Player::Update()
 		}
 	}
 	
+	if (hp <= 0) {
+		return;
+	}
 
 	// ”R—¿‚ÌÁ”ï
 	fuel -= speed;
