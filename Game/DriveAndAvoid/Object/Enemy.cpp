@@ -30,10 +30,10 @@ void Enemy::Initialize(ComentType type, std::string text, int font)
 	std::uniform_int_distribution<>randX(0, 5);
 	float random_x = static_cast<float>(GetRand(3) * 50 + 1340);
 
-	std::uniform_int_distribution<>randY(0, 34);
+	std::uniform_int_distribution<>randY(0, 29);
 
 	// 生成位置の設定
-	location = Vector2D(randX(mt) * 50 + 1340, randY(mt) * fontSize + 20);
+	location = Vector2D(randX(mt) * 50 + 1340, randY(mt) * fontSize + 120);
 	
 	// 速さの設定
 	std::uniform_int_distribution<> randSpeed(3, 7);
@@ -74,7 +74,7 @@ void Enemy::Draw() const
 	{
 		// コメント表示
 		DrawFormatStringToHandle(location.x, location.y, textColor, font, coment.c_str());
-		DrawBoxAA(location.x, location.y, location.x + box_size.x, location.y + box_size.y, 0xff0000, FALSE);
+		//DrawBoxAA(location.x, location.y, location.x + box_size.x, location.y + box_size.y, 0xff0000, FALSE);
 	}
 	else if (exprosionState == ExprosionState::EXPROSION)
 	{
