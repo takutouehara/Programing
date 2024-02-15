@@ -51,6 +51,7 @@ void GameMainScene::Initialize()
 	//コメント読み込み
 	SetComentText();
 	maxSpawnNum = 30;
+	laughtLengthNum = 2;
 	comentFont = CreateFontToHandle("UD デジタル 教科書体 N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
 	isSpawnBaria = false;
 	seHit = LoadSoundMem("Resource/sound/damaged2.mp3");
@@ -125,7 +126,7 @@ eSceneType GameMainScene::Update()
 				{
 				case Enemy::ComentType::NORMAL:
 					if (player->GetHitFlg() == false) {
-						player->DecreaseHp(-200.0f);
+						player->DecreaseHp(-100.0f);
 						player->SetActive(false);
 						player->SetHitFlg(true);
 						PlaySoundMem(seHit, DX_PLAYTYPE_BACK, TRUE);
@@ -133,7 +134,7 @@ eSceneType GameMainScene::Update()
 					break;
 				case Enemy::ComentType::LAUGTH:
 					if (player->GetHitFlg() == false) {
-						player->DecreaseHp(-350.0f);
+						player->DecreaseHp(-200.0f);
 						player->SetActive(false);
 						player->SetHitFlg(true);
 						e->Explosion();
@@ -141,7 +142,7 @@ eSceneType GameMainScene::Update()
 					}
 					break;
 				case Enemy::ComentType::HEAL_HP:
-					player->DecreaseHp(200);
+					player->DecreaseHp(150);
 					PlaySoundMem(seHeal, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				case Enemy::ComentType::HEAL_BARRIER:

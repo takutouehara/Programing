@@ -174,6 +174,10 @@ void Player::DecreaseHp(float value)
 		{
 			this->hp = 0;
 		}
+		if (1000 <= this->hp)
+		{
+			this->hp = 1000;
+		}
 	}
 }
 

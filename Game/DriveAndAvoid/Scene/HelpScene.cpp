@@ -5,6 +5,7 @@
 HelpScene::HelpScene():background_image(NULL), background_font(NULL), color(GetColor(255, 255, 255))
 {
 	BGM = LoadSoundMem("Resource/sound/maou_bgm_acoustic10.mp3");
+	ChangeVolumeSoundMem(100, BGM);
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
 }
 
@@ -20,6 +21,7 @@ void HelpScene::Initialize()
 	background_image = LoadGraph("Resource/images/Ranking_Back.png");
 	background_font = LoadGraph("Resource/images/Help_Font.png");
 	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");	//決定音
+	ChangeVolumeSoundMem(100, enter_se);
 
 	// エラーチェック
 	if (background_image == -1)

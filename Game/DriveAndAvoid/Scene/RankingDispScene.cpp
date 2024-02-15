@@ -5,6 +5,7 @@
 RankingDispScene::RankingDispScene():background_image(NULL), background_font(NULL),ranking(nullptr)
 {
 	BGM = LoadSoundMem("Resource/sound/maou_bgm_fantasy10.mp3");
+	ChangeVolumeSoundMem(100, BGM);
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
 }
 

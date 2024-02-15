@@ -4,6 +4,7 @@
 TitleScene::TitleScene():background_image(NULL),background_font(NULL), menu_image(NULL), cursor_image(NULL), menu_cursor(2),acter(NULL)
 {
 	BGM = LoadSoundMem("Resource/sound/maou_bgm_acoustic10.mp3");
+	ChangeVolumeSoundMem(100, BGM);
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
 
 }
@@ -24,6 +25,8 @@ void TitleScene::Initialize()
 	cursor_image = LoadGraph("Resource/images/Menu_Icon.png");
 	cursor_se = LoadSoundMem("Resource/sound/select01.mp3");
 	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
+	ChangeVolumeSoundMem(100, cursor_se);
+	ChangeVolumeSoundMem(100, enter_se);
 
 	// エラーチェック
 	if (background_image == -1)

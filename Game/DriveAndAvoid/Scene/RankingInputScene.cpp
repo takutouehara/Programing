@@ -6,6 +6,7 @@ RankingInputScene::RankingInputScene():background_image(NULL),ranking(nullptr),t
 {
 	memset(name, NULL, (sizeof(char) * 15));
 	BGM = LoadSoundMem("Resource/sound/maou_bgm_fantasy10.mp3");
+	ChangeVolumeSoundMem(100, BGM);
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
 }
 
@@ -22,6 +23,7 @@ void RankingInputScene::Initialize()
 	cursor_se = LoadSoundMem("Resource/sound/select01.mp3");
 	ChangeVolumeSoundMem(100, cursor_se);
 	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
+	ChangeVolumeSoundMem(100, enter_se);
 	// エラーチェック
 	if (background_image == -1)
 	{
