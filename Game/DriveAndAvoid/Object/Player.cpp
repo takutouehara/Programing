@@ -99,7 +99,7 @@ void Player::Update()
 	if (barrier != nullptr)
 	{
 		// バリア時間が経過したか　していたら、削除する
-		if (barrier->IsFinished())
+		if (barrier->IsFinished(this->speed))
 		{
 			delete barrier;
 			barrier = nullptr;
