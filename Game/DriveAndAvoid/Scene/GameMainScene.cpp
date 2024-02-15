@@ -59,6 +59,7 @@ void GameMainScene::Initialize()
 	ChangeVolumeSoundMem(100, seHit);
 	ChangeVolumeSoundMem(100, seExprosion);
 	ChangeVolumeSoundMem(100, seHeal);
+	brightValue = 255;
 }
 
 // 更新処理
@@ -165,7 +166,14 @@ eSceneType GameMainScene::Update()
 	// プレイヤーの体力が０未満ならリザルトに遷移する
 	if (player->GetHp() < 0.0f)
 	{
-		return eSceneType::E_RESULT;
+		//だんだん暗くする
+		brightValue--;
+		SetDrawBright(brightValue, brightValue, brightValue);
+		if (brightValue <= 100)
+		{
+			SetDrawBright(255, 255, 255);
+			return eSceneType::E_RESULT;
+		}
 	}
 
 	//動画ループ処理

@@ -44,6 +44,8 @@ private:
 	int seExprosion;
 	//‰ñ•œSE
 	int seHeal;
+	//‰æ–ÊÆ“x’l
+	int brightValue;
 public:
 	GameMainScene();
 	virtual ~GameMainScene();
