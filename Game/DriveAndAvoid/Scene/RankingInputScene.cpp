@@ -5,6 +5,8 @@
 RankingInputScene::RankingInputScene():background_image(NULL),ranking(nullptr),time(0),name_num(0),cursor_x(0),cursor_y(0)
 {
 	memset(name, NULL, (sizeof(char) * 15));
+	BGM = LoadSoundMem("Resource/sound/maou_bgm_fantasy10.mp3");
+	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
 }
 
 RankingInputScene::~RankingInputScene()
@@ -61,8 +63,11 @@ eSceneType RankingInputScene::Update()
 	// シーン変更は可能か？
 	if (is_change)
 	{
+			StopSoundMem(BGM, 0);
+
 		// ランキング表示に遷移
 		return eSceneType::E_RANKING_DISP;
+		
 	}
 	else
 	{
@@ -292,6 +297,7 @@ bool RankingInputScene::InputName()
 			}
 		}
 	}
+
 
 	return false;
 }

@@ -9,6 +9,7 @@ private:
 	int background_image;	// ”wŒi‰æ‘œ
 	int color;				// •¶šF
 	int enter_se;
+	int BGM;
 public:
 	HelpScene();
 	virtual ~HelpScene();
