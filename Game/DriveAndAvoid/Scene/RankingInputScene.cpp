@@ -137,8 +137,10 @@ void RankingInputScene::Finalize()
 	ranking->SetRankingData(time, name);
 
 	// 読み込んだデータを削除
-	InitGraph();
-	InitSoundMem();
+	DeleteGraph(background_image);
+	DeleteSoundMem(BGM);
+	DeleteSoundMem(cursor_se);
+	DeleteSoundMem(enter_se);
 
 	// 動的メモリの解放
 	delete ranking;

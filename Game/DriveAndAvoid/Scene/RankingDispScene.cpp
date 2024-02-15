@@ -91,8 +91,11 @@ void RankingDispScene::Draw() const
 void RankingDispScene::Finalize()
 {
 	// “Ç‚Ýž‚ñ‚¾‰æ‘œ‚Æ‰¹º‚ðíœ
-	InitGraph();
-	InitSoundMem();
+
+	DeleteSoundMem(BGM);
+	DeleteGraph(background_image);
+	DeleteGraph(background_font);
+	DeleteSoundMem(enter_se);
 
 	// “®“Iƒƒ‚ƒŠ‚Ì‰ð•ú
 	ranking->Finalize();

@@ -132,7 +132,9 @@ void TitleScene::Finalize()
 	DeleteGraph(cursor_image);
 	DeleteGraph(acter);
 
-	InitSoundMem();
+	DeleteSoundMem(BGM);
+	DeleteSoundMem(cursor_se);
+	DeleteSoundMem(enter_se);
 }
 
 // Œ»İ‚ÌƒV[ƒ“î•ñ‚ğæ“¾

@@ -93,8 +93,8 @@ void ResultScene::Draw() const
 void ResultScene::Finalize()
 {
 	// “Ç‚İ‚ñ‚¾‰æ‘œ‚ğíœ
-	InitGraph();
-	InitSoundMem();
+	DeleteGraph(back_ground);
+	DeleteSoundMem(BGM);
 }
 
 // Œ»İ‚ÌƒV[ƒ“î•ñ‚ğæ“¾
