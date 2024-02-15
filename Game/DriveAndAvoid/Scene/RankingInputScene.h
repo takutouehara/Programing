@@ -17,6 +17,7 @@ private:
 public:
 	int cursor_se;			//ƒJ[ƒ\ƒ‹‰¹
 	int enter_se;			//Œˆ’è‰¹
+	int BGM;
 	RankingInputScene();
 	virtual ~RankingInputScene();
 

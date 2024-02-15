@@ -4,7 +4,8 @@
 
 RankingDispScene::RankingDispScene():background_image(NULL), background_font(NULL),ranking(nullptr)
 {
-
+	BGM = LoadSoundMem("Resource/sound/maou_bgm_fantasy10.mp3");
+	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
 }
 
 RankingDispScene::~RankingDispScene()
@@ -42,7 +43,9 @@ eSceneType RankingDispScene::Update()
 	// Aボタンが押されたら、タイトルに戻る
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
+
 		PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+		StopSoundMem(BGM, 0);
 
 		return eSceneType::E_TITLE;
 	}
