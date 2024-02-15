@@ -10,7 +10,7 @@ GameMainScene::GameMainScene() :high_time(0), barrier_image(NULL), mileage(0), p
 	{
 		enemy_count[i] = NULL;
 	}
-	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
+	movieHandle = LoadGraph("Resource/movies/nekomeme.mp4");
 	PlayMovieToGraph(movieHandle);
 	ChangeMovieVolumeToGraph(100, movieHandle);
 }
