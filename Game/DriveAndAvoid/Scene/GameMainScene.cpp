@@ -50,7 +50,7 @@ void GameMainScene::Initialize()
 
 	//コメント読み込み
 	SetComentText();
-
+	maxSpawnNum = 10;
 	comentFont = CreateFontToHandle("UD デジタル 教科書体 N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
 	isSpawnBaria = false;
 	seHit = LoadSoundMem("Resource/sound/damaged2.mp3");
@@ -59,6 +59,7 @@ void GameMainScene::Initialize()
 	ChangeVolumeSoundMem(100, seHit);
 	ChangeVolumeSoundMem(100, seExprosion);
 	ChangeVolumeSoundMem(100, seHeal);
+	brightValue = 255;
 }
 
 // 更新処理
@@ -82,7 +83,7 @@ eSceneType GameMainScene::Update()
 	mileage += (int)player->GetSpeed() + 5;
 
 	// 敵生成処理
-	if (FPSCount % spawnInterval == 0 && enemy.size()<10)
+	if (FPSCount % spawnInterval == 0 && enemy.size()<maxSpawnNum)
 	{
 		SpawnCooment(starttime);
 	}
@@ -151,11 +152,6 @@ eSceneType GameMainScene::Update()
 			}
 
 		}
-		else
-		{
-			enemy.erase(enemy.begin() + i);
-			continue;
-		}
 		i++;
 	}
 
@@ -165,7 +161,14 @@ eSceneType GameMainScene::Update()
 	// プレイヤーの体力が０未満ならリザルトに遷移する
 	if (player->GetHp() < 0.0f)
 	{
-		return eSceneType::E_RESULT;
+		//だんだん暗くする
+		brightValue--;
+		SetDrawBright(brightValue, brightValue, brightValue);
+		if (brightValue <= 100)
+		{
+			SetDrawBright(255, 255, 255);
+			return eSceneType::E_RESULT;
+		}
 	}
 
 	//動画ループ処理
