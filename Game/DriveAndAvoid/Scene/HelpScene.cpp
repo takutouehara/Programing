@@ -4,7 +4,8 @@
 
 HelpScene::HelpScene():background_image(NULL), background_font(NULL), color(GetColor(255, 255, 255))
 {
-
+	BGM = LoadSoundMem("Resource/sound/maou_bgm_acoustic10.mp3");
+	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
 }
 
 HelpScene::~HelpScene()
@@ -18,8 +19,7 @@ void HelpScene::Initialize()
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Ranking_Back.png");
 	background_font = LoadGraph("Resource/images/Help_Font.png");
-	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
-	;			//決定音
+	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");	//決定音
 
 	// エラーチェック
 	if (background_image == -1)
@@ -35,11 +35,12 @@ void HelpScene::Initialize()
 // 更新処理
 eSceneType HelpScene::Update()
 {
+
 	// Aボタンが押されたらタイトルに戻る
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
 		PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
-
+		StopSoundMem(BGM, 0);
 		return eSceneType::E_TITLE;
 	}
 
@@ -49,6 +50,7 @@ eSceneType HelpScene::Update()
 // 描画処理
 void HelpScene::Draw() const
 {
+
 	// 背景画像の描画
 	DrawGraph(0, 0, background_image, FALSE);
 	// 文字画像の描画

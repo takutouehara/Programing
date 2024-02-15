@@ -11,7 +11,7 @@ private:
 	int background_font;	// •¶š‰æ‘œ
 	int background_image;	// ”wŒi‰æ‘œ
 	int enter_se;
-
+	int BGM;
 	RankingData* ranking;	// ƒ‰ƒ“ƒLƒ“ƒOî•ñ
 
 public:
