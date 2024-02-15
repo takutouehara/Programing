@@ -78,12 +78,12 @@ eSceneType GameMainScene::Update()
 		if (starttime % 20 == 0 && laughtLengthNum < 10)
 		{
 			laughtLengthNum++;
-			maxSpawnNum += 10;
 		}
-		//10秒ごとにコメント生成間隔を早くする
+		//10秒ごとにコメント生成間隔を早くし、最大数を増やす
 		if (starttime % 10 == 0 && 1 < spawnInterval)
 		{
 			spawnInterval--;
+			maxSpawnNum += 20;
 		}
 	}
 	// プレイヤーの更新
