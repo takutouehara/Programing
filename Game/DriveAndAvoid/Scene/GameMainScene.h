@@ -26,6 +26,8 @@ private:
 	std::vector<std::shared_ptr<Enemy>> enemy;
 	//コメントテキスト格納配列
 	std::unordered_map<Enemy::ComentType, std::vector<std::string>>comentText;
+	//コメント最大生成数
+	int maxSpawnNum;
 	//コメントフォント
 	int comentFont;
 	//laughtコメントを生成する乱数値の範囲

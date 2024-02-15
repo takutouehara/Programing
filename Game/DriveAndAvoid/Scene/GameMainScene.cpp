@@ -50,7 +50,7 @@ void GameMainScene::Initialize()
 
 	//コメント読み込み
 	SetComentText();
-
+	maxSpawnNum = 10;
 	comentFont = CreateFontToHandle("UD デジタル 教科書体 N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
 	isSpawnBaria = false;
 	seHit = LoadSoundMem("Resource/sound/damaged2.mp3");
@@ -83,7 +83,7 @@ eSceneType GameMainScene::Update()
 	mileage += (int)player->GetSpeed() + 5;
 
 	// 敵生成処理
-	if (FPSCount % spawnInterval == 0 && enemy.size()<10)
+	if (FPSCount % spawnInterval == 0 && enemy.size()<maxSpawnNum)
 	{
 		SpawnCooment(starttime);
 	}
@@ -151,11 +151,6 @@ eSceneType GameMainScene::Update()
 				continue;
 			}
 
-		}
-		else
-		{
-			enemy.erase(enemy.begin() + i);
-			continue;
 		}
 		i++;
 	}
