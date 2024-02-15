@@ -53,8 +53,6 @@ void RankingInputScene::Initialize()
 // XVˆ—
 eSceneType RankingInputScene::Update()
 {
-	clsDx();
-	printfDx("%s",name);
 	bool is_change = false;
 
 	// –¼‘O“ü—Íˆ—
