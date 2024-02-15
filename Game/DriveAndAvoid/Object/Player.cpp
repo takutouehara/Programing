@@ -66,9 +66,10 @@ void Player::Update()
 		if (FlashTime < 0)
 		{
 			FlashTime = 120;
-			is_HitFlg = true;
+			is_HitFlg = false;
 		}
 	}
+	
 
 	// ”R—¿‚ÌÁ”ï
 	fuel -= speed;

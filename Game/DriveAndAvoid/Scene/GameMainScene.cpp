@@ -103,11 +103,9 @@ eSceneType GameMainScene::Update()
 			}
 
 			// “–‚½‚è”»’è‚ÌŠm”F
-			if (IsHitCheck(player,e) && player->GetActive() == true)
+			if (IsHitCheck(player,e) && player->GetActive() == true )
 			{
-				player->SetHitFlg(true);
-
-				player->SetActive(false);
+				//player->SetActive(false);
 
 				Enemy::ComentType type = e->GetType();
 
@@ -115,15 +113,21 @@ eSceneType GameMainScene::Update()
 				switch (type)
 				{
 				case Enemy::ComentType::NORMAL:
-					player->DecreaseHp(-50.0f);
-					player->SetActive(false);
-					PlaySoundMem(seHit, DX_PLAYTYPE_BACK, TRUE);
+					if (player->GetHitFlg() == false) {
+						player->DecreaseHp(-50.0f);
+						player->SetActive(false);
+						player->SetHitFlg(true);
+						PlaySoundMem(seHit, DX_PLAYTYPE_BACK, TRUE);
+					}
 					break;
 				case Enemy::ComentType::LAUGTH:
-					player->DecreaseHp(-150.0f);
-					player->SetActive(false);
-					e->Explosion();
-					PlaySoundMem(seExprosion, DX_PLAYTYPE_BACK, TRUE);
+					if (player->GetHitFlg() == false) {
+						player->DecreaseHp(-150.0f);
+						player->SetActive(false);
+						player->SetHitFlg(true);
+						e->Explosion();
+						PlaySoundMem(seExprosion, DX_PLAYTYPE_BACK, TRUE);
+					}
 					break;
 				case Enemy::ComentType::HEAL_HP:
 					player->DecreaseHp(100);
@@ -137,6 +141,8 @@ eSceneType GameMainScene::Update()
 				default:
 					break;
 				}
+
+				
 
 				if (e->GetType() != Enemy::ComentType::LAUGTH)
 				{
