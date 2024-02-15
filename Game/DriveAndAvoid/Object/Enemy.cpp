@@ -78,7 +78,7 @@ void Enemy::Draw() const
 	}
 	else if (exprosionState == ExprosionState::EXPROSION)
 	{
-		DrawGraphF(location.x, location.y, explosionImage[explosionAnimationCount],TRUE);
+		DrawGraphF(location.x-10, location.y-50, explosionImage[explosionAnimationCount],TRUE);
 	}
 }
 
