@@ -38,10 +38,12 @@ private:
 	int exprosionImage[10];
 	//バリアコメントが存在しているかのフラグ
 	bool isSpawnBaria;
-
-
-	bool playerHit;		//プレイヤーが敵に当たったかのフラグ
-
+	//ヒットSE
+	int seHit;
+	//爆発SE
+	int seExprosion;
+	//回復SE
+	int seHeal;
 public:
 	GameMainScene();
 	virtual ~GameMainScene();

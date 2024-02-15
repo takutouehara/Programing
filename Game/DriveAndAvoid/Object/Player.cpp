@@ -163,7 +163,10 @@ void Player::SetActive(bool flg)
 // ‘Ì—ÍŒ¸­ˆ—
 void Player::DecreaseHp(float value)
 {
-	this->hp += value;
+	if (is_active == true && barrier == nullptr)
+	{
+		this->hp += value;
+	}
 }
 
 // ˆÊ’uî•ñæ“¾ˆ—
@@ -226,7 +229,7 @@ float Player::GetFlashTime() const
 // ˆÚ“®ˆ—
 void Player::Movement()
 {
-	float  stick_y = InputControl::GetLstickRadY() ;
+	float  stick_y = InputControl::GetLstickRadY();
 	float  stick_x = InputControl::GetLstickRadX();
 
 	Vector2D move = Vector2D(0.0f);

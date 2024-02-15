@@ -8,7 +8,7 @@ private:
 	int background_font;	// •¶š‰æ‘œ
 	int background_image;	// ”wŒi‰æ‘œ
 	int color;				// •¶šF
-
+	int enter_se;
 public:
 	HelpScene();
 	virtual ~HelpScene();

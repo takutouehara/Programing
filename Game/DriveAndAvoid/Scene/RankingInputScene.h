@@ -13,8 +13,10 @@ private:
 	int name_num;			// 名前入力数
 	int cursor_x;			// カーソルX座標
 	int cursor_y;			// カーソルY座標
-
+	
 public:
+	int cursor_se;			//カーソル音
+	int enter_se;			//決定音
 	RankingInputScene();
 	virtual ~RankingInputScene();
 

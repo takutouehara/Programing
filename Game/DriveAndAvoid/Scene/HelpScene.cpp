@@ -18,6 +18,8 @@ void HelpScene::Initialize()
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Ranking_Back.png");
 	background_font = LoadGraph("Resource/images/Help_Font.png");
+	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
+	;			//決定音
 
 	// エラーチェック
 	if (background_image == -1)
@@ -33,9 +35,11 @@ void HelpScene::Initialize()
 // 更新処理
 eSceneType HelpScene::Update()
 {
-	// Bボタンが押されたらタイトルに戻る
+	// Aボタンが押されたらタイトルに戻る
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
+		PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 		return eSceneType::E_TITLE;
 	}
 
@@ -59,19 +63,19 @@ void HelpScene::Draw() const
 	DrawBox(260, 185, 1000, 340, GetColor(155, 0, 0), TRUE);
 
 	DrawString(450, 190, "操作方法", color, 0);
-	DrawString(290, 240, "移動　　　　 十字ボタン/スティック", color, 0);
-	DrawString(290, 290, "決定/バリア　Aボタン", color, 0);
+	DrawString(290, 240, "移動         十字ボタン/スティック", color, 0);
+	DrawString(290, 290, "決定/キャンセル/バリア　   Aボタン", color, 0);
 
-	DrawString(80, 350, "流れてくるコメントに当たるとダメージ", color, 0);
-	DrawString(80, 400, "'笑い'に関する言葉に当たると爆発して大ダメージ", color, 0);
-	DrawString(80, 450, "体力が０になるとゲームーオーバー", color, 0);
-	DrawString(80, 500, "コメントの中には当たると良いことが起こるものもあります", color, 0);
+	DrawString(80, 350, "・流れてくるコメントに当たるとダメージ", color, 0);
+	DrawString(80, 400, "・'笑い'に関する言葉に当たると爆発して大ダメージ", color, 0);
+	DrawString(80, 450, "・体力が０になるとゲームーオーバー", color, 0);
+	DrawString(80, 500, "・コメントの中には当たると良いことがあるものもあります", color, 0);
 
 	SetFontSize(55);
 	DrawString(80, 555, "コメントを避け続けハイスコアを目指そう！", 0xff00dd, 0);
 
 	SetFontSize(20);
-	DrawString(420, 620, "---- Aボタンを押してタイトルへ戻る ----", color, 0);
+	DrawString(420, 620, "---- Aボタンを押してタイトルへ戻る ----", 0xdd0000, 0);
 }
 
 // 終了時処理

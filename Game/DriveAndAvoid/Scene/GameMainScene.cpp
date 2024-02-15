@@ -12,7 +12,7 @@ GameMainScene::GameMainScene() :high_time(0), barrier_image(NULL), mileage(0), p
 	}
 	movieHandle = LoadGraph("Resource/movies/sm43358357.mp4");
 	PlayMovieToGraph(movieHandle);
-
+	ChangeMovieVolumeToGraph(100, movieHandle);
 }
 
 GameMainScene::~GameMainScene()
@@ -53,8 +53,12 @@ void GameMainScene::Initialize()
 
 	comentFont = CreateFontToHandle("UD デジタル 教科書体 N-B", 20, 10, DX_FONTTYPE_ANTIALIASING_8X8);;
 	isSpawnBaria = false;
-
-	playerHit = false;
+	seHit = LoadSoundMem("Resource/sound/damaged2.mp3");
+	seExprosion = LoadSoundMem("Resource/sound/mini_bomb1.mp3");
+	seHeal = LoadSoundMem("Resource/sound/heal.mp3");
+	ChangeVolumeSoundMem(100, seHit);
+	ChangeVolumeSoundMem(100, seExprosion);
+	ChangeVolumeSoundMem(100, seHeal);
 }
 
 // 更新処理
@@ -65,7 +69,7 @@ eSceneType GameMainScene::Update()
 	{
 		FPSCount = 0;
 		starttime++;
-		//３０秒ごとにコメント生成間隔を早くする
+		//２０秒ごとにコメント生成間隔を早くする
 		if (starttime % 20 == 0 && spawnInterval != 1)
 		{
 			spawnInterval--;
@@ -73,7 +77,7 @@ eSceneType GameMainScene::Update()
 	}
 	// プレイヤーの更新
 	player->Update();
-
+	
 	// 移動距離の更新
 	mileage += (int)player->GetSpeed() + 5;
 
@@ -99,7 +103,7 @@ eSceneType GameMainScene::Update()
 			}
 
 			// 当たり判定の確認
-			if (IsHitCheck(player,e))
+			if (IsHitCheck(player,e) && player->GetActive() == true)
 			{
 				player->SetHitFlg(true);
 
@@ -112,22 +116,28 @@ eSceneType GameMainScene::Update()
 				{
 				case Enemy::ComentType::NORMAL:
 					player->DecreaseHp(-50.0f);
+					player->SetActive(false);
+					PlaySoundMem(seHit, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				case Enemy::ComentType::LAUGTH:
 					player->DecreaseHp(-150.0f);
+					player->SetActive(false);
 					e->Explosion();
+					PlaySoundMem(seExprosion, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				case Enemy::ComentType::HEAL_HP:
 					player->DecreaseHp(100);
+					PlaySoundMem(seHeal, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				case Enemy::ComentType::HEAL_BARRIER:
 					player->AddBarriarCount();
 					isSpawnBaria = false;
+					PlaySoundMem(seHeal, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				default:
 					break;
 				}
-				
+
 				if (e->GetType() != Enemy::ComentType::LAUGTH)
 				{
 					enemy.erase(enemy.begin() + i);
@@ -199,24 +209,22 @@ void GameMainScene::Draw() const
 	DrawFormatString(50, 10, GetColor(255, 255, 255), "経過時間");
 	DrawFormatString(80, 50, GetColor(255, 255, 255), "%d", starttime);
 
-	DrawFormatString(180, 10, GetColor(255, 0, 0), "走行距離");
-	DrawFormatString(180, 50, GetColor(255, 255, 255), "%08d", mileage / 10);
 	
 
-	DrawFormatString(300, 10, GetColor(0, 0, 255), "残りのバリア");
+	DrawFormatString(200, 10, GetColor(0, 0, 255), "残りのバリア");
 
 	// バリア枚数の描画
 	for (int i = 0; i < player->GetBarriarCount(); i++)
 	{
-		DrawRotaGraph(320 + i * 25, 60, 0.2f, 0, barrier_image, TRUE, FALSE);
+		DrawRotaGraph(220 + i * 25, 60, 0.2f, 0, barrier_image, TRUE, FALSE);
 	}
 
 	
 
 	// 体力ゲージの描画
-	float fx = 450.0f;
+	float fx = 350.0f;
 	float fy = 30.0f;
-	DrawFormatStringF(fx, fy - 10, GetColor(0, 255, 0), "HP METER");
+	DrawFormatStringF(fx, fy - 5, GetColor(0, 255, 0), "HP");
 	DrawBoxAA(fx, fy + 20.0f, fx + (player->GetHp() * 200 / 1000), fy + 50.0f, GetColor(0, 255, 0), TRUE);
 	DrawBoxAA(fx, fy + 20.0f, fx + 200.0f, fy + 50.0f, GetColor(0, 0, 0), FALSE);
 
@@ -270,6 +278,7 @@ void GameMainScene::Finalize()
 	enemy.shrink_to_fit();
 
 	InitGraph();
+	InitSoundMem();
 	DeleteFontToHandle(comentFont);
 }
 
@@ -306,10 +315,13 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 	}
 
 	// 位置情報の差分を取得
-	Vector2D diff_location = p->GetLocation() - e->GetLocation();
+	Vector2D e_location = e->GetLocation();
+	e_location.x += e->GetBoxSize().x / 2;
+	e_location.y += e->GetBoxSize().y / 2;
+	Vector2D diff_location = p->GetLocation() - e_location;
 
 	// 当たり判定サイズの大きさを取得
-	Vector2D box_ex = p->GetBoxSize() + e->GetBoxSize();
+	Vector2D box_ex = p->GetBoxSize() + (e->GetBoxSize() / 2);
 
 	// コリジョンデータより位置情報の差分が小さいならヒット判定とする
 	return ((fabsf(diff_location.x) < box_ex.x) && (fabsf(diff_location.y) < box_ex.y));
@@ -320,9 +332,10 @@ bool GameMainScene::IsHitCheck(Player* p, std::shared_ptr<Enemy> e)
 //コメントテキスト設定
 void GameMainScene::SetComentText()
 {
-	std::vector<std::string> normalComent{ "タヒネ","きっしょ","〇す","56す"};
-	std::vector<std::string> laughtComent{ "ｗｗｗｗ","草","爆笑" };
-	std::vector<std::string> healComent{ "ここすき"};
+	std::vector<std::string> normalComent{ "タヒネ","きっしょ","〇す","56す","つ、まんね","い、くわ",
+											"■■■■■■■■■■","ぶっさ"};
+	std::vector<std::string> laughtComent{ "ｗｗｗｗ","草","爆笑","ｌｏｌ","ｗｗｗｗｗｗｗｗｗｗ","大草原不可避" };
+	std::vector<std::string> healComent{ "ここすき","ネ申","ｋｔｋｒ" };
 	std::vector<std::string> bariaComent{ "バリア" };
 
 	comentText[Enemy::ComentType::NORMAL] = normalComent;

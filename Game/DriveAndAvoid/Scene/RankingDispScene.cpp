@@ -18,6 +18,7 @@ void RankingDispScene::Initialize()
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Ranking_Back.png");
 	background_font=LoadGraph("Resource/images/Ranking_Font.png");
+	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
 
 
 	// エラーチェック
@@ -38,9 +39,11 @@ void RankingDispScene::Initialize()
 // 更新処理
 eSceneType RankingDispScene::Update()
 {
-	// Bボタンが押されたら、タイトルに戻る
+	// Aボタンが押されたら、タイトルに戻る
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
+		PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 		return eSceneType::E_TITLE;
 	}
 	return GetNowScene();
@@ -59,8 +62,24 @@ void RankingDispScene::Draw() const
 	for (int i = 0; i < 5; i++)
 	{
 		DrawFormatString(50, 170 + i * 100, 0xff0000, "%2d", ranking->GetRank(i));
-		DrawFormatString(200, 170 + i * 100, 0xffffff, "%-15s %6d", ranking->GetName(i), ranking->GetTime(i));
+		DrawFormatString(200, 170 + i * 100, 0xffffff, "%-15s", ranking->GetName(i));
 
+		if (ranking->GetTime(i) / 60 < 10 && ranking->GetTime(i) % 60 < 10)
+		{
+			DrawFormatString(800, 170 + i * 100, 0xffffff, "0%d:0%d", ranking->GetTime(i) / 60, ranking->GetTime(i) % 60);
+		}
+		if (ranking->GetTime(i) / 60 < 10 && ranking->GetTime(i) % 60 > 9)
+		{
+			DrawFormatString(800, 170 + i * 100, 0xffffff, "0%d:%d", ranking->GetTime(i) / 60, ranking->GetTime(i) % 60);
+		}
+		if (ranking->GetTime(i) / 60 > 9 && ranking->GetTime(i) % 60 < 10)
+		{
+			DrawFormatString(800, 170 + i * 100, 0xffffff, "%d:0%d", ranking->GetTime(i) / 60, ranking->GetTime(i) % 60);
+		}
+		if (ranking->GetTime(i) / 60 > 9 && ranking->GetTime(i) % 60 > 9)
+		{
+			DrawFormatString(800, 170 + i * 100, 0xffffff, "%d %d", ranking->GetTime(i) / 60, ranking->GetTime(i) % 60);
+		}
 	}
 }
 

@@ -17,7 +17,9 @@ void RankingInputScene::Initialize()
 {
 	// 画像の読み込み
 	background_image = LoadGraph("Resource/images/Ranking_Back.png");
-
+	cursor_se = LoadSoundMem("Resource/sound/select01.mp3");
+	ChangeVolumeSoundMem(100, cursor_se);
+	enter_se = LoadSoundMem("Resource/sound/決定ボタンを押す3.mp3");
 	// エラーチェック
 	if (background_image == -1)
 	{
@@ -49,6 +51,8 @@ void RankingInputScene::Initialize()
 // 更新処理
 eSceneType RankingInputScene::Update()
 {
+	clsDx();
+	printfDx("x:%d  y:%d", cursor_x, cursor_y);
 	bool is_change = false;
 
 	// 名前入力処理
@@ -73,40 +77,47 @@ void RankingInputScene::Draw() const
 	// 背景画像の描画
 	DrawGraph(0, 0, background_image, TRUE);
 
-	SetFontSize(16);
+	DrawBox(128, 180, 1152, 650, GetColor(0, 153, 0), TRUE);
+	DrawBox(128, 180, 1152, 650, GetColor(0, 0, 0), FALSE);
+
+	SetFontSize(64);
 	// 名前入力指示文字列の描画
-	DrawString(150, 100, "ランキングに登録します", 0xFFFFFF);
-	DrawFormatString(100, 220, GetColor(255, 255, 255), ">%s", name);
+	DrawString(280, 90, "ランキングに登録します", 0xFF0000);
+	DrawFormatString(180, 200, GetColor(255, 255, 255), ">%s", name);
 
 	// 選択用文字を描画
-	const int font_size = 25;
+	const int font_size = 75;
 	for (int i = 0; i < 26; i++)
 	{
-		int x = (i % 13) * font_size + 15;
-		int y = (i / 13) * font_size + 300;
-		DrawFormatString(x, y, GetColor(255, 255, 255), "%-3c", 'a' + i);
-		y = ((i / 13) + 2) * font_size + 300;
+		int x = (i % 13) * font_size + 170;
+		int y = (i / 13) * font_size + 270;
+		DrawFormatString(x, y, GetColor(255, 255, 255), "%-6c", 'a' + i);
+		y = ((i / 13) + 2) * font_size + 270;
 		DrawFormatString(x, y, GetColor(255, 255, 255), "%-3c", 'A' + i);
 	}
-	DrawString(40, 405, "決定", GetColor(255, 255, 255));
-	DrawString(40 + font_size * 2, 405, "消す", GetColor(255, 255, 225));
+	DrawString(380, 570, "決定", GetColor(255, 0, 0));
+	DrawString(580 + font_size * 2, 570, "消す", GetColor(255, 0, 0));
 
 	// 選択文字をフォーカスする
 	if (cursor_y < 4)
 	{
-		int x = cursor_x * font_size + 10;
-		int y = cursor_y * font_size + 295;
+		int x = cursor_x * font_size + 150;
+		int y = cursor_y * font_size + 265;
 		DrawBox(x, y, x + font_size, y + font_size, GetColor(255, 255, 255), FALSE);
 	}
 	else
 	{
 		if (cursor_x == 0)
 		{
-			DrawBox(35, 400, 35 + font_size * 2, 400 + font_size, GetColor(255, 255, 255), FALSE);
+			int x = 5 * font_size;
+			int y = 4 * font_size + 265;
+			DrawBox(x, y, x + font_size * 2, y + font_size, GetColor(0, 0, 255), FALSE);
 		}
 		else
 		{
-			DrawBox(0, 0, font_size, font_size, GetColor(255, 255, 255), FALSE);
+			int x = 10 * font_size - 30;
+			int y = 4 * font_size + 265;
+			DrawBox(x, y, x + font_size * 2, y + font_size, GetColor(255, 0, 0), FALSE);
 		}
 	}
 }
@@ -117,8 +128,9 @@ void RankingInputScene::Finalize()
 	// ランキングにデータを格納
 	ranking->SetRankingData(time, name);
 
-	// 読み込んだ画像を削除
-	DeleteGraph(background_image);
+	// 読み込んだデータを削除
+	InitGraph();
+	InitSoundMem();
 
 	// 動的メモリの解放
 	delete ranking;
@@ -133,9 +145,13 @@ eSceneType RankingInputScene::GetNowScene() const
 // 名前入力処理
 bool RankingInputScene::InputName()
 {
+	//スティック入力値
+	Vector2D lstick = InputControl::GetleftStick();
+
 	// カーソル操作処理
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_LEFT))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_LEFT) || lstick.x == -1.0f)
 	{
+
 		if (cursor_x > 0)
 		{
 			cursor_x--;
@@ -143,10 +159,17 @@ bool RankingInputScene::InputName()
 		else
 		{
 			cursor_x = 12;
+			if (cursor_y == 4)
+			{
+				cursor_x = 1;
+			}
 		}
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 	}
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_RIGHT))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_RIGHT) || lstick.x == 1.0f)
 	{
+
 		if (cursor_x < 12)
 		{
 			cursor_x++;
@@ -154,32 +177,86 @@ bool RankingInputScene::InputName()
 		else
 		{
 			cursor_x = 0;
+
 		}
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 	}
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_UP))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_UP) || lstick.y == 1.0f)
 	{
+
 		if (cursor_y > 0)
 		{
+			if (cursor_y == 4)
+			{
+				if (cursor_x == 0)
+				{
+					cursor_x = 3;
+				}
+				else
+				{
+					cursor_x = 8;
+				}
+			}
 			cursor_y--;
 		}
+		else
+		{
+			cursor_y = 4;
+			if (cursor_x <= 6)
+			{
+				cursor_x = 0;
+			}
+			else
+			{
+				cursor_x = 1;
+			}
+		}
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 	}
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN) || lstick.y == -1.0f)
 	{
+
 		if (cursor_y < 4)
 		{
 			cursor_y++;
 			if (cursor_y == 4)
 			{
-				cursor_x = 0;
+				if (cursor_x <= 6)
+				{
+					cursor_x = 0;
+				}
+				else
+				{
+					cursor_x = 1;
+				}
 			}
 		}
+		else
+		{
+			cursor_y = 0;
+			if (cursor_x == 0)
+			{
+				cursor_x = 3;
+			}
+			else
+			{
+				cursor_x = 8;
+			}
+		}
+		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 	}
 
 	// カーソル位置の文字を決定する
 	if (InputControl::GetButtonDown(XINPUT_BUTTON_A))
 	{
+
 		if (cursor_y < 2)
 		{
+			PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 			name[name_num++] = 'a' + cursor_x + (cursor_y * 13);
 			if (name_num == 14)
 			{
@@ -189,6 +266,8 @@ bool RankingInputScene::InputName()
 		}
 		else if (cursor_y < 4)
 		{
+			PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 			name[name_num++] = 'A' + cursor_x + ((cursor_y - 2) * 13);
 			if (name_num == 14)
 			{
@@ -200,11 +279,15 @@ bool RankingInputScene::InputName()
 		{
 			if (cursor_x == 0)
 			{
+				PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 				name[name_num] = '\0';
 				return true;
 			}
 			else
 			{
+				PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
+
 				name[name_num--] = NULL;
 			}
 		}
