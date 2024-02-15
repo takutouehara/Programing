@@ -136,7 +136,10 @@ void Player::SetActive(bool flg)
 // ‘Ì—ÍŒ¸­ˆ—
 void Player::DecreaseHp(float value)
 {
-	this->hp += value;
+	if (is_active == true && barrier == nullptr)
+	{
+		this->hp += value;
+	}
 }
 
 // ˆÊ’uî•ñŽæ“¾ˆ—
