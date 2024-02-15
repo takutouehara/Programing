@@ -99,7 +99,7 @@ void Player::Update()
 	if (barrier != nullptr)
 	{
 		// バリア時間が経過したか　していたら、削除する
-		if (barrier->IsFinished(this->speed))
+		if (barrier->IsFinished())
 		{
 			delete barrier;
 			barrier = nullptr;
@@ -167,6 +167,10 @@ void Player::DecreaseHp(float value)
 	if (is_active == true && barrier == nullptr)
 	{
 		this->hp += value;
+		if (this->hp < 0)
+		{
+			this->hp = 0;
+		}
 	}
 }
 
@@ -243,7 +247,7 @@ void Player::Movement()
 	location += move;
 
 	// 画面外に行かないように制限する
-	if ((location.x < box_size.x) || (location.x >= 1280.0f - box_size.x) || (location.y < box_size.y) || (location.y >= 720.0f - box_size.y))
+	if ((location.x < box_size.x) || (location.x >= 1280.0f - box_size.x) || (location.y < box_size.y+100) || (location.y >= 720.0f - box_size.y))
 	{
 		location -= move;
 	}

@@ -9,6 +9,7 @@ ResultScene::ResultScene():back_ground(NULL),starttime(0)
 	BGM = LoadSoundMem("Resource/sound/maou_bgm_fantasy10.mp3");
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
 
+	SetDrawBright(255, 255, 255);
 }
 
 ResultScene::~ResultScene()
@@ -91,7 +92,8 @@ void ResultScene::Draw() const
 void ResultScene::Finalize()
 {
 	// “Ç‚İ‚ñ‚¾‰æ‘œ‚ğíœ
-	DeleteGraph(back_ground);
+	InitGraph();
+	InitSoundMem();
 }
 
 // Œ»İ‚ÌƒV[ƒ“î•ñ‚ğæ“¾

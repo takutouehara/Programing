@@ -89,9 +89,9 @@ void RankingDispScene::Draw() const
 // I—¹Žžˆ—
 void RankingDispScene::Finalize()
 {
-	// “Ç‚Ýž‚ñ‚¾‰æ‘œ‚ðíœ
-	DeleteGraph(background_image);
-	DeleteGraph(background_font);
+	// “Ç‚Ýž‚ñ‚¾‰æ‘œ‚Æ‰¹º‚ðíœ
+	InitGraph();
+	InitSoundMem();
 
 	// “®“Iƒƒ‚ƒŠ‚Ì‰ð•ú
 	ranking->Finalize();

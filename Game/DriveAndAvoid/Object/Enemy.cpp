@@ -21,15 +21,19 @@ Enemy::~Enemy()
 // 初期化処理
 void Enemy::Initialize(ComentType type, std::string text, int font)
 {
+	fontSize = 20;
 	//乱数生成
 	std::random_device rnd;
 	std::mt19937 mt(rnd());
 
-	// 出現させるｘ座標パターンを取得
+	// 出現させる座標パターンを取得
+	std::uniform_int_distribution<>randX(0, 5);
 	float random_x = static_cast<float>(GetRand(3) * 50 + 1340);
-	float random_y = static_cast<float>(GetRand(10) * 50 + 200);
+
+	std::uniform_int_distribution<>randY(0, 29);
+
 	// 生成位置の設定
-	location = Vector2D(1340, random_y);
+	location = Vector2D(randX(mt) * 50 + 1340, randY(mt) * fontSize + 120);
 	
 	// 速さの設定
 	std::uniform_int_distribution<> randSpeed(3, 7);

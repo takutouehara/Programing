@@ -1,11 +1,11 @@
 #include "TitleScene.h"
 #include "../Utility/InputControl.h"
 #include "DxLib.h"
-
 TitleScene::TitleScene():background_image(NULL),background_font(NULL), menu_image(NULL), cursor_image(NULL), menu_cursor(2),acter(NULL)
 {
 	BGM = LoadSoundMem("Resource/sound/maou_bgm_acoustic10.mp3");
 	PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, TRUE);
+
 }
 
 TitleScene::~TitleScene()
@@ -46,15 +46,16 @@ void TitleScene::Initialize()
 	{
 		throw("Resource/images/Title_Acter.pngがありません\n");
 	}
-	
+
 }
 
 // 更新処理
 eSceneType TitleScene::Update()
 {
+	Vector2D lstick = InputControl::GetleftStick();
 
 	// カーソル下移動
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_DOWN)||lstick.y == -1.0f)
 	{
 		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
 		menu_cursor += 2;
@@ -65,10 +66,9 @@ eSceneType TitleScene::Update()
 		}
 	}
 	// カーソル上移動
-	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_UP))
+	if (InputControl::GetButtonDown(XINPUT_BUTTON_DPAD_UP)||lstick.y == 1.0f)
 	{
 		PlaySoundMem(cursor_se, DX_PLAYTYPE_NORMAL, TRUE);
-
 		menu_cursor -= 2;
 		// 一番上に到達したら一番下にする
 		if (menu_cursor < 2)
@@ -128,6 +128,8 @@ void TitleScene::Finalize()
 	DeleteGraph(menu_image);
 	DeleteGraph(cursor_image);
 	DeleteGraph(acter);
+
+	InitSoundMem();
 }
 
 // 現在のシーン情報を取得
