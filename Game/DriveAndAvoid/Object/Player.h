@@ -17,6 +17,9 @@ private:
 	int barrier_count;	// バリアの枚数
 	Barrier* barrier;	// バリア
 
+	bool is_HitFlg;	//敵と接触したか
+	int FlashTime;	//点滅時間
+
 	//デバック用
 	Vector2D BoxLocation1;	//左上隅の座標
 	Vector2D BoxLocation2;	//右上隅の座標
@@ -42,6 +45,10 @@ public:
 	int GetBarriarCount()const;		// バリアの枚数取得
 	void AddBarriarCount() { barrier_count++; }
 	bool IsBarrier()const;			// バリアが有効かを取得
+	void SetHitFlg(bool flg);		// 敵と接触フラグ設定
+	bool GetHitFlg();				// 敵と接触フラグ取得
+	float GetFlashTime()const;		//点滅時間取得
+
 
 private:
 	void Movement();	// 移動処理

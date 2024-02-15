@@ -5,7 +5,8 @@
 #define PleyerMoveSpeed 5	//プレイヤーの移動速度
 
 Player::Player() :is_active(false), image(NULL), location(0.0f), box_size(0.0f),
-angle(0.0f), speed(0.0f), hp(0.0f), fuel(0.0f), barrier_count(0), barrier(nullptr)
+angle(0.0f), speed(0.0f), hp(0.0f), fuel(0.0f), barrier_count(0), barrier(nullptr),
+is_HitFlg(false),FlashTime(120)
 {
 
 }
@@ -52,9 +53,21 @@ void Player::Update()
 		speed = 1.0f;
 		if (angle >= DX_PI_F * 4.0f)
 		{
+			angle = 0.0f;
 			is_active = true;
 		}
-		return;
+		//return;
+	}
+
+	//点滅させる時間のカウント
+	if (is_HitFlg == true)
+	{
+		FlashTime--;
+		if (FlashTime < 0)
+		{
+			FlashTime = 120;
+			is_HitFlg = true;
+		}
 	}
 
 	// 燃料の消費
@@ -102,7 +115,21 @@ void Player::Update()
 void Player::Draw()
 {
 	// プレイヤー画像の描画
-	DrawRotaGraphF(location.x, location.y, 1.0, angle, image, TRUE);
+	if (is_HitFlg == true) {
+
+		if (FlashTime % 20 < 10) {
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+			DrawRotaGraphF(location.x, location.y, 1.0, angle, image, TRUE);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
+		else {
+			DrawRotaGraphF(location.x, location.y, 1.0, angle, image, TRUE);
+		}
+
+	}
+	else {
+		DrawRotaGraphF(location.x, location.y, 1.0, angle, image, TRUE);
+	}
 	
 	// バリアが生成されていたら、描画を行う
 	if (barrier != nullptr)
@@ -181,6 +208,21 @@ bool Player::IsBarrier() const
 	return (barrier != nullptr);
 }
 
+void Player::SetHitFlg(bool flg)
+{
+	this->is_HitFlg = flg;
+}
+
+bool Player::GetHitFlg()
+{
+	return this->is_HitFlg;
+}
+
+float Player::GetFlashTime() const
+{
+	return this->FlashTime;
+}
+
 // 移動処理
 void Player::Movement()
 {
@@ -188,7 +230,7 @@ void Player::Movement()
 	float  stick_x = InputControl::GetLstickRadX();
 
 	Vector2D move = Vector2D(0.0f);
-	angle = 0.0f;
+	
 
 	if (stick_y != 0 || stick_x != 0) {
 		move += Vector2D(stick_x * PleyerMoveSpeed, -stick_y * PleyerMoveSpeed);

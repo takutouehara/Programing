@@ -101,6 +101,8 @@ eSceneType GameMainScene::Update()
 			// “–‚½‚è”»’è‚ÌŠm”F
 			if (IsHitCheck(player,e))
 			{
+				player->SetHitFlg(true);
+
 				player->SetActive(false);
 
 				Enemy::ComentType type = e->GetType();
