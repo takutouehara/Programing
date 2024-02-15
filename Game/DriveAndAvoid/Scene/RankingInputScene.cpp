@@ -54,7 +54,7 @@ void RankingInputScene::Initialize()
 eSceneType RankingInputScene::Update()
 {
 	clsDx();
-	printfDx("x:%d  y:%d", cursor_x, cursor_y);
+	printfDx("%s",name);
 	bool is_change = false;
 
 	// 名前入力処理
@@ -106,23 +106,26 @@ void RankingInputScene::Draw() const
 	// 選択文字をフォーカスする
 	if (cursor_y < 4)
 	{
-		int x = cursor_x * font_size + 150;
-		int y = cursor_y * font_size + 265;
-		DrawBox(x, y, x + font_size, y + font_size, GetColor(255, 255, 255), FALSE);
+		float x = static_cast<float>(cursor_x * font_size + 150);
+		float y = (cursor_y * font_size + 265);
+		
+		DrawBoxAA(x, y, x + font_size, y + font_size, 0x000000, FALSE, 2.0);
 	}
 	else
 	{
 		if (cursor_x == 0)
 		{
-			int x = 5 * font_size;
-			int y = 4 * font_size + 265;
-			DrawBox(x, y, x + font_size * 2, y + font_size, GetColor(0, 0, 255), FALSE);
+			float x = static_cast <float>(5 * font_size);
+			float y = static_cast <float>(4 * font_size + 265);
+			
+			DrawBoxAA(x, y, x + font_size * 2, y + font_size, 0x0000ff, FALSE, 2.0);
 		}
 		else
 		{
-			int x = 10 * font_size - 30;
-			int y = 4 * font_size + 265;
-			DrawBox(x, y, x + font_size * 2, y + font_size, GetColor(255, 0, 0), FALSE);
+			float x = static_cast <float>(10 * font_size - 30);
+			float y = static_cast <float>(4 * font_size + 265);
+			
+			DrawBoxAA(x, y, x + font_size * 2, y + font_size, 0xff0000, FALSE, 2.0);
 		}
 	}
 }
@@ -262,23 +265,21 @@ bool RankingInputScene::InputName()
 		{
 			PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
 
-			name[name_num++] = 'a' + cursor_x + (cursor_y * 13);
-			if (name_num == 14)
+			if (name_num < 14)
 			{
-				cursor_x = 0;
-				cursor_y = 4;
+				name[name_num++] = 'a' + cursor_x + (cursor_y * 13);
 			}
+			
 		}
 		else if (cursor_y < 4)
 		{
 			PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
 
-			name[name_num++] = 'A' + cursor_x + ((cursor_y - 2) * 13);
-			if (name_num == 14)
+			if (name_num < 14)
 			{
-				cursor_x = 0;
-				cursor_y = 4;
+				name[name_num++] = 'A' + cursor_x + ((cursor_y - 2) * 13);
 			}
+			
 		}
 		else
 		{
@@ -292,8 +293,11 @@ bool RankingInputScene::InputName()
 			else
 			{
 				PlaySoundMem(enter_se, DX_PLAYTYPE_NORMAL, TRUE);
-
-				name[name_num--] = NULL;
+				if (0 < name_num)
+				{
+					name_num--;
+				}
+				name[name_num] = NULL;
 			}
 		}
 	}
