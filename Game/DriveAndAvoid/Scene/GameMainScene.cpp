@@ -115,7 +115,7 @@ eSceneType GameMainScene::Update()
 			}
 
 			// “–‚½‚è”»’è‚ÌŠm”F
-			if (IsHitCheck(player,e) && player->GetActive() == true )
+			if (IsHitCheck(player,e) && player->GetActive() == true && player->GetHitFlg() == false)
 			{
 				//player->SetActive(false);
 
