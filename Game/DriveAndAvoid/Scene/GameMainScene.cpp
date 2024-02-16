@@ -125,7 +125,7 @@ eSceneType GameMainScene::Update()
 				{
 				case Enemy::ComentType::NORMAL:
 					if (player->GetHitFlg() == false) {
-						player->DecreaseHp(-50.0f);
+						player->DecreaseHp(-200.0f);
 						player->SetActive(false);
 						player->SetHitFlg(true);
 						PlaySoundMem(seHit, DX_PLAYTYPE_BACK, TRUE);
@@ -133,7 +133,7 @@ eSceneType GameMainScene::Update()
 					break;
 				case Enemy::ComentType::LAUGTH:
 					if (player->GetHitFlg() == false) {
-						player->DecreaseHp(-150.0f);
+						player->DecreaseHp(-350.0f);
 						player->SetActive(false);
 						player->SetHitFlg(true);
 						e->Explosion();
@@ -141,7 +141,7 @@ eSceneType GameMainScene::Update()
 					}
 					break;
 				case Enemy::ComentType::HEAL_HP:
-					player->DecreaseHp(100);
+					player->DecreaseHp(200);
 					PlaySoundMem(seHeal, DX_PLAYTYPE_BACK, TRUE);
 					break;
 				case Enemy::ComentType::HEAL_BARRIER:
