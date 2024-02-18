@@ -25,9 +25,9 @@ void SceneManager::Initialize()
 	SetMainWindowText("Drive&avoid");
 
 	// ウィンドウモードで起動
-	if (ChangeWindowMode(TRUE) != DX_CHANGESCREEN_OK)
+	if (ChangeWindowMode(FALSE) != DX_CHANGESCREEN_OK)
 	{
-		throw("ウィンドウモードで起動できませんでした\n");
+		throw("フルスクリーンで起動できませんでした\n");
 	}
 
 	//解像度の設定
