@@ -27,7 +27,7 @@ void SceneManager::Initialize()
 	// ウィンドウモードで起動
 	if (ChangeWindowMode(FALSE) != DX_CHANGESCREEN_OK)
 	{
-		throw("ウィンドウモードで起動できませんでした\n");
+		throw("フルスクリーンで起動できませんでした\n");
 	}
 
 	//解像度の設定
