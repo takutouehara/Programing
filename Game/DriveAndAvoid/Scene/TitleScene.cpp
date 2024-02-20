@@ -120,6 +120,11 @@ void TitleScene::Draw() const
 
 	// カーソル画像の描画
 	DrawRotaGraph(90, 220 + menu_cursor * 40, 0.7, DX_PI / 2.0, cursor_image, TRUE);
+	// 著作権表示
+	DrawString(700, 650, "タイトル＆ヘルプBGM", TRUE);
+	DrawString(700, 680, "魔王魂様", TRUE);
+	DrawString(900, 650, "リザルト&ランキング&ランキング入力BGM", TRUE);
+	DrawString(900, 680, "魔王魂様", TRUE);
 }
 
 // 終了時処理
